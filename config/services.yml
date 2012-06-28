@@ -1,0 +1,27 @@
+parameters:
+  
+  currency_subscriber.class: Heystack\Subsystem\Currency\Subscriber
+  currency_processor.class: Heystack\Subsystem\Currency\Processor
+  
+  purchaseable_subscriber.class: Heystack\Subsystem\Purchaseable\Subscriber
+  
+services:
+  
+  currency_subscriber:
+    class: %currency_subscriber.class%
+
+  event_dispatcher:
+    calls: 
+      - [ addSubscriber, [ @currency_subscriber ] ]
+      - [ addSubscriber, [ @purchaseable_subscriber ] ]
+      
+  currency_processor:
+    class: %currency_processor.class%
+    arguments: [@state, @event_dispatcher]
+      
+  processor_handler:
+    calls:
+      - [ addProcessor, [ @currency_processor ] ]
+      
+  purchaseable_subscriber:
+    class: %purchaseable_subscriber.class%
