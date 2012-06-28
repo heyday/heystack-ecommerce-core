@@ -1,8 +1,8 @@
 <?php
 
-namespace Heystack\Subsystem\Currency;
+namespace Heystack\Subsystem\Ecommerce\Currency;
 
-use Heystack\Subsystem\Currency\Events as CurrencyEvents;
+use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 
 use Heystack\Subsystem\Core\Processor\ProcessorInterface;
 use Heystack\Subsystem\Core\State\State;

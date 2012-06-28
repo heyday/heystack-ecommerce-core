@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Currency;
+namespace Heystack\Subsystem\Ecommerce\Currency;
 
 final class Events {
     
