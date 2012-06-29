@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Purchaseable;
+namespace Heystack\Subsystem\Ecommerce\Purchaseable;
 
 final class Events {
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Purchaseable;
+namespace Heystack\Subsystem\Ecommerce;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -25,7 +25,7 @@ class ContainerExtension implements ExtensionInterface
 
     public function getNamespace()
     {
-        return 'purchaseable';
+        return 'ecommerce';
     }
 
     public function getXsdValidationBasePath()
@@ -35,7 +35,7 @@ class ContainerExtension implements ExtensionInterface
 
     public function getAlias()
     {
-        return 'purchaseable';
+        return 'ecommerce';
     }
     
 }
