@@ -3,7 +3,7 @@
 interface PurchaseableHolderInterface 
 {
     
-    public function getPurchaseables(array $identifier = null);
+    public function getPurchaseables(array $identifiers = null);
     
     public function setPurchaseables(array $purchaseables);
     

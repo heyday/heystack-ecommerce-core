@@ -1,5 +1,7 @@
 <?php
 
+use Heystack\Subsystem\Core\ServiceStore;
+
 class EcommerceInputController extends Controller
 {
 
@@ -13,8 +15,8 @@ class EcommerceInputController extends Controller
 
         parent::__construct();
 
-        $this->stateService = \Heystack\Subsystem\Core\ServiceStore::getService('state');
-        $this->handlerService = \Heystack\Subsystem\Core\ServiceStore::getService('processor_handler');
+        $this->stateService = ServiceStore::getService('state');
+        $this->handlerService = ServiceStore::getService('processor_handler');
 
     }
 
