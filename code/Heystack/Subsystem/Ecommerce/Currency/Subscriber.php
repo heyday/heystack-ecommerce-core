@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Currency;
+namespace Heystack\Subsystem\Ecommerce\Currency;
 
 use Heystack\Subsystem\Purchaseable\Events as PurchaseableEvents;
 
@@ -11,9 +11,9 @@ class Subscriber implements EventSubscriberInterface
 {
     static public function getSubscribedEvents()
     {
+        
         return array(
             PurchaseableEvents::PURCHASEABLE_CREATE     => array('onPurchaseableCreate', 0),
-            
         );
     }
 
