@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Core\Tests;
+namespace Heystack\Subsystem\Ecommerce\Tests;
 
 class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
