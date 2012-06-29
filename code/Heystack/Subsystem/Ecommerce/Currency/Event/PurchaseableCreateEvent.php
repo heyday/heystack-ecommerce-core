@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Currency\Event;
+namespace Heystack\Subsystem\Ecommerce\Currency\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 

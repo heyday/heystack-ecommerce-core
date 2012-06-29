@@ -2,9 +2,8 @@
 
 namespace Heystack\Subsystem\Ecommerce\Purchaseable;
 
-final class Events {
-    
+final class Events
+{
     const PURCHASEABLE_CREATE = 'purchaseable.create';
-    
-    
+
 }

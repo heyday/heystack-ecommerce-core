@@ -11,31 +11,31 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Processor implements ProcessorInterface
 {
-    
+
     private $state;
     private $eventDispatcher;
-    
+
     public function __construct(State $state, EventDispatcher $eventDispatcher)
     {
-        
+
         $this->state = $state;
         $this->eventDispatcher = $eventDispatcher;
-        
+
     }
-    
+
     public function getName()
     {
         return 'currency';
-        
+
     }
-    
+
     public function process(\SS_HTTPRequest $request)
     {
 
         $this->state->setByKey('currency', $request->getVar('currency'));
-        
+
         $this->eventDispatcher->dispatch(CurrencyEvents::CURRENCY_CHANGE);
-        
+
     }
-    
+
 }
