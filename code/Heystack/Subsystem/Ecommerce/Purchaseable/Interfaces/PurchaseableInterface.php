@@ -3,7 +3,6 @@
 namespace Heystack\Subsystem\Ecommerce\Purchaseable\Interfaces;
 
 use Heystack\Subsystem\Core\State\State;
-
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 interface PurchaseableInterface

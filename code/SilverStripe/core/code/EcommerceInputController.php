@@ -24,10 +24,11 @@ class EcommerceInputController extends Controller
     {
 
         $request = $this->getRequest();
+        $processor = $request->param('Processor');
 
-        if ($this->handlerService->hasProcessor($request->param('ID'))) {
+        if ($this->handlerService->hasProcessor($processor)) {
 
-            $this->handlerService->getProcessor($request->param('ID'))->process($request);
+            $this->handlerService->getProcessor($processor)->process($request);
 
         }
 

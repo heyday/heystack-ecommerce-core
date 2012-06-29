@@ -11,5 +11,6 @@ interface PurchaseableHolderInterface
     public function setPurchaseables(array $purchaseables);
     public function addPurchaseable(PurchaseableInterface $purchaseable);
     public function getPurchaseable($identifier);
+    public function removePurchaseable($identifier);
 
 }
