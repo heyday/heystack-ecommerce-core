@@ -2,7 +2,7 @@
 
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
-use Heystack\Subsystem\Purchaseable\Events as PurchaseableEvents;
+use Heystack\Subsystem\Ecommerce\Purchaseable\Events as PurchaseableEvents;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
