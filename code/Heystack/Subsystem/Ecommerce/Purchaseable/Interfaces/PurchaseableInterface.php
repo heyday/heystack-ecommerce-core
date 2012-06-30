@@ -11,6 +11,6 @@ interface PurchaseableInterface
     public function getIdentifier();
     public function getPrice();
     public function addStateService(State $stateService);
-    public function addEventDispatcher(EventDispatcher $eventDispatcher);
+    public function addEventService(EventDispatcher $eventService);
 
 }
