@@ -22,6 +22,6 @@ services:
     class: %currency_processor.class%
     arguments: [@state, @event_dispatcher]
       
-  processor_handler:
+  input_processor_handler:
     calls:
       - [ addProcessor, [ @currency_processor ] ]

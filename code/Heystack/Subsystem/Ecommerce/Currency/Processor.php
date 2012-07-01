@@ -4,7 +4,7 @@ namespace Heystack\Subsystem\Ecommerce\Currency;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 
-use Heystack\Subsystem\Core\Processor\ProcessorInterface;
+use Heystack\Subsystem\Core\Input\ProcessorInterface;
 use Heystack\Subsystem\Core\State\State;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;

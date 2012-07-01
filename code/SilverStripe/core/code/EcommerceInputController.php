@@ -16,7 +16,7 @@ class EcommerceInputController extends Controller
         parent::__construct();
 
         $this->stateService = ServiceStore::getService('state');
-        $this->handlerService = ServiceStore::getService('processor_handler');
+        $this->handlerService = ServiceStore::getService('input_processor_handler');
 
     }
 
@@ -26,11 +26,7 @@ class EcommerceInputController extends Controller
         $request = $this->getRequest();
         $processor = $request->param('Processor');
 
-        if ($this->handlerService->hasProcessor($processor)) {
-
-            $this->handlerService->getProcessor($processor)->process($request);
-
-        }
+        $this->handlerService->process($processor, $request);
 
     }
 
