@@ -24,9 +24,8 @@ class EcommerceInputController extends Controller
     {
 
         $request = $this->getRequest();
-        $processor = $request->param('Processor');
 
-        $this->handlerService->process($processor, $request);
+        $this->handlerService->process($request->param('Processor'), $request);
 
     }
 
