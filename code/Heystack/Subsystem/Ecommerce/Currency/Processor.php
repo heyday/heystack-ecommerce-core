@@ -23,7 +23,7 @@ class Processor implements ProcessorInterface
 
     }
 
-    public function getName()
+    public function getIdentifier()
     {
         return 'currency';
 

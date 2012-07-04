@@ -8,7 +8,8 @@ class EcommerceInputController extends Controller
     public static $url_segment = 'ecommerce/input';
 
     private $stateService;
-    private $handlerService;
+    private $inputHandlerService;
+    private $outputHandlerService;
 
     public function __construct()
     {
@@ -16,7 +17,8 @@ class EcommerceInputController extends Controller
         parent::__construct();
 
         $this->stateService = ServiceStore::getService('state');
-        $this->handlerService = ServiceStore::getService('input_processor_handler');
+        $this->inputHandlerService = ServiceStore::getService('input_processor_handler');
+        $this->outputHandlerService = ServiceStore::getService('output_processor_handler');
 
     }
 
@@ -24,8 +26,13 @@ class EcommerceInputController extends Controller
     {
 
         $request = $this->getRequest();
-
-        $this->handlerService->process($request->param('Processor'), $request);
+        $identifier = $request->param('Processor');
+        
+        return $this->outputHandlerService->process(
+                $identifier,
+                $this,
+                $this->inputHandlerService->process($identifier, $request)
+        );
 
     }
 
