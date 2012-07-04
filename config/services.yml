@@ -3,20 +3,20 @@ parameters:
   currency_subscriber.class: Heystack\Subsystem\Ecommerce\Currency\Subscriber
   currency_processor.class: Heystack\Subsystem\Ecommerce\Currency\Processor
   
-  purchaseable_subscriber.class: Heystack\Subsystem\Ecommerce\Purchaseable\Subscriber
+  purchasable_subscriber.class: Heystack\Subsystem\Ecommerce\Purchasable\Subscriber
   
 services:
   
   currency_subscriber:
     class: %currency_subscriber.class%
       
-  purchaseable_subscriber:
-    class: %purchaseable_subscriber.class%
+  purchasable_subscriber:
+    class: %purchasable_subscriber.class%
 
   event_dispatcher:
     calls: 
       - [ addSubscriber, [ @currency_subscriber ] ]
-      - [ addSubscriber, [ @purchaseable_subscriber ] ]
+      - [ addSubscriber, [ @purchasable_subscriber ] ]
       
   currency_processor:
     class: %currency_processor.class%

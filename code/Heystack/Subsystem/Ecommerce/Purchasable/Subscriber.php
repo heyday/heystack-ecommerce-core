@@ -1,6 +1,6 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Purchaseable;
+namespace Heystack\Subsystem\Ecommerce\Purchasable;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 

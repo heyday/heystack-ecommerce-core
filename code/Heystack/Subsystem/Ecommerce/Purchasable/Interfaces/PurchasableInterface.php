@@ -1,11 +1,11 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Purchaseable\Interfaces;
+namespace Heystack\Subsystem\Ecommerce\Purchasable\Interfaces;
 
 use Heystack\Subsystem\Core\State\State;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-interface PurchaseableInterface
+interface PurchasableInterface
 {
 
     public function getIdentifier();
