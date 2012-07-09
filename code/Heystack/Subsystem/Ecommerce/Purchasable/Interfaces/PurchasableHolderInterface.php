@@ -7,7 +7,7 @@ use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
 interface PurchasableHolderInterface
 {
 
-    public function getPurchasables($identifiers = null);
+    public function getPurchasables(array $identifiers = null);
     public function setPurchasables(array $purchasables);
     public function addPurchasable(PurchasableInterface $purchasable);
     public function getPurchasable($identifier);
