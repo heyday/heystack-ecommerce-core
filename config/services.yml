@@ -5,8 +5,6 @@ parameters:
   
   purchasable_subscriber.class: Heystack\Subsystem\Ecommerce\Purchasable\Subscriber
   
-  product.class: Product
-  
 services:
   
   currency_subscriber:
@@ -27,10 +25,4 @@ services:
   input_processor_handler:
     calls:
       - [ addProcessor, [ @currency_processor ] ]
-
-  product:
-    class: %product.class%
-
-  dataobjectgenerator:
-    calls:
-      - [ addDataObject, [ @product ] ]
+      

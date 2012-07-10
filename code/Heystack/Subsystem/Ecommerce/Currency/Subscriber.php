@@ -2,7 +2,7 @@
 
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
-use Heystack\Subsystem\Ecommerce\Purchasable\Events as PurchasableEvents;
+use Heystack\Subsystem\Ecommerce\Purchasable\Events;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -12,7 +12,7 @@ class Subscriber implements EventSubscriberInterface
     {
 
         return array(
-            PurchasableEvents::PURCHASABLE_CREATE     => array('onPurchasableCreate', 0),
+            Events::PURCHASABLE_CREATE     => array('onPurchasableCreate', 0),
         );
     }
 
