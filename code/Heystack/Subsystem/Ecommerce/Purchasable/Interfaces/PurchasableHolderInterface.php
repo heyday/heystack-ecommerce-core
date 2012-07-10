@@ -16,6 +16,12 @@ use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
  * PurchasableHolderInterface 
  * 
  * This defines what methods are necessary to implement a Purchasable Holder
+ * @copyright  Heyday
+ * @author Stevie Mayhew <stevie@heyday.co.nz>
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @author Cam Spiers <cameron@heyday.co.nz>
+ * @package Ecommerce-Core
+ *
  */
 interface PurchasableHolderInterface
 {
