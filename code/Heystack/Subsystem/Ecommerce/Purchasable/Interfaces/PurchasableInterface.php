@@ -14,7 +14,7 @@ interface PurchasableInterface
     public function addEventService(EventDispatcher $eventService);
     public function setQuantity($quantity = 1);
     public function getQuantity();
-    public function setUnitPrice(\Float $unitPrice);
+    public function setUnitPrice($unitPrice);
     public function getUnitPrice();
     public function getTotal();
 

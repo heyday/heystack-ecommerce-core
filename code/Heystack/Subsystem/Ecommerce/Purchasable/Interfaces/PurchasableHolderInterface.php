@@ -42,7 +42,7 @@ interface PurchasableHolderInterface
      * Add a purchasable to the implementing class
      * @param PurchasableInterface $purchasable
      */
-    public function addPurchasable(PurchasableInterface $purchasable);
+    public function addPurchasable(PurchasableInterface $purchasable, $quantity);
     
     /**
      * Sets the quantity of the purchasable in the implementing class
