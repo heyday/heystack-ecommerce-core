@@ -159,11 +159,11 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function setActiveCurrency($identifier)
     {
-        if (isset($this->data[self::ALL_CURRENCIES_KEY][$identifier])) {
+        if ($currency = $this->getCurrency($identifier)) {
 
-            $this->data[self::ACTIVE_CURRENCY_KEY] = $this->data[self::ALL_CURRENCIES_KEY][$identifier];
+            $this->data[self::ACTIVE_CURRENCY_KEY] = $currency;
 
-            $this->eventDispatcher->dispatch(Events::CURRENCY_CHANGE, new CurrencyEvent($this->data[self::ACTIVE_CURRENCY_KEY]));
+            $this->eventDispatcher->dispatch(Events::CURRENCY_CHANGE, new CurrencyEvent($currency));
 
             return true;
         }
@@ -173,7 +173,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
     /**
      * Retrieves the currently active currency
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface | null
+     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getActiveCurrency()
     {
@@ -182,7 +182,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
     /**
      * Retrieves all the available currencies
-     * @return array | null
+     * @return array
      */
     public function getCurrencies()
     {
@@ -198,5 +198,24 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function convert($amount, $from, $to)
     {
         return $amount * ($this->data[self::ALL_CURRENCIES_KEY][$to]->getValue() / $this->data[self::ALL_CURRENCIES_KEY][$from]->getValue());
+    }
+    
+    /**
+     * Returns a currency object based on the identifier
+     * @param type $identifier
+     * @return Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     */
+    public function getCurrency($identifier)
+    {
+        return isset($this->data[self::ALL_CURRENCIES_KEY][$identifier]) ? $this->data[self::ALL_CURRENCIES_KEY][$identifier] : null;
+    }
+    
+    /**
+     * Returns the default currency object
+     * @return Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     */
+    public function getDefaultCurrency()
+    {
+        return isset($this->data[self::DEFAULT_CURRENCY_KEY]) ? $this->data[self::DEFAULT_CURRENCY_KEY] : null;
     }
 }
