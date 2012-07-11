@@ -1,24 +1,38 @@
 <?php
 
-class EcommerceCurrency extends DataObject
+use \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
+
+class EcommerceCurrency extends DataObject implements CurrencyInterface, Serializable
 {
+    use Heystack\Subsystem\Products\Product\DataObjectTrait;
 
     public static $db = array(
-      'Price' => 'Money'
+        'Name' => 'Varchar(255)',
+        'Value' => 'Decimal(10,3)',
+        'Symbol' => 'Varchar(255)',
+        'IsDefaultCurrency' => 'Boolean'
+    );
+    
+    static $summary_fields = array(
+        'Name',
+        'Symbol',
+        'Value',
+        'IsDefaultCurrency'
     );
 
-    public function getCMSFields()
+    public function retrieveSymbol()
     {
-        $fields = new FieldSet();
-
-        // if (!$this->ID) {
-        //  $fields->push(new DropdownField('PriceCurrency', 'Currency', Heyday_Silvercart_Currency_Config::getAllowedCurrencies()));
-        // } else {
-        //  $fields->push(new ReadonlyField('PriceCurrency', 'Currency', $this->PriceCurrency));
-        // }
-        // $fields->push(new TextField('PriceAmount', 'Amount'));
-
-        return $fields;
+        return $this->Symbol;
+    }
+    
+    public function isDefaultCurrency()
+    {
+        return $this->IsDefaultCurrency;
+    }
+    
+    public function retrieveValue()
+    {
+        return $this->Value;
     }
 
 }
