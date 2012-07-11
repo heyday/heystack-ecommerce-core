@@ -20,7 +20,7 @@ class Subscriber implements EventSubscriberInterface
     public function onCurrencyChange(CurrencyEvent $event)
     {
 //        \HeydayLog::log('Currency did change');
-        
+
         error_log('Currency Changed! Value:' . $event->getCurrency()->retrieveValue());
         error_log('Currency Changed! Symbol:' . $event->getCurrency()->retrieveSymbol());
     }

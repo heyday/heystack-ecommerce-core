@@ -26,7 +26,7 @@ class Processor implements ProcessorInterface
 {
     /**
      * Stores the classname of the currency data object
-     * @var string 
+     * @var string
      */
     private $currencyClass;
 
@@ -54,14 +54,14 @@ class Processor implements ProcessorInterface
 
     /**
      * Method used to determine how to handle the output based on the InputProcessor's result
-     * @param \Controller $controller
-     * @param type $result
+     * @param  \Controller     $controller
+     * @param  type            $result
      * @return SS_HTTPResponse
      */
     public function process(\Controller $controller, $result = null)
     {
         if ($controller->isAjax()) {
-            
+
             $response = $controller->getResponse();
             $response->setStatusCode(200);
             $response->addHeader('Content-Type', 'application/json');

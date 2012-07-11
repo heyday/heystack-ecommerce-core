@@ -12,8 +12,8 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
         'Symbol' => 'Varchar(255)',
         'IsDefaultCurrency' => 'Boolean'
     );
-    
-    static $summary_fields = array(
+
+    public static $summary_fields = array(
         'CurrencyCode',
         'Symbol',
         'Value',
@@ -24,22 +24,22 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
     {
         return $this->Symbol;
     }
-    
+
     public function isDefaultCurrency()
     {
         return $this->IsDefaultCurrency;
     }
-    
+
     public function retrieveValue()
     {
         return $this->Value;
     }
-    
+
     public function retriveCurrencyCode()
     {
         return $this->CurrencyCode;
     }
-    
+
     public function getIdentifier()
     {
         return $this->retriveCurrencyCode();

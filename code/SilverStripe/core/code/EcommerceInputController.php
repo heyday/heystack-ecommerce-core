@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of the Heystack package
- * 
+ *
  * @package Heystack
  */
 
@@ -12,15 +12,15 @@ use Heystack\Subsystem\Core\ServiceStore;
 
 /**
  * EcommerceInputController handles all input to the system.
- * 
+ *
  * Calls which interact with the ecommerce system should be directed through
  * this controller.
- * 
+ *
  * @copyright  Heyday
  * @author Stevie Mayhew <stevie@heyday.co.nz>
  * @author Cameron Spiers <cam@heyday.co.nz>
  * @package Heystack
- * 
+ *
  */
 class EcommerceInputController extends Controller
 {
@@ -48,7 +48,7 @@ class EcommerceInputController extends Controller
     /**
      * Process the request to the controller and direct it to the correct input
      * and output controllers via the input and output processor services.
-     * 
+     *
      * @return mixed
      */
     public function process()

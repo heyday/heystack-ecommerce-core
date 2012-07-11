@@ -28,23 +28,23 @@ class Processor implements ProcessorInterface
 
     /**
      * Stores the classname of the currency data object
-     * @var string 
+     * @var string
      */
     private $currencyClass;
     /**
      * Stores the CurrencyService
-     * @var Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface 
+     * @var Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
      */
     private $currencyService;
 
     /**
      * Currency Input Processor Constructor
-     * @param type $currencyClass
+     * @param type                                                                       $currencyClass
      * @param \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
      */
     public function __construct($currencyClass, CurrencyServiceInterface $currencyService)
     {
-        
+
         $this->currencyClass = $currencyClass;
         $this->currencyService = $currencyService;
 
@@ -56,6 +56,7 @@ class Processor implements ProcessorInterface
      */
     public function getIdentifier()
     {
+        
         return strtolower($this->currencyClass);
 
     }
@@ -63,21 +64,24 @@ class Processor implements ProcessorInterface
     /**
      * Method to determine how to handle the request.
      * Uses the currency service to set the active currency
-     * @param \SS_HTTPRequest $request
+     * @param  \SS_HTTPRequest $request
      * @return array
      */
     public function process(\SS_HTTPRequest $request)
     {
 
         if ($identifier = $request->param('ID')) {
+
+            if ($this->currencyService->setActiveCurrency($identifier)) {
                 
-            if($this->currencyService->setActiveCurrency($identifier)){
+                $this->currencyService->saveState();
+                
                 return array(
                     'Success' => true
                 );
             }
         }
-        
+
         return array(
             'Success' => false
         );
