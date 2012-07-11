@@ -7,14 +7,14 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
     use Heystack\Subsystem\Products\Product\DataObjectTrait;
 
     public static $db = array(
-        'Name' => 'Varchar(255)',
+        'CurrencyCode' => 'Varchar(255)',
         'Value' => 'Decimal(10,3)',
         'Symbol' => 'Varchar(255)',
         'IsDefaultCurrency' => 'Boolean'
     );
     
     static $summary_fields = array(
-        'Name',
+        'CurrencyCode',
         'Symbol',
         'Value',
         'IsDefaultCurrency'
@@ -33,6 +33,16 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
     public function retrieveValue()
     {
         return $this->Value;
+    }
+    
+    public function retriveCurrencyCode()
+    {
+        return $this->CurrencyCode;
+    }
+    
+    public function getIdentifier()
+    {
+        return $this->retriveCurrencyCode();
     }
 
 }

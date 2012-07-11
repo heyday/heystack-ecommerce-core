@@ -69,20 +69,13 @@ class Processor implements ProcessorInterface
     public function process(\SS_HTTPRequest $request)
     {
 
-        if ($id = $request->param('ID')) {
-
-            $currency = \DataObject::get_by_id($this->currencyClass, $id);
-
-            if ($currency instanceof $this->currencyClass) {
+        if ($identifier = $request->param('ID')) {
                 
-                $this->currencyService->setCurrency($currency);
-
+            if($this->currencyService->setActiveCurrency($identifier)){
                 return array(
                     'Success' => true
                 );
-
             }
-
         }
         
         return array(

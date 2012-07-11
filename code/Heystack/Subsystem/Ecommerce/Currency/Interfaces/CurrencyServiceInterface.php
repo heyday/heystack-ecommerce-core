@@ -23,5 +23,23 @@ interface CurrencyServiceInterface
      * Sets the currently active currency
      * @param \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
      */
-    public function setCurrency(CurrencyInterface $currency);
+    public function setActiveCurrency($identifier);
+    
+    /**
+     * Retrieves the currently active currency
+     */
+    public function getActiveCurrency();
+    
+    /**
+     * Retrieves all the currencies
+     */
+    public function getCurrencies();
+    
+    /**
+     * Converts amount from one currency to another using the currency's identifier
+     * @param float $amount
+     * @param string $from
+     * @param string $to
+     */
+    public function convert(float $amount, $from, $to);
 }

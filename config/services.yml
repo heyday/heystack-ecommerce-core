@@ -12,7 +12,9 @@ services:
   
   currency_service:
     class: %currency_service.class%
-    arguments: [@state, @event_dispatcher]
+    arguments: [%currency.class%, @state, @event_dispatcher]
+    calls:
+      - [ restoreState ]
   
   currency_subscriber:
     class: %currency_subscriber.class%
