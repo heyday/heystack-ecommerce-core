@@ -20,9 +20,9 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
         'IsDefaultCurrency'
     );
 
-    public function retrieveSymbol()
+    public function getSymbol()
     {
-        return $this->Symbol;
+        return $this->record['Symbol'];
     }
 
     public function isDefaultCurrency()
@@ -30,19 +30,19 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
         return $this->IsDefaultCurrency;
     }
 
-    public function retrieveValue()
+    public function getValue()
     {
-        return $this->Value;
+        return $this->record['Value'];
     }
 
-    public function retriveCurrencyCode()
+    public function getCurrencyCode()
     {
-        return $this->CurrencyCode;
+        return $this->record['CurrencyCode'];
     }
 
     public function getIdentifier()
     {
-        return $this->retriveCurrencyCode();
+        return $this->getCurrencyCode();
     }
 
 }

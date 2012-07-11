@@ -27,12 +27,12 @@ interface CurrencyInterface
     /**
      * Returns the Currency's code, e.g. NZD, USD
      */
-    public function retriveCurrencyCode();
+    public function getCurrencyCode();
 
     /**
      * Returns the Currency's Symbol, e.g. $,
      */
-    public function retrieveSymbol();
+    public function getSymbol();
 
     /**
      * Returns whether the currency is the System's default
@@ -42,5 +42,5 @@ interface CurrencyInterface
     /**
      * Returns the value of the currency vis-a-vis the default currency
      */
-    public function retrieveValue();
+    public function getValue();
 }

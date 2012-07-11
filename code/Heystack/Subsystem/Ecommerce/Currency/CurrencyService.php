@@ -119,7 +119,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
         $this->data = $this->state->getObj(self::STATE_KEY);
 
-        if (!isset($this->data[self::ALL_CURRENCIES_KEY])) {
+        if (!$this->data || !isset($this->data[self::ALL_CURRENCIES_KEY])) {
             $currencies = \DataObject::get($this->currencyClass);
 
             if ($currencies instanceof \DataObjectSet && $currencies->exists()) {
@@ -197,6 +197,6 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function convert($amount, $from, $to)
     {
-        return $amount * ($this->data[self::ALL_CURRENCIES_KEY][$to]->retrieveValue() / $this->data[self::ALL_CURRENCIES_KEY][$from]->retrieveValue());
+        return $amount * ($this->data[self::ALL_CURRENCIES_KEY][$to]->getValue() / $this->data[self::ALL_CURRENCIES_KEY][$from]->getValue());
     }
 }
