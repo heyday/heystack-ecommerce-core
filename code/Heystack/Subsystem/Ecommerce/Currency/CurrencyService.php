@@ -18,6 +18,8 @@ use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Events;
 use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * CurrencyService default implementation
  *
@@ -58,7 +60,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
     /**
      * Stores the EventDispatcher
-     * @var EventDispatcher
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -78,9 +80,9 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * CurrencySerivce Constructor
      * @param string                                                 $currencyClass
      * @param \Heystack\Subsystem\Ecommerce\Currency\State           $state
-     * @param \Heystack\Subsystem\Ecommerce\Currency\EventDispatcher $eventDispatcher
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct($currencyClass, State $state, EventDispatcher $eventDispatcher)
+    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher)
     {
         $this->currencyClass = $currencyClass;
         $this->state = $state;
