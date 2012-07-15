@@ -68,5 +68,7 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
     public function removePurchasable($identifier);
     
     public function updatePurchasablePrices();
+    
+    public function updateTotal();
 
 }
