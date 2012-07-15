@@ -135,7 +135,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
                 }
 
                 if (!isset($this->data[self::ACTIVE_CURRENCY_KEY])) {
-                    $this->data[self::ACTIVE_CURRENCY_KEY] = $this->data[self::DEFAULT_CURRENCY_KEY];
+                    $this->data[self::ACTIVE_CURRENCY_KEY] = $this->getDefaultCurrency();
                 }
 
             } else {

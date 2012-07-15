@@ -11,11 +11,13 @@
 namespace Heystack\Subsystem\Ecommerce\Purchasable\Interfaces;
 
 use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
+use \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
 /**
  * PurchasableHolderInterface
  *
  * This defines what methods are necessary to implement a Purchasable Holder
+ * 
  * @copyright  Heyday
  * @author Stevie Mayhew <stevie@heyday.co.nz>
  * @author Glenn Bautista <glenn@heyday.co.nz>
@@ -23,7 +25,7 @@ use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
  * @package Ecommerce-Core
  *
  */
-interface PurchasableHolderInterface
+interface PurchasableHolderInterface extends TransactionModifierInterface
 {
 
     /**
@@ -64,5 +66,7 @@ interface PurchasableHolderInterface
      * @param type $identifier
      */
     public function removePurchasable($identifier);
+    
+    public function updatePurchasablePrices();
 
 }
