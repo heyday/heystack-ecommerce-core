@@ -24,6 +24,7 @@ services:
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
+    arguments: [@transaction, @event_dispatcher]
     
   currency_service:
     class: %currency_service.class%

@@ -2,33 +2,33 @@
 
 namespace Heystack\Subsystem\Ecommerce\Transaction;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Heystack\Subsystem\Core\ServiceStore;
+use Interfaces\TransactionInterface;
 
 class Subscriber implements EventSubscriberInterface
 {
+    protected $transaction;
+    protected $eventDispatcher;
+    
+    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher )
+    {
+        $this->transaction = $transaction;
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     public static function getSubscribedEvents()
-    {
-        $transaction = ServiceStore::getService(Transaction::STATE_KEY);
-        $subscribedEvents = array();
-        
-        $updateCall = array('onUpdate',0);
-        $updateEventStrings = $transaction->getUpdateEventStrings();
-        
-        foreach($updateEventStrings as $updateEventString){
-            $subscribedEvents[$updateEventString] = $updateCall;
-        }
-        
-        return $subscribedEvents;
+    {        
+        return array(
+            Events::UPDATE_TRANSACTION => array('onUpdate',0)
+        );
     }
     
     public function onUpdate()
     {
-        $transaction = ServiceStore::getService(Transaction::STATE_KEY);
-        $transaction->updateTotal();
-        $transaction->saveState();
+        $this->transaction->updateTotal();
+        $this->eventDispatcher->dispatch(Events::TRANSACTION_UPDATED);
     }
     
 }

@@ -54,21 +54,6 @@ class Transaction implements TransactionInterface, StateableInterface
         return isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
     }
     
-    public function getUpdateEventStrings()
-    {
-        $eventStrings = array();
-        
-        foreach($this->modifiers as $modifier){
-            
-            if($updateString = $modifier->getUpdateEventString()){
-                $eventStrings[] = $updateString;
-            }
-            
-        }
-        
-        return $eventStrings;
-    }
-    
     public function updateTotal()
     {
         $total = 0;
@@ -78,5 +63,7 @@ class Transaction implements TransactionInterface, StateableInterface
         }
         
         $this->data[self::TOTAL_KEY] = $total;
+        
+        $this->saveState();
     }
 }

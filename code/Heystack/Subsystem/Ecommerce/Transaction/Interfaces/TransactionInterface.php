@@ -9,5 +9,4 @@ interface TransactionInterface
     public function getModifiers();
     public function getTotal();
     public function updateTotal();
-    public function getUpdateEventStrings();
 }
