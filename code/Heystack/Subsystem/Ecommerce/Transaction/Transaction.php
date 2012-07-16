@@ -59,7 +59,16 @@ class Transaction implements TransactionInterface, StateableInterface
         $total = 0;
         
         foreach($this->modifiers as $modifier){
-            $total += $modifier->getTotal();
+            
+            switch($modifier->getType()){
+                case TransactionModifierTypes::CHARGEABLE:
+                    $total += $modifier->getTotal();
+                    break;
+                case TransactionModifierTypes::DEDUCTIBLE:
+                    $total -= $modifier->getTotal();
+                    break;
+            }
+            
         }
         
         $this->data[self::TOTAL_KEY] = $total;
