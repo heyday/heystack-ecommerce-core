@@ -56,7 +56,7 @@ class Processor implements ProcessorInterface
      */
     public function getIdentifier()
     {
-        
+
         return strtolower($this->currencyClass);
 
     }
@@ -73,9 +73,9 @@ class Processor implements ProcessorInterface
         if ($identifier = $request->param('ID')) {
 
             if ($this->currencyService->setActiveCurrency($identifier)) {
-                
+
                 $this->currencyService->saveState();
-                
+
                 return array(
                     'Success' => true
                 );

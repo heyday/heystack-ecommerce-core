@@ -78,8 +78,8 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
     /**
      * CurrencySerivce Constructor
-     * @param string                                                 $currencyClass
-     * @param \Heystack\Subsystem\Ecommerce\Currency\State           $state
+     * @param string                                                      $currencyClass
+     * @param \Heystack\Subsystem\Ecommerce\Currency\State                $state
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
     public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher)
@@ -201,17 +201,17 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     {
         return $amount * ($this->data[self::ALL_CURRENCIES_KEY][$to]->getValue() / $this->data[self::ALL_CURRENCIES_KEY][$from]->getValue());
     }
-    
+
     /**
      * Returns a currency object based on the identifier
-     * @param type $identifier
+     * @param  type                                                               $identifier
      * @return Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getCurrency($identifier)
     {
         return isset($this->data[self::ALL_CURRENCIES_KEY][$identifier]) ? $this->data[self::ALL_CURRENCIES_KEY][$identifier] : null;
     }
-    
+
     /**
      * Returns the default currency object
      * @return Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface

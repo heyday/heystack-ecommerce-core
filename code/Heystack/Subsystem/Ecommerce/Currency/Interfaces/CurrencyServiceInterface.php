@@ -42,13 +42,13 @@ interface CurrencyServiceInterface
      * @param string $to
      */
     public function convert($amount, $from, $to);
-    
+
     /**
      * Retrieves a currency object based on the identifier
      * @param type $identifier
      */
     public function getCurrency($identifier);
-    
+
     /**
      * Retrieves the default currency object
      */
