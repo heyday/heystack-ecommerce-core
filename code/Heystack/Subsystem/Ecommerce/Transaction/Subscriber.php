@@ -21,14 +21,14 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            Events::UPDATE_TRANSACTION => array('onUpdate',0)
+            Events::UPDATE => array('onUpdate',0)
         );
     }
 
     public function onUpdate()
     {
         $this->transaction->updateTotal();
-        $this->eventDispatcher->dispatch(Events::TRANSACTION_UPDATED);
+        $this->eventDispatcher->dispatch(Events::UPDATED);
     }
 
 }
