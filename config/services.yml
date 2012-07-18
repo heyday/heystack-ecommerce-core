@@ -17,9 +17,8 @@ services:
   
   transaction:
     class: %transaction.class%
-    arguments: [@state]
+    arguments: [ @state ]
     calls:
-      - [ addModifier, [ @productholder ] ]
       - [ restoreState ]
       
   transaction_subscriber:
@@ -47,14 +46,17 @@ services:
     arguments: [%currency.class%]    
       
   input_processor_handler:
+    class: %input_processor_handler.class%
     calls:
       - [ addProcessor, [ @currency_input_processor ] ]
       
   output_processor_handler:
+    class: %output_processor_handler.class%
     calls:
       - [ addProcessor, [ @currency_output_processor ] ]
       
   event_dispatcher:
+    class: %event_dispatcher.class%
     calls: 
       - [ addSubscriber, [ @transaction_subscriber ] ]
       

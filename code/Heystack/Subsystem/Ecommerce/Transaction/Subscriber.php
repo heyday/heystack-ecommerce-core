@@ -5,7 +5,7 @@ namespace Heystack\Subsystem\Ecommerce\Transaction;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Interfaces\TransactionInterface;
+use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 
 class Subscriber implements EventSubscriberInterface
 {
