@@ -16,7 +16,6 @@ use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events;
-use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -165,7 +164,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
             $this->data[self::ACTIVE_CURRENCY_KEY] = $currency;
 
-            $this->eventDispatcher->dispatch(Events::CHANGE, new CurrencyEvent($currency));
+            $this->eventDispatcher->dispatch(Events::CHANGED);
 
             return true;
         }
