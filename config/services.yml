@@ -23,7 +23,7 @@ services:
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
-    arguments: [@transaction, @event_dispatcher]
+    arguments: [@transaction, @event_dispatcher, @storage_processor_handler]
     
   currency_service:
     class: %currency_service.class%
@@ -64,3 +64,5 @@ services:
     class: %dataobject_generator.class%
     calls:
       - [ addYamlSchema, [ ecommerce-core/config/storage/transaction.yml ] ]
+      
+      

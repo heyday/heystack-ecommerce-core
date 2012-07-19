@@ -6,17 +6,20 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
+use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 
 class Subscriber implements EventSubscriberInterface
 {
     protected $transaction;
     protected $eventDispatcher;
+    protected $storageService;
     
 
-    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher )
+    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, $storageService)
     {
         $this->transaction = $transaction;
         $this->eventDispatcher = $eventDispatcher;
+        $this->storageService = $storageService;
     }
 
     public static function getSubscribedEvents()
@@ -33,38 +36,15 @@ class Subscriber implements EventSubscriberInterface
         $this->eventDispatcher->dispatch(Events::UPDATED);
     }
     
-    public function onStore() {
+    public function onStore() 
+    {
+              
+        $parentID = $this->storageService->process($this->transaction);
         
-        $storage = \Heystack\Subsystem\Core\ServiceStore::getService('storage_processor_handler');
+        $event = new TransactionStoredEvent($parentID);
         
-        $parentID = $storage->process($this->transaction);
+        $this->eventDispatcher->dispatch(Events::STORED, $event);
 
-        
-        foreach($this->transaction->getModifiers() as $modifier) {
-
-            $parentID = $storage->process($modifier, false, $parentID);
-            
-            if ($modifier->getIdentifier() == 'productholder') {
-                
-                foreach ($modifier->getPurchasables() as $purchaseable) {
-                    
-                    $storage->process($purchaseable, false, $parentID);
-                    
-                }
-                
-            } else if ($modifier->getIdentifier() == 'voucher_holder') {
-                
-                
-                foreach ($modifier->getVouchers() as $voucher) {
-                    
-                    $storage->process($voucher, false, $parentID);
-                    
-                }
-                
-            }
-
-        }
-        
     }
 
 }
