@@ -59,4 +59,8 @@ services:
     class: %event_dispatcher.class%
     calls: 
       - [ addSubscriber, [ @transaction_subscriber ] ]
-      
+  
+  dataobject_generator:
+    class: %dataobject_generator.class%
+    calls:
+      - [ addYamlSchema, [ ecommerce-core/config/storage/transaction.yml ] ]

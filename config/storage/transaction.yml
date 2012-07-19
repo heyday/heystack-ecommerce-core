@@ -1,0 +1,10 @@
+id: Transaction
+flat:
+  Total: Int
+  Status: Varchar(255)
+related:
+parent:
+children:
+  StoredProductHolder: StoredProductHolder
+  StoredVoucherHolder: StoredVoucherHolder
+  

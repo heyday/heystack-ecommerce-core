@@ -82,4 +82,29 @@ class Transaction implements TransactionInterface, StateableInterface
         
         $this->saveState();
     }
+    
+    public function getStorableData()
+    {
+
+        $data = array();
+        
+        $data['id'] = "Transaction";
+        
+        $data['flat'] = array(
+            'Total' => $this->getTotal(),
+            'Status' => 'pending'
+        );
+        
+        $data['related'] = array(
+            
+        );
+        
+        return $data;
+        
+    }
+    
+    public function getStorageIdentifier()
+    {
+        return 'dataobject';
+    }
 }
