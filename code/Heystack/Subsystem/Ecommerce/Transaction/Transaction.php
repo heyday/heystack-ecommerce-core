@@ -33,6 +33,11 @@ class Transaction implements TransactionInterface, StateableInterface
     {
         $this->data = $this->stateService->getObj(self::STATE_KEY);
     }
+    
+    public function getMerchantReference()
+    {
+        return 'Merchant Reference';
+    }
         
     public function addModifier(TransactionModifierInterface $modifier)
     {
@@ -51,7 +56,9 @@ class Transaction implements TransactionInterface, StateableInterface
     
     public function getTotal()
     {
-        return isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
+        $total = isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
+        
+        return number_format($total, 2, '.', '');
     }
     
     public function updateTotal()
