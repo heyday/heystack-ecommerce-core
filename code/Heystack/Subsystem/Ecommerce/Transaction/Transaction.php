@@ -8,13 +8,16 @@ use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInter
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+
 class Transaction implements TransactionInterface, StateableInterface
 {
     const STATE_KEY = 'transaction';
     const TOTAL_KEY = 'total';
+    const CURRENCY_KEY = 'currency';
     
     protected $stateService;
-    
+
     protected $modifiers = array();
     
     protected $data = array();
@@ -83,17 +86,31 @@ class Transaction implements TransactionInterface, StateableInterface
         $this->saveState();
     }
     
+    public function getCurrency()
+    {
+        return $this->data[self::CURRENCY_KEY];
+    }
+        
+    public function updateCurrency($currency) 
+    {       
+        $this->data[self::CURRENCY_KEY] = $currency;
+    }
+    
     public function getStorableData()
     {
 
+        \HeydayLog::log($this->getCurrency());
+        
         $data = array();
         
         $data['id'] = "Transaction";
         
         $data['flat'] = array(
             'Total' => $this->getTotal(),
-            'Status' => 'pending'
+            'Status' => 'pending',
+            'Currency' => $this->getCurrency()
         );
+
         
         $data['related'] = array(
             

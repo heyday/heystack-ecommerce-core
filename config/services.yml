@@ -23,11 +23,11 @@ services:
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
-    arguments: [@transaction, @event_dispatcher, @storage_processor_handler]
+    arguments: [ @transaction, @event_dispatcher, @storage_processor_handler ]
     
   currency_service:
     class: %currency_service.class%
-    arguments: [%currency.class%, @state, @event_dispatcher]
+    arguments: [ %currency.class%, @state, @event_dispatcher ]
     calls:
       - [ restoreState ]
   
@@ -39,7 +39,7 @@ services:
       
   currency_input_processor:
     class: %currency_input_processor.class%
-    arguments: [%currency.class%,@currency_service]
+    arguments: [ %currency.class%, @currency_service ]
     
   currency_output_processor:
     class: %currency_output_processor.class%

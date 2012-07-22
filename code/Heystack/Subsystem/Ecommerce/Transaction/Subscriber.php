@@ -8,6 +8,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 
+use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
+
 class Subscriber implements EventSubscriberInterface
 {
     protected $transaction;
@@ -26,7 +29,8 @@ class Subscriber implements EventSubscriberInterface
     {
         return array(
             Events::UPDATE => array('onUpdate',0),
-            Events::STORE => array('onStore', 0)
+            Events::STORE => array('onStore', 0),
+            CurrencyEvents::CHANGED => array('onCurrencyChange',0)
         );
     }
 
@@ -45,6 +49,11 @@ class Subscriber implements EventSubscriberInterface
         
         $this->eventDispatcher->dispatch(Events::STORED, $event);
 
+    }
+    
+    public function onCurrencyChange(CurrencyEvent $currencyEvent)
+    {
+        $this->transaction->updateCurrency($currencyEvent->getCurrency()->CurrencyCode);  
     }
 
 }

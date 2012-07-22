@@ -2,6 +2,7 @@ id: Transaction
 flat:
   Total: Int
   Status: Varchar(255)
+  Currency: Varchar(5)
 related:
 parent:
 children:
