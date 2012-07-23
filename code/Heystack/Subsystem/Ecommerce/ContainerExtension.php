@@ -8,7 +8,9 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class ContainerExtension implements ExtensionInterface
+use Heystack\Subsystem\Core\ContainerExtensionConfigProcessor;
+
+class ContainerExtension extends ContainerExtensionConfigProcessor implements ExtensionInterface
 {
 
     public function load(array $config, ContainerBuilder $container)
@@ -20,7 +22,8 @@ class ContainerExtension implements ExtensionInterface
         );
 
         $loader->load('services.yml');
-
+        
+        $this->processConfig($config, $container);
     }
 
     public function getNamespace()
