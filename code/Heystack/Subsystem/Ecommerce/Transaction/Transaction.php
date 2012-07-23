@@ -97,10 +97,7 @@ class Transaction implements TransactionInterface, StateableInterface
     }
     
     public function getStorableData()
-    {
-
-        \HeydayLog::log($this->getCurrency());
-        
+    {        
         $data = array();
         
         $data['id'] = "Transaction";
