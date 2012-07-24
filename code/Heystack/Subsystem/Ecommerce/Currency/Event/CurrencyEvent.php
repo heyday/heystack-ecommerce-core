@@ -25,6 +25,10 @@ use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
  */
 class CurrencyEvent extends Event
 {
+    /**
+     * Holds the currency object relevant to this event
+     * @var \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface 
+     */
     protected $currency;
 
     /**
