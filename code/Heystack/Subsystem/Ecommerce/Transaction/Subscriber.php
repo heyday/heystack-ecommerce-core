@@ -19,6 +19,8 @@ use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
 
+use Heystack\Subsystem\Core\Storage\Storage;
+
 /**
  * Transaction's Subscriber
  * 
@@ -50,7 +52,7 @@ class Subscriber implements EventSubscriberInterface
      * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, $storageService)
+    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService)
     {
         $this->transaction = $transaction;
         $this->eventDispatcher = $eventDispatcher;

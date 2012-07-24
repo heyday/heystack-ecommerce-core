@@ -23,7 +23,7 @@ services:
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
-    arguments: [ @transaction, @event_dispatcher, @storage_processor_handler ]
+    arguments: [ @transaction, @event_dispatcher, @storage ]
     
   currency_service:
     class: %currency_service.class%
