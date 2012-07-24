@@ -1,5 +1,13 @@
 <?php
+/**
+ * This file is part of the Ecommerce-Core package
+ *
+ * @package Ecommerce-Core
+ */
 
+/**
+ * Transaction namespace
+ */
 namespace Heystack\Subsystem\Ecommerce\Transaction;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -11,13 +19,37 @@ use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
 
+/**
+ * Transaction's Subscriber
+ * 
+ * Handles both subscribing to events and acting on those events needed for Transaction work properly
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @package Ecommerce-Core
+ */
 class Subscriber implements EventSubscriberInterface
 {
+    /**
+     * Holds the Transaction object
+     * @var \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface 
+     */
     protected $transaction;
+    
+    /**
+     * Holds the EventDispatcher Service object
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface 
+     */
     protected $eventDispatcher;
+    
+    
     protected $storageService;
     
-
+    /**
+     * Creates the Susbcriber object
+     * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
     public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, $storageService)
     {
         $this->transaction = $transaction;
@@ -25,6 +57,10 @@ class Subscriber implements EventSubscriberInterface
         $this->storageService = $storageService;
     }
 
+    /**
+     * Returns an array of events to subscribe to and the methods to call when those events are fired
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         return array(
@@ -34,26 +70,30 @@ class Subscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * Method that facilitiates updating the Transaction
+     */
     public function onUpdate()
     {
         $this->transaction->updateTotal();
         $this->eventDispatcher->dispatch(Events::UPDATED);
     }
     
+    /**
+     * Method that facilitates storing the Transaction
+     */
     public function onStore() 
     {
-              
-        $parentID = $this->storageService->process($this->transaction);
-        
-        $event = new TransactionStoredEvent($parentID);
-        
-        $this->eventDispatcher->dispatch(Events::STORED, $event);
-
+        $this->eventDispatcher->dispatch(Events::STORED, new TransactionStoredEvent($this->storageService->process($this->transaction)));
     }
     
+    /**
+     * Method that facilitates the updating of the active currency on the Transaction
+     * @param \Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent $currencyEvent
+     */
     public function onCurrencyChange(CurrencyEvent $currencyEvent)
     {
-        $this->transaction->updateCurrency($currencyEvent->getCurrency()->CurrencyCode);  
+        $this->transaction->setCurrencyCode($currencyEvent->getCurrency()->CurrencyCode);  
     }
 
 }

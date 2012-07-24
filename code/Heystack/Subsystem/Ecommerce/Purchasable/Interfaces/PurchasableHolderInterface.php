@@ -6,7 +6,7 @@
  */
 
 /**
- * PurchasableHolderInterface namespace
+ * Interfaces namespace
  */
 namespace Heystack\Subsystem\Ecommerce\Purchasable\Interfaces;
 
@@ -16,7 +16,7 @@ use \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInte
 /**
  * PurchasableHolderInterface
  *
- * This defines what methods are necessary to implement a Purchasable Holder
+ * This defines what methods are necessary to implement a Purchasable Holder Class
  *
  * @copyright  Heyday
  * @author Stevie Mayhew <stevie@heyday.co.nz>
@@ -67,8 +67,14 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
      */
     public function removePurchasable($identifier);
 
+    /**
+     * Updates the prices of the currently held purchasables
+     */
     public function updatePurchasablePrices();
 
+    /**
+     * Updates the total based on all purchasables held
+     */
     public function updateTotal();
 
 }

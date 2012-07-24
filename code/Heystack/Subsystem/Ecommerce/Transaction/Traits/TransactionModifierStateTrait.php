@@ -1,7 +1,22 @@
 <?php
+/**
+ * This file is part of the Ecommerce-Core package
+ *
+ * @package Ecommerce-Core
+ */
 
+/**
+ * Traits namespace
+ */
 namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
 
+/**
+ * Provides an implementation for the Statable Interface for Transaction Modifiers
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @package Ecommerce-Core
+ */
 trait TransactionModifierStateTrait
 { 
     /**

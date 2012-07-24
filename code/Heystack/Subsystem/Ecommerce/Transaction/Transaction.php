@@ -1,5 +1,13 @@
 <?php
+/**
+ * This file is part of the Ecommerce-Core package
+ *
+ * @package Ecommerce-Core
+ */
 
+/**
+ * Transaction namespace
+ */
 namespace Heystack\Subsystem\Ecommerce\Transaction;
 
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
@@ -8,55 +16,107 @@ use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInter
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+use Heystack\Subsystem\Core\Storage\StorableInterface;
 
-class Transaction implements TransactionInterface, StateableInterface
+/**
+ * Transaction's Subscriber
+ * 
+ * Handles both subscribing to events and acting on those events needed for Transaction work properly
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @author Stevie Mayhew <stevie@heyday.co.nz>
+ * @package Ecommerce-Core
+ */
+class Transaction implements TransactionInterface, StateableInterface, StorableInterface
 {
+    /**
+     * Holds the key used for storing state
+     */
     const STATE_KEY = 'transaction';
-    const TOTAL_KEY = 'total';
-    const CURRENCY_KEY = 'currency';
     
+    /**
+     * Holds the key used for storing the Total on the data array
+     */
+    const TOTAL_KEY = 'total';
+    
+    /**
+     * Holds the key use for storing the active currency code on the data array
+     */
+    const CURRENCY_CODE_KEY = 'currencycode';
+    
+    /**
+     * Holds the State service
+     * @var \Heystack\Subsystem\Core\State\State 
+     */
     protected $stateService;
 
+    /**
+     * Holds an array of currently managed TransactionModifiers
+     * @var array
+     */
     protected $modifiers = array();
     
+    /**
+     * Holds all the data that is stored on State
+     * @var array
+     */
     protected $data = array();
     
+    /**
+     * Creates the Transaction object
+     * @param \Heystack\Subsystem\Core\State\State $stateService
+     */
     public function __construct(State $stateService)
     {
         $this->stateService = $stateService;
     }
     
+    /**
+     * Saves the state of the Transaction object
+     */
     public function saveState()
     {
        $this->stateService->setObj(self::STATE_KEY, $this->data);
     }
     
+    /**
+     * Restores the state of the Transaction object
+     */
     public function restoreState()
     {
         $this->data = $this->stateService->getObj(self::STATE_KEY);
     }
-    
-    public function getMerchantReference()
-    {
-        return 'Merchant Reference';
-    }
-        
+
+    /**
+     * Add a TransactionModifier to the Transaction
+     * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
+     */
     public function addModifier(TransactionModifierInterface $modifier)
     {
         $this->modifiers[$modifier->getIdentifier()] = $modifier;
     }
     
+    /**
+     * Returns a TransactionModifier based on the identifier
+     * @param string $identifier
+     */
     public function getModifier($identifier)
     {
         return isset($this->modifiers[$identifier]) ? $this->modifiers[$identifier] : null;
     }
     
+    /**
+     * Returns all the TransactionModifiers held by the Transaction object
+     */
     public function getModifiers()
     {
         return $this->modifiers;
     }
     
+    /**
+     * Returns the aggregate total of the TransactionModifers held by the Transaction object
+     */
     public function getTotal()
     {
         $total = isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
@@ -64,6 +124,9 @@ class Transaction implements TransactionInterface, StateableInterface
         return number_format($total, 2, '.', '');
     }
     
+    /**
+     * Update the aggregate total of the TransactionModifers held by the Transaction object
+     */
     public function updateTotal()
     {
         $total = 0;
@@ -86,16 +149,26 @@ class Transaction implements TransactionInterface, StateableInterface
         $this->saveState();
     }
     
-    public function getCurrency()
+    /**
+     * Returns the currently active currency code
+     */
+    public function getCurrencyCode()
     {
-        return $this->data[self::CURRENCY_KEY];
+        return $this->data[self::CURRENCY_CODE_KEY];
     }
-        
-    public function updateCurrency($currency) 
+
+    /**
+     * Sets the currently active currency code
+     * @param string $currencyCode
+     */
+    public function setCurrencyCode($currencyCode)
     {       
-        $this->data[self::CURRENCY_KEY] = $currency;
+        $this->data[self::CURRENCY_CODE_KEY] = $currencyCode;
     }
     
+    /**
+     * @todo document this
+     */
     public function getStorableData()
     {        
         $data = array();
@@ -105,7 +178,7 @@ class Transaction implements TransactionInterface, StateableInterface
         $data['flat'] = array(
             'Total' => $this->getTotal(),
             'Status' => 'pending',
-            'Currency' => $this->getCurrency()
+            'Currency' => $this->getCurrencyCode()
         );
 
         
@@ -117,6 +190,9 @@ class Transaction implements TransactionInterface, StateableInterface
         
     }
     
+    /**
+     * @todo Document this
+     */
     public function getStorageIdentifier()
     {
         return 'dataobject';

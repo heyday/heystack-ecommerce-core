@@ -2,7 +2,7 @@
 /**
  * This file is part of the Ecommerce-Products package
  *
- * @package Ecommerce-Products
+ * @package Ecommerce-Core
  */
 
 /**
@@ -134,6 +134,11 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
 
     }
     
+    /**
+     * If after restoring state no currencies are loaded onto the data array get 
+     * them from the database and load them to the data array, and save the state.
+     * @throws \Exception
+     */
     public function ensureDataExists()
     {
         if (!$this->data || !isset($this->data[self::ALL_CURRENCIES_KEY])) {
