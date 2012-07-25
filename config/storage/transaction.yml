@@ -6,6 +6,6 @@ flat:
 related:
 parent:
 children:
-  StoredProductHolder: StoredProductHolder
-  StoredVoucherHolder: StoredVoucherHolder
+  ProductHolder: @ProductHolder
+  VoucherHolder: @VoucherHolder
   

@@ -193,8 +193,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     /**
      * @todo Document this
      */
-    public function getStorageIdentifier()
+    public function getStorageBackendIdentifiers()
     {
-        return 'dataobject';
+        return array(
+            'silverstripe_orm'
+        );
     }
 }
