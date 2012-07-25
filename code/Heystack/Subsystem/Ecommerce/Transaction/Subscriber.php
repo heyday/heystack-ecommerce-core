@@ -20,9 +20,7 @@ use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
 
 /**
- * Transaction's Subscriber
- * 
- * Handles both subscribing to events and acting on those events needed for Transaction work properly
+ * Handles both subscribing to events and acting on those events needed for Transaction to work properly
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
