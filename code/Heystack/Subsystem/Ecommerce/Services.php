@@ -6,7 +6,7 @@
  */
 
 /**
- * Shipping namespace
+ * Ecommerce namespace
  */
 namespace Heystack\Subsystem\Ecommerce;
 
