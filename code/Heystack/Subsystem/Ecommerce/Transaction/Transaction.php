@@ -20,7 +20,7 @@ use Heystack\Subsystem\Core\Storage\StorableInterface;
 
 /**
  * Transaction's Subscriber
- * 
+ *
  * Handles both subscribing to events and acting on those events needed for Transaction work properly
  *
  * @copyright  Heyday
@@ -34,20 +34,20 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Holds the key used for storing state
      */
     const STATE_KEY = 'transaction';
-    
+
     /**
      * Holds the key used for storing the Total on the data array
      */
     const TOTAL_KEY = 'total';
-    
+
     /**
      * Holds the key use for storing the active currency code on the data array
      */
     const CURRENCY_CODE_KEY = 'currencycode';
-    
+
     /**
      * Holds the State service
-     * @var \Heystack\Subsystem\Core\State\State 
+     * @var \Heystack\Subsystem\Core\State\State
      */
     protected $stateService;
 
@@ -56,13 +56,13 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var array
      */
     protected $modifiers = array();
-    
+
     /**
      * Holds all the data that is stored on State
      * @var array
      */
     protected $data = array();
-    
+
     /**
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
@@ -71,7 +71,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         $this->stateService = $stateService;
     }
-    
+
     /**
      * Saves the state of the Transaction object
      */
@@ -79,7 +79,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
        $this->stateService->setObj(self::STATE_KEY, $this->data);
     }
-    
+
     /**
      * Restores the state of the Transaction object
      */
@@ -96,7 +96,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         $this->modifiers[$modifier->getIdentifier()] = $modifier;
     }
-    
+
     /**
      * Returns a TransactionModifier based on the identifier
      * @param string $identifier
@@ -105,7 +105,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         return isset($this->modifiers[$identifier]) ? $this->modifiers[$identifier] : null;
     }
-    
+
     /**
      * Returns all the TransactionModifiers held by the Transaction object
      */
@@ -113,27 +113,27 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         return $this->modifiers;
     }
-    
+
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function getTotal()
     {
         $total = isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
-        
+
         return number_format($total, 2, '.', '');
     }
-    
+
     /**
      * Update the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function updateTotal()
     {
         $total = 0;
-        
-        foreach($this->modifiers as $modifier){
-            
-            switch($modifier->getType()){
+
+        foreach ($this->modifiers as $modifier) {
+
+            switch ($modifier->getType()) {
                 case TransactionModifierTypes::CHARGEABLE:
                     $total += $modifier->getTotal();
                     break;
@@ -141,14 +141,14 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
                     $total -= $modifier->getTotal();
                     break;
             }
-            
+
         }
-        
+
         $this->data[self::TOTAL_KEY] = $total;
-        
+
         $this->saveState();
     }
-    
+
     /**
      * Returns the currently active currency code
      */
@@ -162,34 +162,34 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @param string $currencyCode
      */
     public function setCurrencyCode($currencyCode)
-    {       
+    {
         $this->data[self::CURRENCY_CODE_KEY] = $currencyCode;
     }
-    
+
     /**
      * @todo document this
      */
     public function getStorableData()
-    {        
+    {
         $data = array();
-        
+
         $data['id'] = "Transaction";
-        
+
         $data['flat'] = array(
             'Total' => $this->getTotal(),
             'Status' => 'pending',
             'Currency' => $this->getCurrencyCode()
         );
 
-        
+
         $data['related'] = array(
-            
+
         );
-        
+
         return $data;
-        
+
     }
-    
+
     /**
      * @todo Document this
      */

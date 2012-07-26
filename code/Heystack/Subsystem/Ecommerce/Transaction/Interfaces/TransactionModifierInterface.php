@@ -23,12 +23,12 @@ interface TransactionModifierInterface
      * Returns a unique identifier for use in the Transaction
      */
     public function getIdentifier();
-    
+
     /**
      * Returns the total value of the TransactionModifier for use in the Transaction
      */
     public function getTotal();
-    
+
     /**
      * Indicates the type of amount the modifier will return
      * Must return a constant from TransactionModifierTypes

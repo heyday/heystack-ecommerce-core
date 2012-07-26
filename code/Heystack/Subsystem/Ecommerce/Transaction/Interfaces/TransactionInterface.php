@@ -24,28 +24,28 @@ interface TransactionInterface
      * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
      */
     public function addModifier(TransactionModifierInterface $modifier);
-    
+
     /**
      * Returns a TransactionModifier based on the identifier
      * @param string $identifier
      */
     public function getModifier($identifier);
-    
+
     /**
      * Returns all the TransactionModifiers held by the Transaction object
      */
     public function getModifiers();
-    
+
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function getTotal();
-    
+
     /**
      * Update the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function updateTotal();
-    
+
     /**
      * Returns the currently active currency code
      */

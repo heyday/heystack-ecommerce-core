@@ -120,7 +120,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function restoreState()
     {
 
-        $this->data = $this->state->getObj(self::STATE_KEY);        
+        $this->data = $this->state->getObj(self::STATE_KEY);
 
     }
 
@@ -133,9 +133,9 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
         $this->state->setObj(self::STATE_KEY, $this->data);
 
     }
-    
+
     /**
-     * If after restoring state no currencies are loaded onto the data array get 
+     * If after restoring state no currencies are loaded onto the data array get
      * them from the database and load them to the data array, and save the state.
      * @throws \Exception
      */
@@ -157,13 +157,13 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
                 if (!isset($this->data[self::ACTIVE_CURRENCY_KEY])) {
                     $this->setActiveCurrency($this->getDefaultCurrency()->getIdentifier());
                 }
-                
+
                 $this->saveState();
 
             } else {
                 throw new \Exception('Please create some currencies');
             }
-        }        
+        }
     }
 
     /**
@@ -191,6 +191,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function getActiveCurrency()
     {
         $this->ensureDataExists();
+
         return isset($this->data[self::ACTIVE_CURRENCY_KEY]) ? $this->data[self::ACTIVE_CURRENCY_KEY] : null;
     }
 
@@ -201,6 +202,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function getCurrencies()
     {
         $this->ensureDataExists();
+
         return isset($this->data[self::ALL_CURRENCIES_KEY]) ? $this->data[self::ALL_CURRENCIES_KEY] : null;
     }
 
@@ -213,6 +215,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function convert($amount, $from, $to)
     {
         $this->ensureDataExists();
+
         return $amount * ($this->data[self::ALL_CURRENCIES_KEY][$to]->getValue() / $this->data[self::ALL_CURRENCIES_KEY][$from]->getValue());
     }
 
@@ -224,6 +227,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function getCurrency($identifier)
     {
         $this->ensureDataExists();
+
         return isset($this->data[self::ALL_CURRENCIES_KEY][$identifier]) ? $this->data[self::ALL_CURRENCIES_KEY][$identifier] : null;
     }
 
@@ -234,6 +238,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function getDefaultCurrency()
     {
         $this->ensureDataExists();
+
         return isset($this->data[self::DEFAULT_CURRENCY_KEY]) ? $this->data[self::DEFAULT_CURRENCY_KEY] : null;
     }
 }
