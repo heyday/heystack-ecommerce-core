@@ -68,7 +68,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService)
+    public function __construct(State $stateService, \Heystack\Subsystem\Ecommerce\Transaction\Collator $collator)
     {
         $this->stateService = $stateService;
     }
@@ -114,15 +114,37 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         return $this->modifiers;
     }
+    
+    /**
+     * Returns modifiers on the transaction by TranactionModifierType
+     * @param string $type
+     * @return array
+     */
+    public function getModifiersByType($type)
+    {
+        
+        $modifiers = array();
+        
+        foreach ($this->modifiers as $identifier => $modifier) {
+            
+            if ($modifier->getType() == $type) {
+                
+                $modifiers[$identifier] = $modifier;
+                
+            }
+            
+        }
+        
+        return $modifiers;
+        
+    }
 
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function getTotal()
     {
-        $total = isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
-
-        return number_format($total, 2, '.', '');
+        return isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
     }
 
     /**
