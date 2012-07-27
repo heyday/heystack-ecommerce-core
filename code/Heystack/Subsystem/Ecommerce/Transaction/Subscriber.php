@@ -31,23 +31,22 @@ class Subscriber implements EventSubscriberInterface
 {
     /**
      * Holds the Transaction object
-     * @var \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface 
+     * @var \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface
      */
     protected $transaction;
-    
+
     /**
      * Holds the EventDispatcher Service object
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface 
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
-    
-    
+
     protected $storageService;
-    
+
     /**
      * Creates the Susbcriber object
      * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface               $eventDispatcher
      */
     public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService)
     {
@@ -77,22 +76,22 @@ class Subscriber implements EventSubscriberInterface
         $this->transaction->updateTotal();
         $this->eventDispatcher->dispatch(Events::UPDATED);
     }
-    
+
     /**
      * Method that facilitates storing the Transaction
      */
-    public function onStore() 
+    public function onStore()
     {
         $this->storageService->process($this->transaction);
     }
-    
+
     /**
      * Method that facilitates the updating of the active currency on the Transaction
      * @param \Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent $currencyEvent
      */
     public function onCurrencyChange(CurrencyEvent $currencyEvent)
     {
-        $this->transaction->setCurrencyCode($currencyEvent->getCurrency()->CurrencyCode);  
+        $this->transaction->setCurrencyCode($currencyEvent->getCurrency()->CurrencyCode);
     }
 
 }

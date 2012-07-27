@@ -20,9 +20,9 @@ use Heystack\Subsystem\Core\ContainerExtensionConfigProcessor;
 
 /**
  * Dependency Injection Extension
- * 
+ *
  * This class is responsible for loading this Subsystem's services.yml configuration
- * as well as overriding that configuration with the relevant entry from 
+ * as well as overriding that configuration with the relevant entry from
  * the mysite/config/services.yml configuration file
  *
  * @copyright  Heyday
@@ -53,7 +53,7 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
         );
 
         $loader->load('services.yml');
-        
+
         $this->processConfig($config, $container);
     }
 

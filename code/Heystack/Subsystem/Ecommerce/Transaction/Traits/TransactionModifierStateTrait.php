@@ -18,7 +18,7 @@ namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
  * @package Ecommerce-Core
  */
 trait TransactionModifierStateTrait
-{ 
+{
     /**
      * Saves the data array on the State service
      */
@@ -26,7 +26,7 @@ trait TransactionModifierStateTrait
     {
         $this->stateService->setObj(self::IDENTIFIER, $this->data);
     }
-    
+
     /**
      * Uses the State service to restore the data array
      */

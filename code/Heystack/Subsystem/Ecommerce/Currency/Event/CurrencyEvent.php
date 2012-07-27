@@ -27,7 +27,7 @@ class CurrencyEvent extends Event
 {
     /**
      * Holds the currency object relevant to this event
-     * @var \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface 
+     * @var \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     protected $currency;
 
@@ -45,7 +45,7 @@ class CurrencyEvent extends Event
      * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getCurrency()
-    {       
+    {
         return $this->currency;
     }
 }

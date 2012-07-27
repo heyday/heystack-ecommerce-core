@@ -18,7 +18,7 @@ namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
  * @package Ecommerce-Core
  */
 trait TransactionModifierSerializeTrait
-{ 
+{
     /**
      * Returns a serialized string from the data array
      * @return string

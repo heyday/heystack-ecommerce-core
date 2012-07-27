@@ -7,8 +7,6 @@ parameters:
   
   currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
   
-  purchasable_subscriber.class: Heystack\Subsystem\Ecommerce\Purchasable\Subscriber
-  
   transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
   
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
@@ -33,9 +31,6 @@ services:
   
   currency_subscriber:
     class: %currency_subscriber.class%
-      
-  purchasable_subscriber:
-    class: %purchasable_subscriber.class%
       
   currency_input_processor:
     class: %currency_input_processor.class%
