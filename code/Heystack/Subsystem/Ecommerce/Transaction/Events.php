@@ -37,7 +37,8 @@ final class Events
     const STORE = 'transaction.store';
     
     /**
-     * Used to indicate that Transaction has finished storing itself
+     * Used to indicate that Transaction has finished storing itself using the ss orm
      */
     const STORED = 'transaction.stored';
+    
 }

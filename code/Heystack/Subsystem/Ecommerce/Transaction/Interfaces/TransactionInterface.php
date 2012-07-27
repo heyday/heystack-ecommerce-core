@@ -56,4 +56,5 @@ interface TransactionInterface
      * @param string $currencyCode
      */
     public function setCurrencyCode($currencyCode);
+    
 }

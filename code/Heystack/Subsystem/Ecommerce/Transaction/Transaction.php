@@ -17,6 +17,7 @@ use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 
 use Heystack\Subsystem\Core\Storage\StorableInterface;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
 /**
  * Transaction's Subscriber
@@ -33,7 +34,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     /**
      * Holds the key used for storing state
      */
-    const STATE_KEY = 'transaction';
+    const IDENTIFIER = 'transaction';
     
     /**
      * Holds the key used for storing the Total on the data array
@@ -77,7 +78,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function saveState()
     {
-       $this->stateService->setObj(self::STATE_KEY, $this->data);
+       $this->stateService->setObj(self::IDENTIFIER, $this->data);
     }
     
     /**
@@ -85,7 +86,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function restoreState()
     {
-        $this->data = $this->stateService->getObj(self::STATE_KEY);
+        $this->data = $this->stateService->getObj(self::IDENTIFIER);
     }
 
     /**
@@ -165,6 +166,14 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {       
         $this->data[self::CURRENCY_CODE_KEY] = $currencyCode;
     }
+
+    
+    public function getStorableIdentifier()
+    {
+
+        return self::IDENTIFIER;
+
+    }
     
     /**
      * @todo document this
@@ -180,7 +189,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
             'Status' => 'pending',
             'Currency' => $this->getCurrencyCode()
         );
-
         
         $data['related'] = array(
             
@@ -193,10 +201,12 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     /**
      * @todo Document this
      */
-    public function getStorageBackendIdentifiers()
+    public function getStorableBackendIdentifiers()
     {
+		
         return array(
-            'silverstripe_orm'
+            Backend::IDENTIFIER
         );
+		
     }
 }

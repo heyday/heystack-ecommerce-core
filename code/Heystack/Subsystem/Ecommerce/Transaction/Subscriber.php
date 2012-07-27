@@ -14,7 +14,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
-use Heystack\Subsystem\Ecommerce\Transaction\Event\TransactionStoredEvent;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
@@ -84,7 +83,7 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onStore() 
     {
-        $this->eventDispatcher->dispatch(Events::STORED, new TransactionStoredEvent($this->storageService->process($this->transaction)));
+        $this->storageService->process($this->transaction);
     }
     
     /**
