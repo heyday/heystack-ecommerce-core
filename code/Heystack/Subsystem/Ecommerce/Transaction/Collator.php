@@ -6,7 +6,9 @@ use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 
 use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableHolderInterface;
 
-class Collator
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+
+class Collator implements ViewableDataInterface
 {
     
     protected $precision = 2;
@@ -15,25 +17,47 @@ class Collator
     public function __construct(TransactionInterface $transaction, $precision = null)
     {
         if (!is_null($precision)) {
-            
-            if (is_int($precision)) {
-                
-                $this->precision = $precision;
-                
-            } else {
-                
-                throw new \Exception('Precision must be an integer');
-                
-            }
-            
+            $this->setPrecision($precision);
         }
+
         $this->transaction = $transaction;
         
     }
     
+    public function getCastings()
+    {
+        
+        return array(
+            'Total' => 'Money'
+        );
+        
+    }
+    
+    public function getDynamicMethods()
+    {
+        return array();
+    }
+    
+    public function setPrecision($precision)
+    {            
+        if (is_int($precision)) {
+
+            $this->precision = $precision;
+
+        } else {
+
+            throw new \Exception('Precision must be an integer');
+
+        }
+
+    }
+    
     public function getTotal()
     {
-        return $this->round($this->transaction->getTotal());
+        return array(
+            'Amount' => $this->round($this->transaction->getTotal()),
+            'Currency' => $this->transaction->getCurrencyCode()
+        );
     }
     
     public function getSubTotal()
