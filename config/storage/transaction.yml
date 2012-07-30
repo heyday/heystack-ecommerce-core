@@ -3,9 +3,8 @@ flat:
   Total: Int
   Status: Varchar(255)
   Currency: Varchar(5)
+  Shipping: +ShippingHandler
 related:
 parent:
 children:
-  ProductHolder: @ProductHolder
-  VoucherHolder: @VoucherHolder
   

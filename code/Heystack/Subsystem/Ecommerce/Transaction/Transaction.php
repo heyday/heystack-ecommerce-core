@@ -221,22 +221,17 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableData()
     {
-        $data = array();
-
-        $data['id'] = "Transaction";
-
-        $data['flat'] = array(
-            'Total' => $this->getTotal(),
-            'Status' => 'pending',
-            'Currency' => $this->getCurrencyCode()
-        );
-
         
-        $data['related'] = array(
-
+        return array(
+            'id' => 'Transaction',
+            'flat' => array(
+                'Total' => $this->getTotal(),
+                'Status' => 'pending',
+                'Currency' => $this->getCurrencyCode(),
+                'References' => $this->modifiers              
+            ),
+            'related' => array()
         );
-
-        return $data;
 
     }
 
