@@ -11,11 +11,13 @@ parameters:
   
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
   
+  collator.class: Heystack\Subsystem\Ecommerce\Transaction\Collator
+  
 services:
   
   transaction:
     class: %transaction.class%
-    arguments: [ @state ]
+    arguments: [ @state, %collator.class% ]
     calls:
       - [ restoreState ]
       

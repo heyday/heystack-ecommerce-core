@@ -26,6 +26,7 @@ use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @author Stevie Mayhew <stevie@heyday.co.nz>
  * @package Ecommerce-Core
  */
@@ -63,14 +64,32 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var array
      */
     protected $data = array();
+    
+    /**
+     * The classname to be used to instantiate the Collator
+     * @var string
+     */
+    protected $collatorClassName;
+    
+    /**
+     * Holds the Collator object
+     * @var \Heystack\Subsystem\Ecommerce\Transaction\Collator
+     */
+    protected $collator;
 
     /**
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService)
+    public function __construct(State $stateService, $collatorClassName)
     {
         $this->stateService = $stateService;
+        
+        if(class_exists($collatorClassName)){
+            $this->collatorClassName = $collatorClassName;
+        }else{
+            throw new \Exception($collatorClassName . ' does not exist');
+        }
     }
 
     /**
@@ -114,15 +133,37 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         return $this->modifiers;
     }
+    
+    /**
+     * Returns modifiers on the transaction by TranactionModifierType
+     * @param string $type
+     * @return array
+     */
+    public function getModifiersByType($type)
+    {
+        
+        $modifiers = array();
+        
+        foreach ($this->modifiers as $identifier => $modifier) {
+            
+            if ($modifier->getType() == $type) {
+                
+                $modifiers[$identifier] = $modifier;
+                
+            }
+            
+        }
+        
+        return $modifiers;
+        
+    }
 
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function getTotal()
     {
-        $total = isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
-
-        return number_format($total, 2, '.', '');
+        return isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
     }
 
     /**
@@ -209,5 +250,21 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
             Backend::IDENTIFIER
         );
 		
+    }
+    
+    
+    public function getCollator()
+    {
+        if(!$this->collator){
+            $collator = new $this->collatorClassName($this);
+            
+            if($collator instanceof Collator){
+                $this->collator = $collator;
+            }else{
+                throw new \Exception($this->collatorClassName . ' is not an instance of Heystack\Subsystem\Ecommerce\Transaction\Collator');
+            }
+        }
+        
+        return $this->collator;
     }
 }
