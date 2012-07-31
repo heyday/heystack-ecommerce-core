@@ -206,6 +206,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     public function setCurrencyCode($currencyCode)
     {
         $this->data[self::CURRENCY_CODE_KEY] = $currencyCode;
+        $this->saveState();
     }
 
     
