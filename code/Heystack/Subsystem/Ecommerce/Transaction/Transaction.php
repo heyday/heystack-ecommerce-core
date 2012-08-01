@@ -209,7 +209,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         $this->saveState();
     }
 
-    
+    /**
+     * Get the identifier for this system 
+     * @return string
+     */
     public function getStorableIdentifier()
     {
 
@@ -218,8 +221,9 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
     
     /**
-     * @todo document this
-     */
+     * Get the data to store
+     * @return array The data to store
+     */    
     public function getStorableData()
     {
         
@@ -237,7 +241,8 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
 
     /**
-     * @todo Document this
+     * Get the type of storage that is being used
+     * @return string The type of storage in use
      */
     public function getStorableBackendIdentifiers()
     {
@@ -248,7 +253,12 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 		
     }
     
-    
+    /**
+     * @todo DocThis
+     * 
+     * @return type
+     * @throws \Exception
+     */
     public function getCollator()
     {
         if(!$this->collator){

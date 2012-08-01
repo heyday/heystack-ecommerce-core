@@ -1,5 +1,18 @@
 <?php
+/**
+ * This file is part of the Heystack package
+ *
+ * @package Ecommerce-Core
+ */
 
+/**
+ * Model Admin for currency
+ *
+ * @copyright  Heyday
+ * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @package Heystack
+ *
+ */
 class CurrencyAdmin extends ModelAdmin
 {
 

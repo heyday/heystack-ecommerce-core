@@ -2,7 +2,7 @@
 /**
  * This file is part of the Heystack package
  *
- * @package Heystack
+ * @package Ecommerce-Core
  */
 
 /**
