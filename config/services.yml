@@ -62,4 +62,9 @@ services:
     calls:
       - [ addYamlSchema, [ ecommerce-core/config/storage/transaction.yml ] ]
       
+  ss_orm_backend:
+    class: %ss_orm_backend.class%
+    calls:
+      - [ addDataProvider, [ @transaction ] ]
+      
       

@@ -1,9 +1,9 @@
+data_provider_id: transaction
 id: Transaction
 flat:
   Total: Int
   Status: Varchar(255)
   Currency: Varchar(5)
-  Shipping: +ShippingHandler
 related:
 parent:
 children:
