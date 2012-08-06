@@ -40,5 +40,5 @@ final class Events
      * Used to indicate that Transaction has finished storing itself using the ss orm
      */
     const STORED = 'transaction.stored';
-    
+
 }

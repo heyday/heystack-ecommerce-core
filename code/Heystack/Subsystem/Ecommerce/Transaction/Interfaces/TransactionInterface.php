@@ -38,7 +38,7 @@ interface TransactionInterface
 
     /**
      * Returns modifiers on the transaction by TranactionModifierType
-     * @param string $type
+     * @param  string $type
      * @return array
      */
     public function getModifiersByType($type);
@@ -63,10 +63,10 @@ interface TransactionInterface
      * @param string $currencyCode
      */
     public function setCurrencyCode($currencyCode);
-    
+
     /**
      * Retrieves the Transaction's Collator
      */
     public function getCollator();
-    
+
 }

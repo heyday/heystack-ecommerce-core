@@ -36,7 +36,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Holds the key used for storing state
      */
     const IDENTIFIER = 'transaction';
-    
+
     /**
      * Holds the key used for storing the Total on the data array
      */
@@ -64,13 +64,13 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var array
      */
     protected $data = array();
-    
+
     /**
      * The classname to be used to instantiate the Collator
      * @var string
      */
     protected $collatorClassName;
-    
+
     /**
      * Holds the Collator object
      * @var \Heystack\Subsystem\Ecommerce\Transaction\Collator
@@ -84,10 +84,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     public function __construct(State $stateService, $collatorClassName)
     {
         $this->stateService = $stateService;
-        
-        if(class_exists($collatorClassName)){
+
+        if (class_exists($collatorClassName)) {
             $this->collatorClassName = $collatorClassName;
-        }else{
+        } else {
             throw new \Exception($collatorClassName . ' does not exist');
         }
     }
@@ -133,29 +133,29 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         return $this->modifiers;
     }
-    
+
     /**
      * Returns modifiers on the transaction by TranactionModifierType
-     * @param string $type
+     * @param  string $type
      * @return array
      */
     public function getModifiersByType($type)
     {
-        
+
         $modifiers = array();
-        
+
         foreach ($this->modifiers as $identifier => $modifier) {
-            
+
             if ($modifier->getType() == $type) {
-                
+
                 $modifiers[$identifier] = $modifier;
-                
+
             }
-            
+
         }
-        
+
         return $modifiers;
-        
+
     }
 
     /**
@@ -210,7 +210,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
 
     /**
-     * Get the identifier for this system 
+     * Get the identifier for this system
      * @return string
      */
     public function getStorableIdentifier()
@@ -219,21 +219,21 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         return self::IDENTIFIER;
 
     }
-    
+
     /**
      * Get the data to store
      * @return array The data to store
-     */    
+     */
     public function getStorableData()
     {
-        
+
         return array(
             'id' => 'Transaction',
             'flat' => array(
                 'Total' => $this->getTotal(),
                 'Status' => 'pending',
                 'Currency' => $this->getCurrencyCode(),
-                'References' => $this->modifiers              
+                'References' => $this->modifiers
             ),
             'related' => array()
         );
@@ -246,31 +246,31 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableBackendIdentifiers()
     {
-		
+
         return array(
             Backend::IDENTIFIER
         );
-		
+
     }
-    
+
     /**
      * @todo DocThis
-     * 
+     *
      * @return type
      * @throws \Exception
      */
     public function getCollator()
     {
-        if(!$this->collator){
+        if (!$this->collator) {
             $collator = new $this->collatorClassName($this);
-            
-            if($collator instanceof Collator){
+
+            if ($collator instanceof Collator) {
                 $this->collator = $collator;
-            }else{
+            } else {
                 throw new \Exception($this->collatorClassName . ' is not an instance of Heystack\Subsystem\Ecommerce\Transaction\Collator');
             }
         }
-        
+
         return $this->collator;
     }
 }
