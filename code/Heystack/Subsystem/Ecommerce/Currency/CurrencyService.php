@@ -238,7 +238,15 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function getDefaultCurrency()
     {
         $this->ensureDataExists();
-
-        return isset($this->data[self::DEFAULT_CURRENCY_KEY]) ? $this->data[self::DEFAULT_CURRENCY_KEY] : null;
+        
+        if (isset($this->data[self::DEFAULT_CURRENCY_KEY])) {
+            
+            return $this->data[self::DEFAULT_CURRENCY_KEY];
+            
+        } else {
+            
+            throw new \Exception('Please select a default currency');
+            
+        }
     }
 }
