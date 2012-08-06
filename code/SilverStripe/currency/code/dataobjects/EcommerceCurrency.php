@@ -67,7 +67,7 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
     {
         return $this->record['CurrencyCode'];
     }
-    
+
     /**
      * Return the identifier for this currency
      * @return string
