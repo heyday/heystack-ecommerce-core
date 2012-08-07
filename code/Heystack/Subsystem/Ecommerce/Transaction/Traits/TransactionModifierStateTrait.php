@@ -24,7 +24,7 @@ trait TransactionModifierStateTrait
      */
     public function saveState()
     {
-        $this->stateService->setObj(self::IDENTIFIER, $this->data);
+        $this->stateService->setByKey(self::IDENTIFIER, $this->data);
     }
 
     /**
@@ -32,6 +32,6 @@ trait TransactionModifierStateTrait
      */
     public function restoreState()
     {
-        $this->data = $this->stateService->getObj(self::IDENTIFIER);
+        $this->data = $this->stateService->getByKey(self::IDENTIFIER);
     }
 }
