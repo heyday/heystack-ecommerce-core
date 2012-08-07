@@ -120,7 +120,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function restoreState()
     {
 
-        $this->data = $this->state->getObj(self::STATE_KEY);
+        $this->data = $this->state->getByKey(self::STATE_KEY);
 
     }
 
@@ -130,7 +130,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function saveState()
     {
 
-        $this->state->setObj(self::STATE_KEY, $this->data);
+        $this->state->setByKey(self::STATE_KEY, $this->data);
 
     }
 
