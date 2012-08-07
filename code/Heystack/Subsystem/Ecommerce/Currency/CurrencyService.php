@@ -120,7 +120,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function restoreState()
     {
 
-        $this->data = $this->state->getObj(self::STATE_KEY);
+        $this->data = $this->state->getByKey(self::STATE_KEY);
 
     }
 
@@ -130,7 +130,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function saveState()
     {
 
-        $this->state->setObj(self::STATE_KEY, $this->data);
+        $this->state->setByKey(self::STATE_KEY, $this->data);
 
     }
 
@@ -142,10 +142,12 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     protected function ensureDataExists()
     {
         if (!$this->data || !isset($this->data[self::ALL_CURRENCIES_KEY])) {
-            $currencies = \DataObject::get($this->currencyClass);
+            //$currencies = \DataObject::get($this->currencyClass);
+            
+            $currencies = unserialize(file_get_contents(realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache'));
 
             if ($currencies instanceof \DataObjectSet && $currencies->exists()) {
-
+  
                 foreach ($currencies as $currency) {
                     $this->data[self::ALL_CURRENCIES_KEY][$currency->getIdentifier()] = $currency;
 

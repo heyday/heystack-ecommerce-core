@@ -77,4 +77,17 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
         return $this->getCurrencyCode();
     }
 
+    /**
+     * Save all currencies to the cache
+     */
+    public function onAfterWrite()
+    {
+        $currencies = DataObject::get('EcommerceCurrency');
+        
+        file_put_contents(
+            realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache',
+            serialize($currencies)
+        );
+        
+    }
 }
