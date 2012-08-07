@@ -13,8 +13,6 @@ namespace Heystack\Subsystem\Ecommerce\Currency;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 
-use Heystack\Subsystem\Core\State\Backends\Memcache;
-
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events;
@@ -92,7 +90,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param \Heystack\Subsystem\Ecommerce\Currency\State                $globalState
      */
-    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher, Memcache $globalState)
+    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher, State $globalState)
     {
         $this->currencyClass = $currencyClass;
         $this->state = $state;
@@ -159,7 +157,18 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
             if (!isset($currencies) || !$currencies){
                 
                 // if the global state falls over get it off disk
-                $currencies = unserialize(file_get_contents(realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache'));
+                
+                $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache';
+                
+                if (file_exists($filename)) {
+                
+                    $currencies = unserialize(file_get_contents($filename));
+                    
+                } else {
+                
+                    $currencies = new \DataObjectSet;
+                
+                }
                 
                 $this->globalState->setByKey(CurrencyService::ALL_CURRENCIES_KEY, $currencies);
 
