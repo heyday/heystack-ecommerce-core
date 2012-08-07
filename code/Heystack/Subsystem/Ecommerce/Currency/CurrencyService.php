@@ -13,6 +13,8 @@ namespace Heystack\Subsystem\Ecommerce\Currency;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 
+use Heystack\Subsystem\Core\State\Backends\Memcache;
+
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events;
@@ -64,6 +66,12 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
+    
+    /**
+     * Stores the Global State Service
+     * @var State
+     */
+    protected $globalState;
 
     /**
      * Stores all the information used by the CurrencyService
@@ -82,12 +90,14 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * @param string                                                      $currencyClass
      * @param \Heystack\Subsystem\Ecommerce\Currency\State                $state
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param \Heystack\Subsystem\Ecommerce\Currency\State                $globalState
      */
-    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher)
+    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher, Memcache $globalState)
     {
         $this->currencyClass = $currencyClass;
         $this->state = $state;
         $this->eventDispatcher = $eventDispatcher;
+        $this->globalState = $globalState;
     }
 
      /**
@@ -142,10 +152,15 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     protected function ensureDataExists()
     {
         if (!$this->data || !isset($this->data[self::ALL_CURRENCIES_KEY])) {
-            //$currencies = \DataObject::get($this->currencyClass);
             
-            $currencies = unserialize(file_get_contents(realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache'));
-
+            // get currency from the global state
+            $currencies = $this->globalState->getByKey(self::ALL_CURRENCIES_KEY);
+            
+            if (!isset($currencies) || !$currencies){
+                // if the global state falls over make sure we have a backup
+                $currencies = unserialize(file_get_contents(realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache'));
+            }
+               
             if ($currencies instanceof \DataObjectSet && $currencies->exists()) {
   
                 foreach ($currencies as $currency) {

@@ -27,7 +27,7 @@ services:
     
   currency_service:
     class: %currency_service.class%
-    arguments: [ %currency.class%, @state, @event_dispatcher ]
+    arguments: [ %currency.class%, @state, @event_dispatcher, @backend_global_memcache ]
     calls:
       - [ restoreState ]
   

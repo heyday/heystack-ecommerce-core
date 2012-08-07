@@ -6,6 +6,8 @@
  */
 use \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
 
+use Heystack\Subsystem\Core\ServiceStore;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 /**
  * EcommerceCurrency is the base currency object. Allows for multiple currencies
  *
@@ -83,6 +85,10 @@ class EcommerceCurrency extends DataObject implements CurrencyInterface, Seriali
     public function onAfterWrite()
     {
         $currencies = DataObject::get('EcommerceCurrency');
+        
+        $globalState = ServiceStore::getService(\Heystack\Subsystem\Core\Services::BACKEND_GLOBAL_MEMCACHE);
+        
+        $globalState->setByKey(CurrencyService::ALL_CURRENCIES_KEY, $currencies);
         
         file_put_contents(
             realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache',
