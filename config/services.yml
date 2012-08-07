@@ -3,7 +3,7 @@ parameters:
   currency_subscriber.class: Heystack\Subsystem\Ecommerce\Currency\Subscriber
   currency_input_processor.class: Heystack\Subsystem\Ecommerce\Currency\Input\Processor
   currency_output_processor.class: Heystack\Subsystem\Ecommerce\Currency\Output\Processor
-  currency.class: EcommerceCurrency
+  currency.class: $$$
   
   currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
   
