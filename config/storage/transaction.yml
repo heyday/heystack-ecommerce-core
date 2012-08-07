@@ -2,7 +2,7 @@ data_provider_id: transaction
 id: Transaction
 flat:
   Total: Int
-  Status: Varchar(255)
+  Status: Enum('Pending,Successful,Failed,Dispatched,Processing,Cancelled','Pending')
   Currency: Varchar(5)
 related:
 parent:

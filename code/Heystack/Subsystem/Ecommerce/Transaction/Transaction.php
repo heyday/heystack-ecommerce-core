@@ -231,7 +231,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
             'id' => 'Transaction',
             'flat' => array(
                 'Total' => $this->getTotal(),
-                'Status' => 'pending',
+                'Status' => 'Pending',
                 'Currency' => $this->getCurrencyCode()
             ),
             'related' => array()
