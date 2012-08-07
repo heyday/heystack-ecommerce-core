@@ -97,7 +97,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function saveState()
     {
-       $this->stateService->setObj(self::IDENTIFIER, $this->data);
+       $this->stateService->setByKey(self::IDENTIFIER, $this->data);
     }
 
     /**
@@ -105,7 +105,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function restoreState()
     {
-        $this->data = $this->stateService->getObj(self::IDENTIFIER);
+        $this->data = $this->stateService->getByKey(self::IDENTIFIER);
     }
 
     /**
