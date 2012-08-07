@@ -30,9 +30,12 @@ class PricingDecorator extends DataObjectDecorator
         
         foreach ($currencyService->getCurrencies() as $currency) {
             
-            $fields->removeByName($currency->getCurrencyCode()."Price");
+            $currencyCode = $currency->getCurrencyCode();
             
-            $fields->addFieldToTab('Root.Prices', new NumericField($currency->getCurrencyCode()."Price"));
+            
+            $fields->removeByName($currencyCode . "Price");
+            
+            $fields->addFieldToTab('Root.Prices', new NumericField($currencyCode."Price", $currencyCode . " Price"));
             
         }
         
