@@ -157,10 +157,12 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
             $currencies = $this->globalState->getByKey(self::ALL_CURRENCIES_KEY);
             
             if (!isset($currencies) || !$currencies){
+                
                 // if the global state falls over get it off disk
                 $currencies = unserialize(file_get_contents(realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache'));
                 
                 $this->globalState->setByKey(CurrencyService::ALL_CURRENCIES_KEY, $currencies);
+
             }
                
             if ($currencies instanceof \DataObjectSet && $currencies->exists()) {
