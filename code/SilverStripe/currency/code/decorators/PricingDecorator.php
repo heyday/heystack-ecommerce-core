@@ -21,6 +21,7 @@ class PricingDecorator extends DataObjectDecorator
         return array(
             'db' => $db
         );
+        
     }
     
     public function updateCMSFields(\FieldSet &$fields)

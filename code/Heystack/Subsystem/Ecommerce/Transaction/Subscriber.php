@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
+use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
 
 use Heystack\Subsystem\Core\Storage\Storage;
 
