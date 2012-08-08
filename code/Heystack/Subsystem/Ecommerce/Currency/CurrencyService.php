@@ -191,7 +191,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
                 $this->saveState();
 
             } else {
-                throw new \Exception('Please create some currencies');
+                throw new \Exception('Please create some currencies or save a record to instantiate the cache for the first time.');
             }
         }
     }
