@@ -1,12 +1,14 @@
 parameters:
   
+  currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
   currency_subscriber.class: Heystack\Subsystem\Ecommerce\Currency\Subscriber
   currency_input_processor.class: Heystack\Subsystem\Ecommerce\Currency\Input\Processor
   currency_output_processor.class: Heystack\Subsystem\Ecommerce\Currency\Output\Processor
   currency.class: $$$
   
-  currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
-  
+  locale_handler.class: Heystack\Subsystem\Ecommerce\Locale\LocaleHandler
+  country.class: $$$
+    
   transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
   
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
@@ -25,9 +27,15 @@ services:
     class: %transaction_subscriber.class%
     arguments: [ @transaction, @event_dispatcher, @storage ]
     
+  locale_handler:
+    class: %locale_handler.class%
+    arguments: [ %country.class%, @state, @state_global, @event_dispatcher, @monolog ]
+    calls:
+      - [ restoreState ]
+    
   currency_service:
     class: %currency_service.class%
-    arguments: [ %currency.class%, @state, @event_dispatcher, @state_global ]
+    arguments: [ %currency.class%, @state,  @state_global, @event_dispatcher ]
     calls:
       - [ restoreState ]
   
