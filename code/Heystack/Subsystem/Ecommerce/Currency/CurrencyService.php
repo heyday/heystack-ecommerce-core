@@ -51,13 +51,13 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     /**
      * State Key constant
      */
-    const STATE_KEY = 'currency_service';
+    const IDENTIFIER = 'currency_service';
 
     /**
      * Stores the State Service
      * @var State
      */
-    protected $state;
+    protected $sessionState;
 
     /**
      * Stores the EventDispatcher
@@ -87,18 +87,18 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * CurrencySerivce Constructor
      * @param string                                                      $currencyClass
      * @param \Heystack\Subsystem\Ecommerce\Currency\State                $state
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param \Heystack\Subsystem\Ecommerce\Currency\State                $globalState
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher, State $globalState)
+    public function __construct($currencyClass, State $sessionState, State $globalState, EventDispatcherInterface $eventDispatcher)
     {
         $this->currencyClass = $currencyClass;
-        $this->state = $state;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->sessionState = $sessionState;
         $this->globalState = $globalState;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-     /**
+    /**
      * Returns a serialized string from the data array
      * @return string
      */
@@ -128,7 +128,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function restoreState()
     {
 
-        $this->data = $this->state->getByKey(self::STATE_KEY);
+        $this->data = $this->sessionState->getByKey(self::IDENTIFIER);
 
     }
 
@@ -138,7 +138,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function saveState()
     {
 
-        $this->state->setByKey(self::STATE_KEY, $this->data);
+        $this->sessionState->setByKey(self::IDENTIFIER, $this->data);
 
     }
 
@@ -158,23 +158,23 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
                 
                 // if the global state falls over get it off disk
                 
-                $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currency.cache';
+                $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currencies.cache';
                 
                 if (file_exists($filename)) {
                 
                     $currencies = unserialize(file_get_contents($filename));
                     
-                } else {
+                } else if (\Director::is_cli() || strpos ($_SERVER['REQUEST_URI'], 'admin') !== false){
                 
                     $currencies = new \DataObjectSet;
                 
                 }
                 
-                $this->globalState->setByKey(CurrencyService::ALL_CURRENCIES_KEY, $currencies);
+                $this->globalState->setByKey(self::ALL_CURRENCIES_KEY, $currencies);
 
             }
                
-            if ($currencies instanceof \DataObjectSet && $currencies->exists()) {
+            if ($currencies instanceof \DataObjectSet) {
   
                 foreach ($currencies as $currency) {
                     $this->data[self::ALL_CURRENCIES_KEY][$currency->getIdentifier()] = $currency;
@@ -184,7 +184,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
                     }
                 }
 
-                if (!isset($this->data[self::ACTIVE_CURRENCY_KEY])) {
+                if (!isset($this->data[self::ACTIVE_CURRENCY_KEY]) && $currencies->exists()) {
                     $this->setActiveCurrency($this->getDefaultCurrency()->getIdentifier());
                 }
 
