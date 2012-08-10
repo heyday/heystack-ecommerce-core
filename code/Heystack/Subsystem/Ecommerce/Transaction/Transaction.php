@@ -20,9 +20,10 @@ use Heystack\Subsystem\Core\Storage\StorableInterface;
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
 /**
- * Transaction's Subscriber
- *
- * Handles both subscribing to events and acting on those events needed for Transaction work properly
+ * Transaction Service
+ * 
+ * Handles all the TransactionModifiers and calculates the order's total. 
+ * Also holds the collator for displaying data
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
@@ -171,24 +172,37 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function updateTotal()
     {
+        $this->data[self::TOTAL_KEY] = $this->getTotalWithExclusions(array());
+
+        $this->saveState();
+    }
+    
+    /**
+     * Retrieves the total without adding excluded modifiers
+     * @param array $exclude an array of identifiers to be excluded
+     */
+    public function getTotalWithExclusions(array $exclude)
+    {
         $total = 0;
 
         foreach ($this->modifiers as $modifier) {
+            
+            if(!in_array($modifier->getIdentifier(), $exclude)){
 
-            switch ($modifier->getType()) {
-                case TransactionModifierTypes::CHARGEABLE:
-                    $total += $modifier->getTotal();
-                    break;
-                case TransactionModifierTypes::DEDUCTIBLE:
-                    $total -= $modifier->getTotal();
-                    break;
+                switch ($modifier->getType()) {
+                    case TransactionModifierTypes::CHARGEABLE:
+                        $total += $modifier->getTotal();
+                        break;
+                    case TransactionModifierTypes::DEDUCTIBLE:
+                        $total -= $modifier->getTotal();
+                        break;
+                }
+            
             }
-
+            
         }
 
-        $this->data[self::TOTAL_KEY] = $total;
-
-        $this->saveState();
+        return $total;
     }
 
     /**
