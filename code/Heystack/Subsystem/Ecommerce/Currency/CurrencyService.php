@@ -279,4 +279,11 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
             
         }
     }
+    
+    public function updateCurrencies($currencies) 
+    {
+        
+        $this->globalState->setByKey(self::ALL_CURRENCIES_KEY, $currencies);
+        
+    }
 }
