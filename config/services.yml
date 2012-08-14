@@ -37,6 +37,7 @@ services:
     class: %currency_service.class%
     arguments: [ %currency.class%, @state,  @state_global, @event_dispatcher ]
     calls:
+      - [ restoreGlobalState ]
       - [ restoreState ]
   
   currency_subscriber:
