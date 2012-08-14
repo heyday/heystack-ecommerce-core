@@ -222,7 +222,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function getActiveCurrency()
     {
-        return isset($this->data[self::ACTIVE_CURRENCY_KEY]) ? $this->data[self::ACTIVE_CURRENCY_KEY] : null;
+        return isset($this->data[self::ACTIVE_CURRENCY_KEY]) && isset($this->data_global[self::ALL_CURRENCIES_KEY][$this->data[self::ACTIVE_CURRENCY_KEY]])? $this->data_global[self::ALL_CURRENCIES_KEY][$this->data[self::ACTIVE_CURRENCY_KEY]] : null;
     }
 
     /**
