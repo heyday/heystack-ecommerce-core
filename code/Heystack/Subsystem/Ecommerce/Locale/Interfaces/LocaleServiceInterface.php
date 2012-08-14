@@ -2,7 +2,7 @@
 
 namespace Heystack\Subsystem\Ecommerce\Locale\Interfaces;
 
-interface LocaleHandlerInterface
+interface LocaleServiceInterface
 {
     public function setActiveCountry($identifier);
     public function getActiveCountry();

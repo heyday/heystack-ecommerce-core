@@ -50,7 +50,7 @@ trait CountryTrait
         
         $globalState = \Heystack\Subsystem\Core\ServiceStore::getService(\Heystack\Subsystem\Core\Services::STATE_GLOBAL);
         
-        $globalState->setByKey(\Heystack\Subsystem\Ecommerce\Locale\LocaleHandler::ALL_COUNTRIES_KEY, $countries);
+        $globalState->setByKey(\Heystack\Subsystem\Ecommerce\Locale\LocaleService::ALL_COUNTRIES_KEY, $countries);
         
         file_put_contents(
             realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'countries.cache',

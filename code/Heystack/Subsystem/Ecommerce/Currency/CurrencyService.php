@@ -152,12 +152,8 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         if (!$this->data_global || !isset($this->data_global[self::ALL_CURRENCIES_KEY]) || !isset($this->data_global[self::DEFAULT_CURRENCY_KEY])) {
                 
             $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currencies.cache';
-
-            if (file_exists($filename)) {
-                
-                $currencies = unserialize(file_get_contents($filename));
-
-            }
+            
+            $currencies = file_exists($filename) ? unserialize(file_get_contents($filename)) : false;
             
             if ($currencies instanceof \DataObjectSet) {
                 
@@ -165,13 +161,9 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
                 
             } else {
                 
-                if (strpos($_SERVER['REQUEST_URI'], 'admin')) {
-                    
-                    $this->updateCurrencies(new \DataObjectSet);
-                    
-                }
+                $this->updateCurrencies(new \DataObjectSet);
                 
-                throw new \Exception('Please create some currencies or save a record to instantiate the cache for the first time.');
+                $this->monologService->err('Configuration error: Please add some currencies and save them');
                 
             }
             
@@ -299,7 +291,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     public function updateCurrencies($currencies, $write = true)
     {
                 
-        $this->data_global[self::ALL_CURRENCIES_KEY] = $this->currenciesDOSToArray($currencies);
+        $this->data_global[self::ALL_CURRENCIES_KEY] = $this->dosToArray($currencies);
 
         $this->setDefaultCurrency();
 
@@ -316,7 +308,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         
     }
     
-    protected function currenciesDOSToArray(\DataObjectSet $currencies)
+    protected function dosToArray(\DataObjectSet $currencies)
     {
         
         $arr = array();

@@ -6,7 +6,7 @@ parameters:
   currency_output_processor.class: Heystack\Subsystem\Ecommerce\Currency\Output\Processor
   currency.class: $$$
   
-  locale_handler.class: Heystack\Subsystem\Ecommerce\Locale\LocaleHandler
+  locale_service.class: Heystack\Subsystem\Ecommerce\Locale\LocaleService
   country.class: $$$
     
   transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
@@ -27,10 +27,11 @@ services:
     class: %transaction_subscriber.class%
     arguments: [ @transaction, @event_dispatcher, @storage ]
     
-  locale_handler:
-    class: %locale_handler.class%
+  locale_service:
+    class: %locale_service.class%
     arguments: [ %country.class%, @state, @state_global, @event_dispatcher, @monolog ]
     calls:
+      - [ restoreGlobalState ]
       - [ restoreState ]
     
   currency_service:
