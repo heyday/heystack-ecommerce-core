@@ -33,7 +33,7 @@ interface CountryInterface extends \Serializable
      * Returns the country code of the country object
      */
     public function getCountryCode();
-    
+
     /**
      * Returns a boolean indicating whether this is the default country
      */

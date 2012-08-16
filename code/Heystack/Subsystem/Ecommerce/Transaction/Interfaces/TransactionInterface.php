@@ -68,7 +68,7 @@ interface TransactionInterface
      * Retrieves the Transaction's Collator
      */
     public function getCollator();
-    
+
     /**
      * Retrieves the total without adding excluded modifiers
      * @param array $exclude an array of identifiers to be excluded

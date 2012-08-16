@@ -35,30 +35,30 @@ trait CountryTrait
     {
         return $this->record['CountryCode'];
     }
-    
+
     public function isDefault()
     {
         return $this->record['IsDefault'];
     }
-    
+
     /**
      * Save all countries to the cache
      */
     public function onAfterWrite()
     {
         $countries = \DataObject::get(__CLASS__);
-        
+
         $globalState = \Heystack\Subsystem\Core\ServiceStore::getService(\Heystack\Subsystem\Core\Services::STATE_GLOBAL);
-        
+
         $globalState->setByKey(\Heystack\Subsystem\Ecommerce\Locale\LocaleService::ALL_COUNTRIES_KEY, $countries);
-        
+
         file_put_contents(
             realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'countries.cache',
             serialize($countries)
         );
-        
+
     }
-    
+
     /**
      * Save all countries to the cache
      */

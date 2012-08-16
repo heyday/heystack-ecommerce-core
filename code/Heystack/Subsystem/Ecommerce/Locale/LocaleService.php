@@ -18,15 +18,15 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     const ALL_COUNTRIES_KEY = 'allcountries';
     const ACTIVE_COUNTRY_KEY = 'activecountry';
     const DEFAULT_COUNTRY_KEY = 'defaultcountry';
-    
+
     const IDENTIFIER = 'localeservice';
-    
+
     protected $countryClass;
     protected $sessionState;
     protected $globalState;
-    protected $eventService;    
+    protected $eventService;
     protected $monologService;
-    
+
     protected $data = array();
     protected $data_global = array();
 
@@ -38,7 +38,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         $this->eventService = $eventService;
         $this->monologService = $monologService;
     }
-    
+
     /**
      * Uses the State service to restore the data array. It also sets all the
      * currencies/default currency on the data array if this is the first time
@@ -51,13 +51,13 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         $this->ensureDataExists();
 
     }
-    
+
     public function restoreGlobalState()
     {
 
         $this->data_global = $this->globalState->getByKey(self::IDENTIFIER);
         $this->ensureGlobalDataExists();
-        
+
     }
 
     /**
@@ -79,37 +79,37 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         $this->globalState->setByKey(self::IDENTIFIER, $this->data_global);
 
     }
-    
+
     public function getCountryClass()
     {
         return $this->countryClass;
     }
-    
+
     public function ensureGlobalDataExists()
     {
-        
+
         if (!$this->data_global || !isset($this->data_global[self::ALL_COUNTRIES_KEY]) || !isset($this->data_global[self::DEFAULT_COUNTRY_KEY])) {
-                
+
             $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'countries.cache';
-            
+
             $countries = file_exists($filename) ? unserialize(file_get_contents($filename)) : false;
-            
+
             if ($countries instanceof \DataObjectSet) {
-                
+
                 $this->updateCountries($countries, false);
-                
+
             } else {
-                
+
                 $this->updateCountries(new \DataObjectSet);
-                
+
                 $this->monologService->err('Configuration error: Please add some countries and save them');
-                
+
             }
-            
+
         }
-        
+
     }
-    
+
     /**
      * If after restoring state no countries are loaded onto the data array get
      * them from the database and load them to the data array, and save the state.
@@ -117,35 +117,35 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     protected function ensureDataExists()
     {
-        
+
         if (!$this->data || !array_key_exists(self::ACTIVE_COUNTRY_KEY, $this->data)) {
-            
+
             $defaultCountry = $this->getDefaultCountry();
-            
-            if ($defaultCountry) {                
-            
+
+            if ($defaultCountry) {
+
                 $this->data[self::ACTIVE_COUNTRY_KEY] = $defaultCountry;
-            
+
                 $this->saveState();
-                
+
             }
-         
+
         }
-        
+
     }
-    
+
     public function setActiveCountry($identifier)
     {
         if ($country = $this->getCountry($identifier)) {
 
             $this->data[self::ACTIVE_COUNTRY_KEY] = $country;
-            
+
             $this->saveState();
-            
+
             $this->eventService->dispatch(Events::CHANGED);
         }
     }
-    
+
     public function getActiveCountry()
     {
         return isset($this->data[self::ACTIVE_COUNTRY_KEY]) && isset($this->data_global[self::ALL_COUNTRIES_KEY][$this->data[self::ACTIVE_COUNTRY_KEY]])? $this->data_global[self::ALL_COUNTRIES_KEY][$this->data[self::ACTIVE_COUNTRY_KEY]] : null;
@@ -169,75 +169,75 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     {
         return isset($this->data[self::ALL_COUNTRIES_KEY]) ? $this->data[self::ALL_COUNTRIES_KEY] : null;
     }
-    
+
     public function setDefaultCurrency($identifier = null)
     {
-        
+
         if (!is_null($identifier)) {
-            
+
             $this->data_global[self::DEFAULT_COUNTRY_KEY] = $identifier;
-        
+
         } else {
-            
+
             foreach ($this->data_global[self::ALL_COUNTRIES_KEY] as $country) {
-                
+
                 if ($country->isDefault()) {
-                    
+
                     $this->data_global[self::DEFAULT_COUNTRY_KEY] = $country->getIdentifier();
-                    
+
                 }
-                
+
             }
-            
+
         }
-        
+
     }
-    
+
     public function getDefaultCountry()
-    {   
+    {
         if (isset($this->data_global[self::DEFAULT_COUNTRY_KEY])) {
-            
+
             return $this->data_global[self::DEFAULT_COUNTRY_KEY];
-            
+
         } else {
-            
+
             return false;
-            
+
         }
     }
-    
+
     public function updateCountries($countries, $write = true)
     {
-                
+
         $this->data_global[self::ALL_COUNTRIES_KEY] = $this->dosToArray($countries);
 
         $this->setDefaultCurrency();
 
         $this->saveGlobalState();
-        
+
         if ($write) {
-        
+
             file_put_contents(
                 realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'countries.cache',
                 serialize($countries)
             );
-            
+
         }
-        
+
     }
-    
+
     protected function dosToArray(\DataObjectSet $countries)
     {
-        
+
         $arr = array();
-        
+
         foreach ($countries as $country) {
 
             $arr[$country->getIdentifier()] = $country;
 
         }
-        
+
         return $arr;
-        
+
     }
 }

@@ -21,8 +21,8 @@ use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
 /**
  * Transaction Service
- * 
- * Handles all the TransactionModifiers and calculates the order's total. 
+ *
+ * Handles all the TransactionModifiers and calculates the order's total.
  * Also holds the collator for displaying data
  *
  * @copyright  Heyday
@@ -176,7 +176,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
         $this->saveState();
     }
-    
+
     /**
      * Retrieves the total without adding excluded modifiers
      * @param array $exclude an array of identifiers to be excluded
@@ -186,8 +186,8 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         $total = 0;
 
         foreach ($this->modifiers as $modifier) {
-            
-            if(!in_array($modifier->getIdentifier(), $exclude)){
+
+            if (!in_array($modifier->getIdentifier(), $exclude)) {
 
                 switch ($modifier->getType()) {
                     case TransactionModifierTypes::CHARGEABLE:
@@ -197,9 +197,9 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
                         $total -= $modifier->getTotal();
                         break;
                 }
-            
+
             }
-            
+
         }
 
         return $total;
@@ -233,16 +233,16 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         return self::IDENTIFIER;
 
     }
-    
+
     /**
      * Get the name of the schema this system relates to
      * @return string
      */
     public function getSchemaName()
     {
-        
+
         return 'Transaction';
-        
+
     }
 
     /**
