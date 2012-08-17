@@ -21,6 +21,8 @@ use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use Heystack\Subsystem\Core\Exception\ConfigurationException;
+
 /**
  * CurrencyService default implementation
  *
@@ -163,7 +165,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
 
                 $this->updateCurrencies(new \DataObjectSet);
 
-                $this->monologService->err('Configuration error: Please add some currencies and save them');
+                throw new ConfigurationException('Please add some currencies and save them');
 
             }
 

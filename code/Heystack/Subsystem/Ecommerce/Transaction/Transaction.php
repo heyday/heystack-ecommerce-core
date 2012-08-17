@@ -280,7 +280,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
 
     /**
-     * Get collator for the transaction, using a classname 
+     * Get collator for the transaction, using a classname
      *
      * @return type
      * @throws ConfigurationException
