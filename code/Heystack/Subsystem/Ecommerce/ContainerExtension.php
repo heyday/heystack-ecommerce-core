@@ -49,7 +49,7 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../../../../config/')
+            new FileLocator(ECOMMERCE_CORE_BASE_PATH . '/config/')
         );
 
         $loader->load('services.yml');

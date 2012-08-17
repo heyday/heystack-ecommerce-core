@@ -19,6 +19,8 @@ use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\Storage\StorableInterface;
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
+use Heystack\Subsystem\Core\Exception\ConfigurationException;
+
 /**
  * Transaction Service
  *
@@ -89,7 +91,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         if (class_exists($collatorClassName)) {
             $this->collatorClassName = $collatorClassName;
         } else {
-            throw new \Exception($collatorClassName . ' does not exist');
+            throw new ConfigurationException($collatorClassName . ' does not exist');
         }
     }
 
@@ -278,10 +280,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
 
     /**
-     * @todo DocThis
+     * Get collator for the transaction, using a classname 
      *
      * @return type
-     * @throws \Exception
+     * @throws ConfigurationException
      */
     public function getCollator()
     {
@@ -291,7 +293,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
             if ($collator instanceof Collator) {
                 $this->collator = $collator;
             } else {
-                throw new \Exception($this->collatorClassName . ' is not an instance of Heystack\Subsystem\Ecommerce\Transaction\Collator');
+                throw new ConfigurationException($this->collatorClassName . ' is not an instance of Heystack\Subsystem\Ecommerce\Transaction\Collator');
             }
         }
 

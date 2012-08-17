@@ -177,11 +177,11 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         if (!$this->data || !array_key_exists(self::ACTIVE_CURRENCY_KEY, $this->data)) {
 
             $defaultCurrency = $this->getDefaultCurrency();
-            
-            if ($defaultCurrency) {                
-            
+
+            if ($defaultCurrency) {
+
                 $this->data[self::ACTIVE_CURRENCY_KEY] = $this->getCurrency($defaultCurrency);
-            
+
                 $this->saveState();
 
             }

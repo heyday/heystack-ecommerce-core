@@ -8,6 +8,8 @@ use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableHolderInterfa
 
 use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
 
+use Heystack\Subsystem\Core\Exception\ConfigurationException;
+
 class Collator implements ViewableDataInterface
 {
 
@@ -46,7 +48,7 @@ class Collator implements ViewableDataInterface
 
         } else {
 
-            throw new \Exception('Precision must be an integer');
+            throw new ConfigurationException('Precision must be an integer');
 
         }
 
