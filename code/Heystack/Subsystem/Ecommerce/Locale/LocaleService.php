@@ -167,7 +167,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function getCountries()
     {
-        return isset($this->data[self::ALL_COUNTRIES_KEY]) ? $this->data[self::ALL_COUNTRIES_KEY] : null;
+        return isset($this->data_global[self::ALL_COUNTRIES_KEY]) ? $this->data_global[self::ALL_COUNTRIES_KEY] : null;
     }
 
     public function setDefaultCurrency($identifier = null)
