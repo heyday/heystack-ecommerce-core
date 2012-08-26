@@ -138,7 +138,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     {
         if ($country = $this->getCountry($identifier)) {
 
-            $this->data[self::ACTIVE_COUNTRY_KEY] = $country;
+            $this->data[self::ACTIVE_COUNTRY_KEY] = $identifier;
 
             $this->saveState();
 

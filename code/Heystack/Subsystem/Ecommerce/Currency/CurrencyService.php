@@ -184,6 +184,8 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
 
                 $this->data[self::ACTIVE_CURRENCY_KEY] = $this->getCurrency($defaultCurrency);
 
+                $this->eventDispatcher->dispatch(Events::SET, new CurrencyEvent($this->getCurrency($defaultCurrency)));
+                
                 $this->saveState();
 
             }

@@ -64,7 +64,8 @@ class Subscriber implements EventSubscriberInterface
         return array(
             Events::UPDATE => array('onUpdate',0),
             Events::STORE => array('onStore', 0),
-            CurrencyEvents::CHANGED => array('onCurrencyChange',0)
+            CurrencyEvents::CHANGED => array('onCurrencyChange',0),
+            CurrencyEvents::SET => array('onCurrencyChange',0)
         );
     }
 
