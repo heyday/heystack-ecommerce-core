@@ -25,7 +25,7 @@ services:
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
-    arguments: [ @transaction, @event_dispatcher, @storage ]
+    arguments: [ @transaction, @event_dispatcher, @storage, @state ]
     
   locale_service:
     class: %locale_service.class%
