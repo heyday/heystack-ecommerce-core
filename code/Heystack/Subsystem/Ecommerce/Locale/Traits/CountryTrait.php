@@ -28,17 +28,17 @@ trait CountryTrait
 
     public function getName()
     {
-        return $this->record['Name'];
+        return $this->getField('Name');
     }
 
     public function getCountryCode()
     {
-        return $this->record['CountryCode'];
+        return $this->getField('CountryCode');
     }
 
     public function isDefault()
     {
-        return $this->record['IsDefault'];
+        return $this->getField('IsDefault');
     }
 
     /**

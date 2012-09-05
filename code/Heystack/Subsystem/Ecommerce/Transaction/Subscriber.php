@@ -21,6 +21,8 @@ use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
 use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
 use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 
+use Heystack\Subsystem\Shipping\Output\Processor as ShippingService;
+
 use Heystack\Subsystem\Core\Storage\Storage;
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
@@ -102,7 +104,7 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onTransactionStored()
     {
-        $this->state->removeAll(array(CurrencyService::IDENTIFIER));
+        $this->state->removeAll(array(CurrencyService::IDENTIFIER, 'shipping', 'localeservice'));
     }
 
     /**
