@@ -63,7 +63,7 @@ class Collator implements ViewableDataInterface
     {
         return array(
             'Amount' => $this->round($this->transaction->getTotal()),
-            'Currency' => $this->transaction->getCurrencyCode()
+            'Currency' => $this->currencyService->getActiveCurrencyCode()
         );
     }
 
@@ -84,7 +84,7 @@ class Collator implements ViewableDataInterface
         
         return array(
             'Amount' => $this->round($this->sumModifiers($modifiers)),
-            'Currency' => $this->transaction->getCurrencyCode()
+            'Currency' => $this->currencyService->getActiveCurrencyCode()
         );
 
     }
