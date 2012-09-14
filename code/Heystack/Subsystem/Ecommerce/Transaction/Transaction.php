@@ -20,7 +20,7 @@ use Heystack\Subsystem\Core\Storage\StorableInterface;
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
 use Heystack\Subsystem\Core\Exception\ConfigurationException;
-
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 /**
  * Transaction Service
  *
@@ -55,6 +55,12 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var \Heystack\Subsystem\Core\State\State
      */
     protected $stateService;
+    
+    /**
+     * Holds the currency service
+     * @var \Heystack\Subsystem\Ecommerce\Currency\CurrencyService 
+     */
+    protected $currencyService;
 
     /**
      * Holds an array of currently managed TransactionModifiers
@@ -84,7 +90,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService, $collatorClassName)
+    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService)
     {
         $this->stateService = $stateService;
 
@@ -93,6 +99,8 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         } else {
             throw new ConfigurationException($collatorClassName . ' does not exist');
         }
+        
+        $this->currencyService = $currencyService;
     }
 
     /**
@@ -208,24 +216,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
 
     /**
-     * Returns the currently active currency code
-     */
-    public function getCurrencyCode()
-    {
-        return $this->data[self::CURRENCY_CODE_KEY];
-    }
-
-    /**
-     * Sets the currently active currency code
-     * @param string $currencyCode
-     */
-    public function setCurrencyCode($currencyCode)
-    {
-        $this->data[self::CURRENCY_CODE_KEY] = $currencyCode;
-        $this->saveState();
-    }
-
-    /**
      * Get the identifier for this system
      * @return string
      */
@@ -259,7 +249,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
             'flat' => array(
                 'Total' => $this->getTotal(),
                 'Status' => 'Pending',
-                'Currency' => $this->getCurrencyCode()
+                'Currency' => $this->currencyService->getActiveCurrencyCode()
             ),
             'related' => array()
         );
@@ -287,8 +277,11 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getCollator()
     {
+     
+        
         if (!$this->collator) {
-            $collator = new $this->collatorClassName($this);
+            
+            $collator = new $this->collatorClassName($this, $this->currencyService);
 
             if ($collator instanceof Collator) {
                 $this->collator = $collator;

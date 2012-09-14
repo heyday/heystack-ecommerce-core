@@ -75,8 +75,6 @@ class Subscriber implements EventSubscriberInterface
         return array(
             Events::UPDATE => array('onUpdate',0),
             Events::STORE => array('onStore', 0),
-            CurrencyEvents::CHANGED => array('onCurrencyChange',0),
-            CurrencyEvents::SET => array('onCurrencyChange',0),
             Backend::IDENTIFIER . '.' . TransactionEvents::STORED  => array('onTransactionStored', 0)
         );
     }
@@ -107,13 +105,6 @@ class Subscriber implements EventSubscriberInterface
         $this->state->removeAll(array(CurrencyService::IDENTIFIER, 'shipping', 'localeservice'));
     }
 
-    /**
-     * Method that facilitates the updating of the active currency on the Transaction
-     * @param \Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent $currencyEvent
-     */
-    public function onCurrencyChange(CurrencyEvent $currencyEvent)
-    {
-        $this->transaction->setCurrencyCode($currencyEvent->getCurrency()->CurrencyCode);
-    }
+   
 
 }

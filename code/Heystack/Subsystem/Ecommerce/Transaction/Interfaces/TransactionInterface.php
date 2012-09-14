@@ -54,17 +54,6 @@ interface TransactionInterface
     public function updateTotal();
 
     /**
-     * Returns the currently active currency code
-     */
-    public function getCurrencyCode();
-
-    /**
-     * Sets the currently active currency code
-     * @param string $currencyCode
-     */
-    public function setCurrencyCode($currencyCode);
-
-    /**
      * Retrieves the Transaction's Collator
      */
     public function getCollator();

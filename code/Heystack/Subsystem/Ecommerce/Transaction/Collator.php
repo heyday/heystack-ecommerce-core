@@ -10,19 +10,23 @@ use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
 
 use Heystack\Subsystem\Core\Exception\ConfigurationException;
 
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+
 class Collator implements ViewableDataInterface
 {
 
     protected $precision = 2;
     protected $transaction = null;
+    protected $currencyService = null;
 
-    public function __construct(TransactionInterface $transaction, $precision = null)
+    public function __construct(TransactionInterface $transaction, CurrencyService $currencyService, $precision = null)
     {
         if (!is_null($precision)) {
             $this->setPrecision($precision);
         }
 
         $this->transaction = $transaction;
+        $this->currencyService = $currencyService;
 
     }
 

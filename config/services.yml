@@ -19,7 +19,7 @@ services:
   
   transaction:
     class: %transaction.class%
-    arguments: [ @state, %collator.class% ]
+    arguments: [ @state, %collator.class%, @currency_service ]
     calls:
       - [ restoreState ]
       

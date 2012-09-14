@@ -220,6 +220,17 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return isset($this->data[self::ACTIVE_CURRENCY_KEY]) && isset($this->data_global[self::ALL_CURRENCIES_KEY][$this->data[self::ACTIVE_CURRENCY_KEY]->getIdentifier()])? $this->data_global[self::ALL_CURRENCIES_KEY][$this->data[self::ACTIVE_CURRENCY_KEY]->getIdentifier()] : null;
     }
+    
+    /**
+     * Retrieves the currently active currency
+     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     */
+    public function getActiveCurrencyCode()
+    {
+    
+        return $this->getActiveCurrency()->CurrencyCode;
+        
+    }
 
     /**
      * Retrieves all the available currencies
