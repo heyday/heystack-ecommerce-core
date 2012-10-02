@@ -21,6 +21,8 @@ use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use Heystack\Subsystem\Core\Exception\ConfigurationException;
+
 /**
  * CurrencyService default implementation
  *
@@ -31,7 +33,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @package Ecommerce-Core
  *
  */
-class CurrencyService implements CurrencyServiceInterface, StateableInterface, \Serializable
+class CurrencyService implements CurrencyServiceInterface, StateableInterface
 {
     /**
      * The key used on the data array to store the active currency
@@ -51,13 +53,13 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     /**
      * State Key constant
      */
-    const STATE_KEY = 'currency_service';
+    const IDENTIFIER = 'currency_service';
 
     /**
      * Stores the State Service
      * @var State
      */
-    protected $state;
+    protected $sessionState;
 
     /**
      * Stores the EventDispatcher
@@ -66,10 +68,22 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     protected $eventDispatcher;
 
     /**
-     * Stores all the information used by the CurrencyService
+     * Stores the Global State Service
+     * @var State
+     */
+    protected $globalState;
+
+    /**
+     * Stores session based information used by the CurrencyService
      * @var array
      */
     protected $data = array();
+
+    /**
+     * Stores global information used by the CurrencyService
+     * @var array
+     */
+    protected $data_global = array();
 
     /**
      * The class name of the Currency Data Object
@@ -81,35 +95,15 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * CurrencySerivce Constructor
      * @param string                                                      $currencyClass
      * @param \Heystack\Subsystem\Ecommerce\Currency\State                $state
+     * @param \Heystack\Subsystem\Ecommerce\Currency\State                $globalState
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __construct($currencyClass, State $state, EventDispatcherInterface $eventDispatcher)
+    public function __construct($currencyClass, State $sessionState, State $globalState, EventDispatcherInterface $eventDispatcher)
     {
         $this->currencyClass = $currencyClass;
-        $this->state = $state;
+        $this->sessionState = $sessionState;
+        $this->globalState = $globalState;
         $this->eventDispatcher = $eventDispatcher;
-    }
-
-     /**
-     * Returns a serialized string from the data array
-     * @return string
-     */
-    public function serialize()
-    {
-
-        return serialize($this->data);
-
-    }
-
-    /**
-     * Unserializes the data into this object's data array
-     * @param string $data
-     */
-    public function unserialize($data)
-    {
-
-        $this->data = unserialize($data);
-
     }
 
     /**
@@ -120,7 +114,15 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function restoreState()
     {
 
-        $this->data = $this->state->getObj(self::STATE_KEY);
+        $this->data = $this->sessionState->getByKey(self::IDENTIFIER);
+        $this->ensureDataExists();
+
+    }
+    public function restoreGlobalState()
+    {
+
+        $this->data_global = $this->globalState->getByKey(self::IDENTIFIER);
+        $this->ensureGlobalDataExists();
 
     }
 
@@ -130,7 +132,14 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
     public function saveState()
     {
 
-        $this->state->setObj(self::STATE_KEY, $this->data);
+        $this->sessionState->setByKey(self::IDENTIFIER, $this->data);
+
+    }
+
+    public function saveGlobalState()
+    {
+
+        $this->globalState->setByKey(self::IDENTIFIER, $this->data_global);
 
     }
 
@@ -139,31 +148,50 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      * them from the database and load them to the data array, and save the state.
      * @throws \Exception
      */
-    protected function ensureDataExists()
+    protected function ensureGlobalDataExists()
     {
-        if (!$this->data || !isset($this->data[self::ALL_CURRENCIES_KEY])) {
-            $currencies = \DataObject::get($this->currencyClass);
 
-            if ($currencies instanceof \DataObjectSet && $currencies->exists()) {
+        if (!$this->data_global || !isset($this->data_global[self::ALL_CURRENCIES_KEY]) || !isset($this->data_global[self::DEFAULT_CURRENCY_KEY])) {
 
-                foreach ($currencies as $currency) {
-                    $this->data[self::ALL_CURRENCIES_KEY][$currency->getIdentifier()] = $currency;
+            $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currencies.cache';
 
-                    if ($currency->isDefaultCurrency()) {
-                        $this->data[self::DEFAULT_CURRENCY_KEY] = $currency;
-                    }
-                }
+            $currencies = file_exists($filename) ? unserialize(file_get_contents($filename)) : false;
 
-                if (!isset($this->data[self::ACTIVE_CURRENCY_KEY])) {
-                    $this->setActiveCurrency($this->getDefaultCurrency()->getIdentifier());
-                }
+            if ($currencies instanceof \DataObjectSet) {
 
-                $this->saveState();
+                $this->updateCurrencies($currencies, false);
 
             } else {
-                throw new \Exception('Please create some currencies');
+
+                $this->updateCurrencies(new \DataObjectSet);
+
+                throw new ConfigurationException('Please add some currencies and save them');
+
             }
+
         }
+
+    }
+
+    protected function ensureDataExists()
+    {
+
+        if (!$this->data || !array_key_exists(self::ACTIVE_CURRENCY_KEY, $this->data)) {
+
+            $defaultCurrency = $this->getDefaultCurrency();
+
+            if ($defaultCurrency) {
+
+                $this->data[self::ACTIVE_CURRENCY_KEY] = $this->getCurrency($defaultCurrency);
+
+                $this->eventDispatcher->dispatch(Events::SET, new CurrencyEvent($this->getCurrency($defaultCurrency)));
+                
+                $this->saveState();
+
+            }
+
+        }
+
     }
 
     /**
@@ -190,9 +218,18 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function getActiveCurrency()
     {
-        $this->ensureDataExists();
-
-        return isset($this->data[self::ACTIVE_CURRENCY_KEY]) ? $this->data[self::ACTIVE_CURRENCY_KEY] : null;
+        return isset($this->data[self::ACTIVE_CURRENCY_KEY]) && isset($this->data_global[self::ALL_CURRENCIES_KEY][$this->data[self::ACTIVE_CURRENCY_KEY]->getIdentifier()])? $this->data_global[self::ALL_CURRENCIES_KEY][$this->data[self::ACTIVE_CURRENCY_KEY]->getIdentifier()] : null;
+    }
+    
+    /**
+     * Retrieves the currently active currency
+     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     */
+    public function getActiveCurrencyCode()
+    {
+    
+        return $this->getActiveCurrency()->CurrencyCode;
+        
     }
 
     /**
@@ -201,9 +238,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function getCurrencies()
     {
-        $this->ensureDataExists();
-
-        return isset($this->data[self::ALL_CURRENCIES_KEY]) ? $this->data[self::ALL_CURRENCIES_KEY] : null;
+        return isset($this->data_global[self::ALL_CURRENCIES_KEY]) ? $this->data_global[self::ALL_CURRENCIES_KEY] : array();
     }
 
     /**
@@ -214,9 +249,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function convert($amount, $from, $to)
     {
-        $this->ensureDataExists();
-
-        return $amount * ($this->data[self::ALL_CURRENCIES_KEY][$to]->getValue() / $this->data[self::ALL_CURRENCIES_KEY][$from]->getValue());
+        return $amount * ($this->data_global[self::ALL_CURRENCIES_KEY][$to]->getValue() / $this->data_global[self::ALL_CURRENCIES_KEY][$from]->getValue());
     }
 
     /**
@@ -226,9 +259,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function getCurrency($identifier)
     {
-        $this->ensureDataExists();
-
-        return isset($this->data[self::ALL_CURRENCIES_KEY][$identifier]) ? $this->data[self::ALL_CURRENCIES_KEY][$identifier] : null;
+        return isset($this->data_global[self::ALL_CURRENCIES_KEY][$identifier]) ? $this->data_global[self::ALL_CURRENCIES_KEY][$identifier] : null;
     }
 
     /**
@@ -237,8 +268,74 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface, \
      */
     public function getDefaultCurrency()
     {
-        $this->ensureDataExists();
 
-        return isset($this->data[self::DEFAULT_CURRENCY_KEY]) ? $this->data[self::DEFAULT_CURRENCY_KEY] : null;
+        if (isset($this->data_global[self::DEFAULT_CURRENCY_KEY])) {
+
+            return $this->data_global[self::DEFAULT_CURRENCY_KEY];
+
+        } else {
+
+            return false;
+
+        }
     }
+
+    public function setDefaultCurrency($identifier = null)
+    {
+
+        if (!is_null($identifier)) {
+
+            $this->data_global[self::DEFAULT_CURRENCY_KEY] = $identifier;
+
+        } else {
+
+            foreach ($this->data_global[self::ALL_CURRENCIES_KEY] as $currency) {
+
+                if ($currency->isDefaultCurrency()) {
+
+                    $this->data_global[self::DEFAULT_CURRENCY_KEY] = $currency->getIdentifier();
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public function updateCurrencies($currencies, $write = true)
+    {
+
+        $this->data_global[self::ALL_CURRENCIES_KEY] = $this->dosToArray($currencies);
+
+        $this->setDefaultCurrency();
+
+        $this->saveGlobalState();
+
+        if ($write) {
+
+            file_put_contents(
+                realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'currencies.cache',
+                serialize($currencies)
+            );
+
+        }
+
+    }
+
+    protected function dosToArray(\DataObjectSet $currencies)
+    {
+
+        $arr = array();
+
+        foreach ($currencies as $currency) {
+
+            $arr[$currency->getIdentifier()] = $currency;
+
+        }
+
+        return $arr;
+
+    }
+
 }

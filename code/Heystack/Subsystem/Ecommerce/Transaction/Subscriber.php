@@ -15,10 +15,18 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 
+use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
+
 use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent;
+use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+
+use Heystack\Subsystem\Shipping\Output\Processor as ShippingService;
 
 use Heystack\Subsystem\Core\Storage\Storage;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+
+use Heystack\Subsystem\Core\State\State;
 
 /**
  * Handles both subscribing to events and acting on those events needed for Transaction to work properly
@@ -42,17 +50,20 @@ class Subscriber implements EventSubscriberInterface
     protected $eventDispatcher;
 
     protected $storageService;
+    
+    protected $state;
 
     /**
      * Creates the Susbcriber object
      * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface               $eventDispatcher
      */
-    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService)
+    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService, State $state)
     {
         $this->transaction = $transaction;
         $this->eventDispatcher = $eventDispatcher;
         $this->storageService = $storageService;
+        $this->state = $state;
     }
 
     /**
@@ -64,7 +75,7 @@ class Subscriber implements EventSubscriberInterface
         return array(
             Events::UPDATE => array('onUpdate',0),
             Events::STORE => array('onStore', 0),
-            CurrencyEvents::CHANGED => array('onCurrencyChange',0)
+            Backend::IDENTIFIER . '.' . TransactionEvents::STORED  => array('onTransactionStored', 0)
         );
     }
 
@@ -84,14 +95,18 @@ class Subscriber implements EventSubscriberInterface
     {
         $this->storageService->process($this->transaction);
     }
-
+    
     /**
-     * Method that facilitates the updating of the active currency on the Transaction
-     * @param \Heystack\Subsystem\Ecommerce\Currency\CurrencyEvent $currencyEvent
+     * Called after the Transaction is stored, clears state apart from the 
+     * active currency.
      */
-    public function onCurrencyChange(CurrencyEvent $currencyEvent)
+    public function onTransactionStored()
     {
-        $this->transaction->setCurrencyCode($currencyEvent->getCurrency()->CurrencyCode);
+
+        $this->state->removeAll(array(CurrencyService::IDENTIFIER, 'shipping', 'localeservice', 'loggedInAs'));
+
     }
+
+   
 
 }

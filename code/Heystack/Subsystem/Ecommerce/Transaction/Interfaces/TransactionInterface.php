@@ -37,6 +37,13 @@ interface TransactionInterface
     public function getModifiers();
 
     /**
+     * Returns modifiers on the transaction by TranactionModifierType
+     * @param  string $type
+     * @return array
+     */
+    public function getModifiersByType($type);
+
+    /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function getTotal();
@@ -47,14 +54,14 @@ interface TransactionInterface
     public function updateTotal();
 
     /**
-     * Returns the currently active currency code
+     * Retrieves the Transaction's Collator
      */
-    public function getCurrencyCode();
+    public function getCollator();
 
     /**
-     * Sets the currently active currency code
-     * @param string $currencyCode
+     * Retrieves the total without adding excluded modifiers
+     * @param array $exclude an array of identifiers to be excluded
      */
-    public function setCurrencyCode($currencyCode);
-    
+    public function getTotalWithExclusions(array $exclude);
+
 }

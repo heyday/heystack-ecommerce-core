@@ -19,13 +19,17 @@ use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Core\Storage\StorableInterface;
 use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
 
+use Heystack\Subsystem\Core\Exception\ConfigurationException;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 /**
- * Transaction's Subscriber
+ * Transaction Service
  *
- * Handles both subscribing to events and acting on those events needed for Transaction work properly
+ * Handles all the TransactionModifiers and calculates the order's total.
+ * Also holds the collator for displaying data
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @author Stevie Mayhew <stevie@heyday.co.nz>
  * @package Ecommerce-Core
  */
@@ -35,7 +39,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Holds the key used for storing state
      */
     const IDENTIFIER = 'transaction';
-    
+
     /**
      * Holds the key used for storing the Total on the data array
      */
@@ -51,6 +55,12 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var \Heystack\Subsystem\Core\State\State
      */
     protected $stateService;
+    
+    /**
+     * Holds the currency service
+     * @var \Heystack\Subsystem\Ecommerce\Currency\CurrencyService 
+     */
+    protected $currencyService;
 
     /**
      * Holds an array of currently managed TransactionModifiers
@@ -65,12 +75,32 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     protected $data = array();
 
     /**
+     * The classname to be used to instantiate the Collator
+     * @var string
+     */
+    protected $collatorClassName;
+
+    /**
+     * Holds the Collator object
+     * @var \Heystack\Subsystem\Ecommerce\Transaction\Collator
+     */
+    protected $collator;
+
+    /**
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService)
+    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService)
     {
         $this->stateService = $stateService;
+
+        if (class_exists($collatorClassName)) {
+            $this->collatorClassName = $collatorClassName;
+        } else {
+            throw new ConfigurationException($collatorClassName . ' does not exist');
+        }
+        
+        $this->currencyService = $currencyService;
     }
 
     /**
@@ -78,7 +108,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function saveState()
     {
-       $this->stateService->setObj(self::IDENTIFIER, $this->data);
+       $this->stateService->setByKey(self::IDENTIFIER, $this->data);
     }
 
     /**
@@ -86,7 +116,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function restoreState()
     {
-        $this->data = $this->stateService->getObj(self::IDENTIFIER);
+        $this->data = $this->stateService->getByKey(self::IDENTIFIER);
     }
 
     /**
@@ -116,13 +146,35 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     }
 
     /**
+     * Returns modifiers on the transaction by TranactionModifierType
+     * @param  string $type
+     * @return array
+     */
+    public function getModifiersByType($type)
+    {
+
+        $modifiers = array();
+
+        foreach ($this->modifiers as $identifier => $modifier) {
+
+            if ($modifier->getType() == $type) {
+
+                $modifiers[$identifier] = $modifier;
+
+            }
+
+        }
+
+        return $modifiers;
+
+    }
+
+    /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
      */
     public function getTotal()
     {
-        $total = isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
-
-        return number_format($total, 2, '.', '');
+        return isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
     }
 
     /**
@@ -130,84 +182,114 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function updateTotal()
     {
-        $total = 0;
-
-        foreach ($this->modifiers as $modifier) {
-
-            switch ($modifier->getType()) {
-                case TransactionModifierTypes::CHARGEABLE:
-                    $total += $modifier->getTotal();
-                    break;
-                case TransactionModifierTypes::DEDUCTIBLE:
-                    $total -= $modifier->getTotal();
-                    break;
-            }
-
-        }
-
-        $this->data[self::TOTAL_KEY] = $total;
+        $this->data[self::TOTAL_KEY] = $this->getTotalWithExclusions(array());
 
         $this->saveState();
     }
 
     /**
-     * Returns the currently active currency code
+     * Retrieves the total without adding excluded modifiers
+     * @param array $exclude an array of identifiers to be excluded
      */
-    public function getCurrencyCode()
+    public function getTotalWithExclusions(array $exclude)
     {
-        return $this->data[self::CURRENCY_CODE_KEY];
+        $total = 0;
+
+        foreach ($this->modifiers as $modifier) {
+
+            if (!in_array($modifier->getIdentifier(), $exclude)) {
+
+                switch ($modifier->getType()) {
+                    case TransactionModifierTypes::CHARGEABLE:
+                        $total += $modifier->getTotal();
+                        break;
+                    case TransactionModifierTypes::DEDUCTIBLE:
+                        $total -= $modifier->getTotal();
+                        break;
+                }
+
+            }
+
+        }
+
+        return $total;
     }
 
     /**
-     * Sets the currently active currency code
-     * @param string $currencyCode
+     * Get the identifier for this system
+     * @return string
      */
-    public function setCurrencyCode($currencyCode)
-    {
-        $this->data[self::CURRENCY_CODE_KEY] = $currencyCode;
-    }
-
-    
     public function getStorableIdentifier()
     {
 
         return self::IDENTIFIER;
 
     }
-    
+
     /**
-     * @todo document this
+     * Get the name of the schema this system relates to
+     * @return string
      */
-    public function getStorableData()
+    public function getSchemaName()
     {
-        $data = array();
 
-        $data['id'] = "Transaction";
-
-        $data['flat'] = array(
-            'Total' => $this->getTotal(),
-            'Status' => 'pending',
-            'Currency' => $this->getCurrencyCode()
-        );
-
-        
-        $data['related'] = array(
-
-        );
-
-        return $data;
+        return 'Transaction';
 
     }
 
     /**
-     * @todo Document this
+     * Get the data to store
+     * @return array The data to store
+     */
+    public function getStorableData()
+    {
+
+        return array(
+            'id' => 'Transaction',
+            'flat' => array(
+                'Total' => $this->getTotal(),
+                'Status' => 'Pending',
+                'Currency' => $this->currencyService->getActiveCurrencyCode()
+            ),
+            'related' => array()
+        );
+
+    }
+
+    /**
+     * Get the type of storage that is being used
+     * @return string The type of storage in use
      */
     public function getStorableBackendIdentifiers()
     {
-		
+
         return array(
             Backend::IDENTIFIER
         );
-		
+
+    }
+
+    /**
+     * Get collator for the transaction, using a classname
+     *
+     * @return type
+     * @throws ConfigurationException
+     */
+    public function getCollator()
+    {
+     
+        
+        if (!$this->collator) {
+            
+            $collator = new $this->collatorClassName($this, $this->currencyService);
+
+            if ($collator instanceof Collator) {
+                $this->collator = $collator;
+            } else {
+                throw new ConfigurationException($this->collatorClassName . ' is not an instance of Heystack\Subsystem\Ecommerce\Transaction\Collator');
+            }
+        }
+
+        return $this->collator;
     }
 }

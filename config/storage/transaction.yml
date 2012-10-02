@@ -1,11 +1,10 @@
+data_provider_id: transaction
 id: Transaction
 flat:
-  Total: Int
-  Status: Varchar(255)
+  Total: Decimal(10,2)
+  Status: Enum('Pending,Successful,Failed,Dispatched,Processing,Cancelled','Pending')
   Currency: Varchar(5)
 related:
 parent:
 children:
-  ProductHolder: @ProductHolder
-  VoucherHolder: @VoucherHolder
   

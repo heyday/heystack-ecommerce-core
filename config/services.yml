@@ -1,32 +1,44 @@
 parameters:
   
+  currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
   currency_subscriber.class: Heystack\Subsystem\Ecommerce\Currency\Subscriber
   currency_input_processor.class: Heystack\Subsystem\Ecommerce\Currency\Input\Processor
   currency_output_processor.class: Heystack\Subsystem\Ecommerce\Currency\Output\Processor
-  currency.class: EcommerceCurrency
+  currency.class: $$$
   
-  currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
-  
+  locale_service.class: Heystack\Subsystem\Ecommerce\Locale\LocaleService
+  country.class: $$$
+    
   transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
   
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
+  
+  collator.class: Heystack\Subsystem\Ecommerce\Transaction\Collator
   
 services:
   
   transaction:
     class: %transaction.class%
-    arguments: [ @state ]
+    arguments: [ @state, %collator.class%, @currency_service ]
     calls:
       - [ restoreState ]
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
-    arguments: [ @transaction, @event_dispatcher, @storage ]
+    arguments: [ @transaction, @event_dispatcher, @storage, @state ]
+    
+  locale_service:
+    class: %locale_service.class%
+    arguments: [ %country.class%, @state, @state_global, @event_dispatcher, @monolog ]
+    calls:
+      - [ restoreGlobalState ]
+      - [ restoreState ]
     
   currency_service:
     class: %currency_service.class%
-    arguments: [ %currency.class%, @state, @event_dispatcher ]
+    arguments: [ %currency.class%, @state,  @state_global, @event_dispatcher ]
     calls:
+      - [ restoreGlobalState ]
       - [ restoreState ]
   
   currency_subscriber:
@@ -59,5 +71,10 @@ services:
     class: %dataobject_generator.class%
     calls:
       - [ addYamlSchema, [ ecommerce-core/config/storage/transaction.yml ] ]
+      
+  ss_orm_backend:
+    class: %ss_orm_backend.class%
+    calls:
+      - [ addDataProvider, [ @transaction ] ]
       
       

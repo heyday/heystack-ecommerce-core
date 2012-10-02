@@ -54,4 +54,10 @@ final class Services
      * For use with the ServiceStore::getService($identifier) call
      */
     const CURRENCY_OUTPUT_PROCESSOR = 'currency_output_processor';
+
+    /**
+     * Holds the identifier of the locale service
+     * For use with the ServiceStore::getService($identifier) call
+     */
+    const LOCALE_SERVICE = 'locale_service';
 }

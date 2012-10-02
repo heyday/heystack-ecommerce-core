@@ -1,7 +1,21 @@
 {
+    "name": "heystack/ecommerce-core",
+    "type": "silverstripe-module",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packages:satis@packages.heyday.net.nz/"
+        }
+    ],
+    "require": {        
+        "php": ">=5.4.0",
+        "composer/installers": "*"
+    },
     "autoload": {
         "psr-0": {
             "Heystack": "code/"
-        }
-    }
+        },
+        "classmap": ["code/SilverStripe"]
+    },
+    "minimum-stability": "dev"
 }
