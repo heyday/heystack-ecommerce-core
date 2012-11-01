@@ -46,9 +46,14 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     const TOTAL_KEY = 'total';
 
     /**
-     * Holds the key use for storing the active currency code on the data array
+     * Holds the key used for storing the active currency code on the data array
      */
     const CURRENCY_CODE_KEY = 'currencycode';
+    
+    /**
+     * Holds the key used for storing the status of the transaction
+     */
+    const STATUS_KEY = 'status';
 
     /**
      * Holds the State service
@@ -85,12 +90,24 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var \Heystack\Subsystem\Ecommerce\Transaction\Collator
      */
     protected $collator;
+    
+    /**
+     * Holds an array of statuses that is accepted by the setStatus() method
+     * @var array 
+     */
+    protected $validStatuses;
+    
+    /**
+     * Holds the default status of the transaction
+     * @var string
+     */
+    protected $defaultStatus;
 
     /**
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService)
+    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService, Array $validStatuses, $defaultStatus)
     {
         $this->stateService = $stateService;
 
@@ -101,6 +118,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         }
         
         $this->currencyService = $currencyService;
+        
+        $this->validStatuses = $validStatuses;
+        
+        $this->defaultStatus = $defaultStatus;
     }
 
     /**
@@ -248,7 +269,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
             'id' => 'Transaction',
             'flat' => array(
                 'Total' => $this->getTotal(),
-                'Status' => 'Pending',
+                'Status' => $this->getStatus(),
                 'Currency' => $this->currencyService->getActiveCurrencyCode()
             ),
             'related' => array()
@@ -291,5 +312,31 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         }
 
         return $this->collator;
+    }
+    
+    /**
+     * Sets the status of the transaction
+     * @param string $status the status of the transaction
+     */
+    public function setStatus($status)
+    {
+        
+        if(in_array($status, $this->validStatuses)){
+            
+            $this->data[self::STATUS_KEY] = $status;
+
+            $this->saveState();
+        }
+        
+    }
+    
+    /**
+     * Retrieves the Transaction's status
+     */
+    public function getStatus()
+    {
+        
+        return isset($this->data[self::STATUS_KEY]) ? $this->data[self::STATUS_KEY] : $this->defaultStatus;
+        
     }
 }
