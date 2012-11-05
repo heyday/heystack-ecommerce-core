@@ -63,5 +63,16 @@ interface TransactionInterface
      * @param array $exclude an array of identifiers to be excluded
      */
     public function getTotalWithExclusions(array $exclude);
+    
+    /**
+     * Sets the status of the transaction
+     * @param string $status the status of the transaction
+     */
+    public function setStatus($status);
+    
+    /**
+     * Retrieves the Transaction's status
+     */
+    public function getStatus();
 
 }

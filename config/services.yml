@@ -11,6 +11,10 @@ parameters:
     
   transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
   
+  transaction.statuses: [ 'Pending', 'Successful', 'Failed', 'Dispatched', 'Processing', 'Cancelled' ]
+  
+  transaction.default: Pending
+  
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
   
   collator.class: Heystack\Subsystem\Ecommerce\Transaction\Collator
@@ -19,7 +23,7 @@ services:
   
   transaction:
     class: %transaction.class%
-    arguments: [ @state, %collator.class%, @currency_service ]
+    arguments: [ @state, %collator.class%, @currency_service, %transaction.statuses%, %transaction.default% ]
     calls:
       - [ restoreState ]
       
