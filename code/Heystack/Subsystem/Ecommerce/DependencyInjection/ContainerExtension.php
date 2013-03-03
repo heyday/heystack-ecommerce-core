@@ -6,9 +6,9 @@
  */
 
 /**
- * Ecommerce namespace
+ * DependencyInjection namespace
  */
-namespace Heystack\Subsystem\Ecommerce;
+namespace Heystack\Subsystem\Ecommerce\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-use Heystack\Subsystem\Core\ContainerExtensionConfigProcessor;
+use Heystack\Subsystem\Core\DependencyInjection\ContainerExtensionConfigProcessor;
 
 /**
  * Dependency Injection Extension
@@ -55,6 +55,16 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
         $loader->load('services.yml');
 
         $this->processConfig($config, $container);
+        
+        $config = array_pop($config);
+        
+        if(isset($config['yml.transaction']) && $container->hasDefinition('transaction_schema')){
+            
+            $definition = $container->getDefinition('transaction_schema');
+            
+            $definition->replaceArgument(0, $config['yml.transaction']);
+            
+        }
     }
 
     /**

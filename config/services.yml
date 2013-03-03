@@ -26,10 +26,14 @@ services:
     arguments: [ @state, %collator.class%, @currency_service, %transaction.statuses%, %transaction.default% ]
     calls:
       - [ restoreState ]
+    tags:
+      - { name: ss_orm_backend.data_provider }
       
   transaction_subscriber:
     class: %transaction_subscriber.class%
     arguments: [ @transaction, @event_dispatcher, @storage, @state ]
+    tags:
+      - { name: event_dispatcher.subscriber }
     
   locale_service:
     class: %locale_service.class%
@@ -51,34 +55,17 @@ services:
   currency_input_processor:
     class: %currency_input_processor.class%
     arguments: [ %currency.class%, @currency_service ]
+    tags:
+      - { name: input_processor_handler.processor }
     
   currency_output_processor:
     class: %currency_output_processor.class%
     arguments: [%currency.class%]    
+    tags:
+      - { name: output_processor_handler.processor }
       
-  input_processor_handler:
-    class: %input_processor_handler.class%
-    calls:
-      - [ addProcessor, [ @currency_input_processor ] ]
-      
-  output_processor_handler:
-    class: %output_processor_handler.class%
-    calls:
-      - [ addProcessor, [ @currency_output_processor ] ]
-      
-  event_dispatcher:
-    class: %event_dispatcher.class%
-    calls: 
-      - [ addSubscriber, [ @transaction_subscriber ] ]
-  
-  dataobject_generator:
-    class: %dataobject_generator.class%
-    calls:
-      - [ addYamlSchema, [ ecommerce-core/config/storage/transaction.yml ] ]
-      
-  ss_orm_backend:
-    class: %ss_orm_backend.class%
-    calls:
-      - [ addDataProvider, [ @transaction ] ]
-      
-      
+  transaction_schema:
+    class: %yaml_data_object_schema.class%
+    arguments: [ ecommerce-core/config/storage/transaction.yml, @state_global ]
+    tags:
+      - { name: dataobject_generator.schema }      
