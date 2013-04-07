@@ -24,8 +24,8 @@ use Heystack\Subsystem\Ecommerce\Services;
  * this compiler pass will merge those calls without overwriting.
  *
  * @copyright  Heyday
- * @author Glenn Bautista
- * @package Heystack
+ * @author     Glenn Bautista
+ * @package    Heystack
  */
 class Transaction implements CompilerPassInterface
 {
@@ -34,23 +34,23 @@ class Transaction implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if(!$container->hasDefinition(Services::TRANSACTION)){
-            
+        if (!$container->hasDefinition(Services::TRANSACTION)) {
+
             return;
-            
+
         }
-        
+
         $definition = $container->getDefinition(Services::TRANSACTION);
-        
+
         $taggedServices = $container->findTaggedServiceIds(Services::TRANSACTION . '.modifier');
-        
-        foreach($taggedServices as $id => $attributes){
-            
+
+        foreach ($taggedServices as $id => $attributes) {
+
             $definition->addMethodCall(
                 'addModifier',
                 array(new Reference($id))
             );
-            
+
         }
 
     }
