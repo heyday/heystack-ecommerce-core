@@ -1,6 +1,7 @@
 <?php
+
 use Camspiers\DependencyInjection\SharedContainerFactory;
+use Heystack\Subsystem\Ecommerce\DependencyInjection;
 
-SharedContainerFactory::addExtension(new Heystack\Subsystem\Ecommerce\DependencyInjection\ContainerExtension);
-
-SharedContainerFactory::addCompilerPass(new Heystack\Subsystem\Ecommerce\DependencyInjection\CompilerPass\Transaction);
+SharedContainerFactory::addExtension(new DependencyInjection\ContainerExtension());
+SharedContainerFactory::addCompilerPass(new DependencyInjection\CompilerPass\Transaction());
