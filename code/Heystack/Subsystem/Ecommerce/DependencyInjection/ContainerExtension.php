@@ -46,7 +46,6 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
      */
     public function load(array $config, ContainerBuilder $container)
     {
-
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(ECOMMERCE_CORE_BASE_PATH . '/config/')
@@ -58,7 +57,7 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
         
         $config = array_pop($config);
         
-        if(isset($config['yml.transaction']) && $container->hasDefinition('transaction_schema')){
+        if (isset($config['yml.transaction']) && $container->hasDefinition('transaction_schema')) {
             
             $definition = $container->getDefinition('transaction_schema');
             

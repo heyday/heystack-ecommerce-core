@@ -9,5 +9,4 @@ interface LocaleServiceInterface
     public function getCountry($identifier);
     public function getCountries();
     public function getDefaultCountry();
-    public function getCountryClass();
 }

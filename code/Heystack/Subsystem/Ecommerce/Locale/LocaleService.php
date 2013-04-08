@@ -4,39 +4,81 @@ namespace Heystack\Subsystem\Ecommerce\Locale;
 
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
-
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces\CountryInterface;
 use Monolog\Logger;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class LocaleService
+ * @package Heystack\Subsystem\Ecommerce\Locale
+ */
 class LocaleService implements LocaleServiceInterface, StateableInterface
 {
     /**
-     * Holds the key for storing all countries in the data array
+     * The active country key
      */
-    const ALL_COUNTRIES_KEY = 'allcountries';
-    const ACTIVE_COUNTRY_KEY = 'activecountry';
-    const DEFAULT_COUNTRY_KEY = 'defaultcountry';
-
-    const IDENTIFIER = 'localeservice';
-
-    protected $countryClass;
+    const ACTIVE_COUNTRY_KEY = 'localservice.activecountry';
+    /**
+     * @var
+     */
+    protected $countries;
+    /**
+     * @var
+     */
+    protected $defaultCountry;
+    /**
+     * @var
+     */
+    protected $activeCountry;
+    /**
+     * @var \Heystack\Subsystem\Core\State\State
+     */
     protected $sessionState;
-    protected $globalState;
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
     protected $eventService;
+    /**
+     * @var \Monolog\Logger
+     */
     protected $monologService;
 
-    protected $data = array();
-    protected $data_global = array();
-
-    public function __construct($countryClass, State $sessionState, State $globalState, EventDispatcherInterface $eventService, Logger $monologService = null)
-    {
-        $this->countryClass = $countryClass;
+    /**
+     * @param array                    $countries
+     * @param CountryInterface         $defaultCountry
+     * @param State                    $sessionState
+     * @param EventDispatcherInterface $eventService
+     * @param Logger                   $monologService
+     */
+    public function __construct(
+        array $countries = array(),
+        CountryInterface $defaultCountry,
+        State $sessionState,
+        EventDispatcherInterface $eventService,
+        Logger $monologService = null
+    ) {
+        $this->setCountries($countries);
+        $this->defaultCounty = $this->activeCountry = $defaultCountry;
         $this->sessionState = $sessionState;
-        $this->globalState = $globalState;
         $this->eventService = $eventService;
         $this->monologService = $monologService;
+    }
+    /**
+     * @param array $countries
+     */
+    public function setCountries(array $countries)
+    {
+        foreach ($countries as $country) {
+            $this->addCountry($country);
+        }
+    }
+    /**
+     * @param CountryInterface $country
+     */
+    public function addCountry(CountryInterface $country)
+    {
+        $this->countries[$country->getIdentifier()] = $country;
     }
 
     /**
@@ -46,111 +88,37 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function restoreState()
     {
-
-        $this->data = $this->sessionState->getByKey(self::IDENTIFIER);
-        $this->ensureDataExists();
-
+        if ($identifier = $this->sessionState->getByKey(self::ACTIVE_COUNTRY_KEY)) {
+            $this->setActiveCountry($identifier);
+        }
     }
-
-    public function restoreGlobalState()
-    {
-
-        $this->data_global = $this->globalState->getByKey(self::IDENTIFIER);
-        $this->ensureGlobalDataExists();
-
-    }
-
     /**
      * Saves the data array on the State service
      */
     public function saveState()
     {
-
-        $this->sessionState->setByKey(self::IDENTIFIER, $this->data);
-
+        $this->sessionState->setByKey(self::ACTIVE_CURRENCY_KEY, $this->activeCountry->getIdentifier());
     }
-
     /**
-     * Saves the data array on the State service
+     * @param $identifier
      */
-    public function saveGlobalState()
-    {
-
-        $this->globalState->setByKey(self::IDENTIFIER, $this->data_global);
-
-    }
-
-    public function getCountryClass()
-    {
-        return $this->countryClass;
-    }
-
-    public function ensureGlobalDataExists()
-    {
-
-        if (!$this->data_global || !isset($this->data_global[self::ALL_COUNTRIES_KEY]) || !isset($this->data_global[self::DEFAULT_COUNTRY_KEY])) {
-
-            $filename = realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'countries.cache';
-
-            $countries = file_exists($filename) ? unserialize(file_get_contents($filename)) : false;
-
-            if ($countries instanceof \DataObjectSet) {
-
-                $this->updateCountries($countries, false);
-
-            } else {
-
-                $this->updateCountries(new \DataObjectSet);
-
-                $this->monologService->err('Configuration error: Please add some countries and save them');
-
-            }
-
-        }
-
-    }
-
-    /**
-     * If after restoring state no countries are loaded onto the data array get
-     * them from the database and load them to the data array, and save the state.
-     * @throws \Exception
-     */
-    protected function ensureDataExists()
-    {
-
-        if (!$this->data || !array_key_exists(self::ACTIVE_COUNTRY_KEY, $this->data)) {
-
-            $defaultCountry = $this->getDefaultCountry();
-
-            if ($defaultCountry) {
-
-                $this->data[self::ACTIVE_COUNTRY_KEY] = $defaultCountry;
-
-                $this->saveState();
-
-            }
-
-        }
-
-    }
-
     public function setActiveCountry($identifier)
     {
         if ($country = $this->getCountry($identifier)) {
-
-            $this->data[self::ACTIVE_COUNTRY_KEY] = $identifier;
-
+            $this->activeCountry = $country;
             $this->saveState();
-
-            $this->eventService->dispatch(Events::CHANGED);
+            $this->eventService->dispatch(
+                Events::CHANGED
+            );
         }
     }
-
+    /**
+     * @return mixed
+     */
     public function getActiveCountry()
     {
-        return isset($this->data[self::ACTIVE_COUNTRY_KEY]) && isset($this->data_global[self::ALL_COUNTRIES_KEY][$this->data[self::ACTIVE_COUNTRY_KEY]])? $this->data_global[self::ALL_COUNTRIES_KEY][$this->data[self::ACTIVE_COUNTRY_KEY]] : null;
+        return $this->activeCountry;
     }
-
     /**
      * Uses the identifier to retrive the country object from the cache
      * @param  type                                                                  $identifier
@@ -158,7 +126,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function getCountry($identifier)
     {
-        return isset($this->data_global[self::ALL_COUNTRIES_KEY][$identifier]) ? $this->data_global[self::ALL_COUNTRIES_KEY][$identifier] : null;
+        return isset($this->countries[$identifier]) ? $this->countries[$identifier] : null;
     }
 
     /**
@@ -167,77 +135,28 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function getCountries()
     {
-        return isset($this->data_global[self::ALL_COUNTRIES_KEY]) ? $this->data_global[self::ALL_COUNTRIES_KEY] : null;
+        return $this->countries;
     }
-
-    public function setDefaultCurrency($identifier = null)
+    /**
+     * @param null $identifier
+     */
+    public function setDefaultCountry($identifier = null)
     {
-
         if (!is_null($identifier)) {
-
-            $this->data_global[self::DEFAULT_COUNTRY_KEY] = $identifier;
-
+            $this->defaultCountry = $this->countries[$identifier];
         } else {
-
-            foreach ($this->data_global[self::ALL_COUNTRIES_KEY] as $country) {
-
+            foreach ($this->countries as $country) {
                 if ($country->isDefault()) {
-
-                    $this->data_global[self::DEFAULT_COUNTRY_KEY] = $country->getIdentifier();
-
+                    $this->defaultCountry = $country;
                 }
-
             }
-
         }
-
     }
-
+    /**
+     * @return mixed
+     */
     public function getDefaultCountry()
     {
-        if (isset($this->data_global[self::DEFAULT_COUNTRY_KEY])) {
-
-            return $this->data_global[self::DEFAULT_COUNTRY_KEY];
-
-        } else {
-
-            return false;
-
-        }
-    }
-
-    public function updateCountries($countries, $write = true)
-    {
-
-        $this->data_global[self::ALL_COUNTRIES_KEY] = $this->dosToArray($countries);
-
-        $this->setDefaultCurrency();
-
-        $this->saveGlobalState();
-
-        if ($write) {
-
-            file_put_contents(
-                realpath(BASE_PATH . DIRECTORY_SEPARATOR . 'heystack/cache') . DIRECTORY_SEPARATOR . 'countries.cache',
-                serialize($countries)
-            );
-
-        }
-
-    }
-
-    protected function dosToArray(\DataObjectSet $countries)
-    {
-
-        $arr = array();
-
-        foreach ($countries as $country) {
-
-            $arr[$country->getIdentifier()] = $country;
-
-        }
-
-        return $arr;
-
+        return $this->defaultCountry;
     }
 }
