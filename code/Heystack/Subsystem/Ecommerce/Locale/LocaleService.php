@@ -5,7 +5,7 @@ namespace Heystack\Subsystem\Ecommerce\Locale;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
-use Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces\CountryInterface;
+use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
 use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

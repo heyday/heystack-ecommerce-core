@@ -34,19 +34,29 @@ services:
     arguments: [ @transaction, @event_dispatcher, @storage, @state ]
     tags:
       - { name: event_dispatcher.subscriber }
+
+  locale.default:
+    class: Heystack\Subsystem\Ecommerce\Locale\Country
+    arguments:
+      - NZ
+      - New Zealand
     
   locale_service:
     class: %locale_service.class%
-    arguments: [ %country.class%, @state, @state_global, @event_dispatcher, @monolog ]
+    arguments: [ [], @locale.default, @state, @event_dispatcher, @monolog ]
     calls:
-      - [ restoreGlobalState ]
       - [ restoreState ]
+
+  currency.default:
+    class: Heystack\Subsystem\Ecommerce\Currency\Currency
+    arguments:
+      - NZD
+      - 1
     
   currency_service:
     class: %currency_service.class%
-    arguments: [ %currency.class%, @state,  @state_global, @event_dispatcher ]
+    arguments: [ [], @currency.default, @state, @event_dispatcher ]
     calls:
-      - [ restoreGlobalState ]
       - [ restoreState ]
   
   currency_subscriber:
