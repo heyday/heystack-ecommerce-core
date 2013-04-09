@@ -26,11 +26,13 @@ class ContainerConfig implements ConfigurationInterface
                         ->scalarNode('default_code')->isRequired()->end()
                         ->floatNode('default_value')->defaultValue(1)->end()
                     ->end()
+                ->end()
                 ->arrayNode('country')
                     ->children()
                         ->scalarNode('default_code')->isRequired()->end()
                         ->scalarNode('default_name')->isRequired()->end()
                     ->end()
+                ->end()
                 ->scalarNode('yml_transaction')->end()
             ->end();
 
