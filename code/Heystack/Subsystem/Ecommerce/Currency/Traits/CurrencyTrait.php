@@ -8,51 +8,58 @@
 /**
  * Traits namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Locale\Traits;
+namespace Heystack\Subsystem\Ecommerce\Currency\Traits;
 
 use Heystack\Subsystem\Core\Console\Command\GenerateContainer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
 /**
- * Provides a basic implementation of the CountryInterface for dataobjects
+ * Provides a basic implementation of the CurrencyInterface for dataobjects
  *
  * @copyright  Heyday
- * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @author Cam Spiers
  * @package Ecommerce-Core
  */
-trait CountryTrait
+trait CurrencyTrait
 {
     /**
      * @return mixed
      */
     public function getIdentifier()
     {
-        return $this->CountryCode;
+        return $this->getCurrencyCode();
     }
     /**
      * @return mixed
      */
-    public function getName()
+    public function getCurrencyCode()
     {
-        return $this->getField('Name');
+        return $this->getField('CurrencyCode');
     }
     /**
      * @return mixed
      */
-    public function getCountryCode()
+    public function getSymbol()
     {
-        return $this->getField('CountryCode');
+        return $this->getField('Symbol');
     }
     /**
      * @return mixed
      */
-    public function isDefault()
+    public function isDefaultCurrency()
     {
-        return $this->getField('IsDefault');
+        return $this->getField('IsDefaultCurrency');
     }
     /**
-     * Save all countries to the container
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->getField('Value');
+    }
+    /**
+     * Save all currencies to the container
      */
     public function onAfterWrite()
     {
@@ -62,7 +69,7 @@ trait CountryTrait
         );
     }
     /**
-     * Save all countries to the container
+     * Save all currencies to the container
      */
     public function onAfterDelete()
     {

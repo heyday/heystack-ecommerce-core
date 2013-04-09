@@ -25,28 +25,16 @@ services:
     arguments: [ @transaction, @event_dispatcher, @storage, @state ]
     tags:
       - { name: event_dispatcher.subscriber }
-
-  locale.default:
-    class: Heystack\Subsystem\Ecommerce\Locale\Country
-    arguments:
-      - %currency.default.code%
-      - %currency.default.name%
     
   locale_service:
     class: %locale_service.class%
-    arguments: [ [], @locale.default, @state, @event_dispatcher, @monolog ]
+    arguments: [ [], null, @state, @event_dispatcher, @monolog ]
     calls:
       - [ restoreState ]
-
-  currency.default:
-    class: Heystack\Subsystem\Ecommerce\Currency\Currency
-    arguments:
-      - %currency.default.code%
-      - %currency.default.value%
     
   currency_service:
     class: %currency_service.class%
-    arguments: [ [], @currency.default, @state, @event_dispatcher ]
+    arguments: [ [], null, @state, @event_dispatcher ]
     calls:
       - [ restoreState ]
   

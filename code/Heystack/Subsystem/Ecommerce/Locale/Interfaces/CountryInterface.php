@@ -17,7 +17,7 @@ namespace Heystack\Subsystem\Ecommerce\Locale\Interfaces;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Core
  */
-interface CountryInterface extends \Serializable
+interface CountryInterface
 {
     /**
      * Returns a unique identifier

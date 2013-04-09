@@ -10,10 +10,15 @@
  */
 namespace Heystack\Subsystem\Ecommerce\DependencyInjection;
 
+use Heystack\Subsystem\Core\Loader\DBClosureLoader;
 use Heystack\Subsystem\Ecommerce\Config\ContainerConfig;
+use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces\CountryInterface;
+use Heystack\Subsystem\Ecommerce\Services;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -45,29 +50,115 @@ class ContainerExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader(
+        (new YamlFileLoader(
             $container,
             new FileLocator(ECOMMERCE_CORE_BASE_PATH . '/config/')
-        );
-
-        $loader->load('services.yml');
+        ))->load('services.yml');
 
         $config = (new Processor())->processConfiguration(
             new ContainerConfig(),
             $configs
         );
-
-        $container->setParameter('currency.default.code', $config['currency']['default_code']);
-        $container->setParameter('currency.default.value', $config['currency']['default_value']);
-        $container->setParameter('country.default.code', $config['country']['default_code']);
-        $container->setParameter('country.default.name', $config['country']['default_name']);
         
         if (isset($config['yml_transaction']) && $container->hasDefinition('transaction_schema')) {
-            
             $definition = $container->getDefinition('transaction_schema');
-            
             $definition->replaceArgument(0, $config['yml_transaction']);
-            
+        }
+
+        // Configure currencies from DB
+        if (isset($config['currency_db'])) {
+            $currencyQuery = new \SQLQuery(
+                $config['currency_db']['select'],
+                $config['currency_db']['from'],
+                $config['currency_db']['where']
+            );
+            (new DBClosureLoader(
+                function (CurrencyInterface $record) use ($container) {
+                    $definition = new Definition(
+                        'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
+                        array(
+                            $identifier = $record->getIdentifier(),
+                            $record->getValue(),
+                            (boolean) $default = $record->isDefaultCurrency(),
+                            $record->getSymbol()
+                        )
+                    );
+                    $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
+                    $container->setDefinition(
+                        "currency.$identifier",
+                        $definition
+                    );
+                    if ($default) {
+                        $definition->addTag(Services::CURRENCY_SERVICE . '.currency_default');
+                    }
+                }
+            ))->load($currencyQuery);
+        } elseif (isset($config['currency'])) {
+            foreach ($config['currency'] as $currency) {
+                $container->setDefinition(
+                    "currency.{$currency['code']}",
+                    $definition = new Definition(
+                        'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
+                        array(
+                            $currency['code'],
+                            $currency['value'],
+                            $currency['default'],
+                            $currency['symbol']
+                        )
+                    )
+                );
+                $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
+                if ($currency['default']) {
+                    $definition->addTag(Services::CURRENCY_SERVICE . '.currency_default');
+                }
+            }
+        }
+
+        // Configure locale from DB
+        if (isset($config['locale_db'])) {
+            $localeQuery = new \SQLQuery(
+                $config['locale_db']['select'],
+                $config['locale_db']['from'],
+                $config['locale_db']['where']
+            );
+            (new DBClosureLoader(
+                function (CountryInterface $record) use ($container) {
+                    $definition = new Definition(
+                        'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
+                        array(
+                            $identifier = $record->getCountryCode(),
+                            $record->getName(),
+                            (boolean) $default = $record->isDefault()
+                        )
+                    );
+                    $definition->addTag(Services::LOCALE_SERVICE . '.locale');
+                    $container->setDefinition(
+                        "locale.$identifier",
+                        $definition
+                    );
+                    if ($default) {
+                        $definition->addTag(Services::LOCALE_SERVICE . '.locale_default');
+                    }
+                }
+            ))->load($localeQuery);
+        } elseif (isset($config['locale'])) {
+            foreach ($config['locale'] as $locale) {
+                $container->setDefinition(
+                    "locale.{$locale['code']}",
+                    $definition = new Definition(
+                        'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
+                        array(
+                            $locale['code'],
+                            $locale['name'],
+                            $locale['default']
+                        )
+                    )
+                );
+                $definition->addTag(Services::LOCALE_SERVICE . '.locale');
+                if ($locale['default']) {
+                    $definition->addTag(Services::LOCALE_SERVICE . '.locale_default');
+                }
+            }
         }
     }
 
