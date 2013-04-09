@@ -28,7 +28,7 @@ services:
     
   locale_service:
     class: %locale_service.class%
-    arguments: [ [], null, @state, @event_dispatcher, @monolog ]
+    arguments: [ [], null, @state, @event_dispatcher ]
     calls:
       - [ restoreState ]
     

@@ -39,30 +39,23 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventService;
-    /**
-     * @var \Monolog\Logger
-     */
-    protected $monologService;
 
     /**
      * @param array                    $countries
      * @param CountryInterface         $defaultCountry
      * @param State                    $sessionState
      * @param EventDispatcherInterface $eventService
-     * @param Logger                   $monologService
      */
     public function __construct(
         array $countries = array(),
         CountryInterface $defaultCountry,
         State $sessionState,
-        EventDispatcherInterface $eventService,
-        Logger $monologService = null
+        EventDispatcherInterface $eventService
     ) {
         $this->setCountries($countries);
         $this->defaultCounty = $this->activeCountry = $defaultCountry;
         $this->sessionState = $sessionState;
         $this->eventService = $eventService;
-        $this->monologService = $monologService;
     }
     /**
      * @param array $countries
