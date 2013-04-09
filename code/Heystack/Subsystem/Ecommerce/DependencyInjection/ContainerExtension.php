@@ -10,13 +10,12 @@
  */
 namespace Heystack\Subsystem\Ecommerce\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-
+use Heystack\Subsystem\Ecommerce\Config\ContainerConfig;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-
-use Heystack\Subsystem\Core\DependencyInjection\ContainerExtensionConfigProcessor;
 
 /**
  * Dependency Injection Extension
@@ -30,21 +29,21 @@ use Heystack\Subsystem\Core\DependencyInjection\ContainerExtensionConfigProcesso
  * @author Cameron Spiers <cam@heyday.co.nz>
  * @package Ecommerce-Core
  */
-class ContainerExtension extends ContainerExtensionConfigProcessor implements ExtensionInterface
+class ContainerExtension extends Extension
 {
 
     /**
      * Loads a specific configuration. Additionally calls processConfig, which handles overriding
      * the subsytem level configuration with more relevant mysite/config level configuration
      *
-     * @param array            $config    An array of configuration values
+     * @param array            $configs    An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      *
      * @api
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader(
             $container,
@@ -53,15 +52,21 @@ class ContainerExtension extends ContainerExtensionConfigProcessor implements Ex
 
         $loader->load('services.yml');
 
-        $this->processConfig($config, $container);
+        $config = (new Processor())->processConfiguration(
+            new ContainerConfig(),
+            $configs
+        );
+
+        $container->setParameter('currency.default.code', $config['currency']['default_code']);
+        $container->setParameter('currency.default.value', $config['currency']['default_value']);
+        $container->setParameter('country.default.code', $config['country']['default_code']);
+        $container->setParameter('country.default.name', $config['country']['default_name']);
         
-        $config = array_pop($config);
-        
-        if (isset($config['yml.transaction']) && $container->hasDefinition('transaction_schema')) {
+        if (isset($config['yml_transaction']) && $container->hasDefinition('transaction_schema')) {
             
             $definition = $container->getDefinition('transaction_schema');
             
-            $definition->replaceArgument(0, $config['yml.transaction']);
+            $definition->replaceArgument(0, $config['yml_transaction']);
             
         }
     }

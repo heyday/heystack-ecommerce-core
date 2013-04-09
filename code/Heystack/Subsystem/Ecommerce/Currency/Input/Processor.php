@@ -30,7 +30,7 @@ class Processor implements ProcessorInterface
      * Stores the classname of the currency data object
      * @var string
      */
-    private $currencyClass;
+    private $identifier;
     /**
      * Stores the CurrencyService
      * @var Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
@@ -42,10 +42,10 @@ class Processor implements ProcessorInterface
      * @param string                                                                     $currencyClass
      * @param \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
      */
-    public function __construct($currencyClass, CurrencyServiceInterface $currencyService)
+    public function __construct($identifier, CurrencyServiceInterface $currencyService)
     {
 
-        $this->currencyClass = $currencyClass;
+        $this->identifier = $identifier;
         $this->currencyService = $currencyService;
 
     }
@@ -56,9 +56,7 @@ class Processor implements ProcessorInterface
      */
     public function getIdentifier()
     {
-
-        return strtolower($this->currencyClass);
-
+        return strtolower($identifier);
     }
 
     /**

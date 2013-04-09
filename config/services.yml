@@ -1,22 +1,13 @@
 parameters:
-  
   currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
   currency_subscriber.class: Heystack\Subsystem\Ecommerce\Currency\Subscriber
   currency_input_processor.class: Heystack\Subsystem\Ecommerce\Currency\Input\Processor
   currency_output_processor.class: Heystack\Subsystem\Ecommerce\Currency\Output\Processor
-  currency.class: $$$
-  
   locale_service.class: Heystack\Subsystem\Ecommerce\Locale\LocaleService
-  country.class: $$$
-    
   transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
-  
   transaction.statuses: [ 'Pending', 'Successful', 'Failed', 'Dispatched', 'Processing', 'Cancelled' ]
-  
   transaction.default: Pending
-  
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
-  
   collator.class: Heystack\Subsystem\Ecommerce\Transaction\Collator
   
 services:
@@ -38,8 +29,8 @@ services:
   locale.default:
     class: Heystack\Subsystem\Ecommerce\Locale\Country
     arguments:
-      - NZ
-      - New Zealand
+      - %currency.default.code%
+      - %currency.default.name%
     
   locale_service:
     class: %locale_service.class%
@@ -50,8 +41,8 @@ services:
   currency.default:
     class: Heystack\Subsystem\Ecommerce\Currency\Currency
     arguments:
-      - NZD
-      - 1
+      - %currency.default.code%
+      - %currency.default.value%
     
   currency_service:
     class: %currency_service.class%
@@ -64,13 +55,13 @@ services:
       
   currency_input_processor:
     class: %currency_input_processor.class%
-    arguments: [ %currency.class%, @currency_service ]
+    arguments: [ 'currency', @currency_service ]
     tags:
       - { name: input_processor_handler.processor }
     
   currency_output_processor:
     class: %currency_output_processor.class%
-    arguments: [%currency.class%]    
+    arguments: [ 'currency' ]
     tags:
       - { name: output_processor_handler.processor }
       
