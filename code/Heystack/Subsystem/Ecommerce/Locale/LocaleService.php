@@ -11,6 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class LocaleService
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Heystack\Subsystem\Ecommerce\Locale
  */
 class LocaleService implements LocaleServiceInterface, StateableInterface

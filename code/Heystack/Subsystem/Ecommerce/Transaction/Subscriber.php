@@ -10,23 +10,14 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Transaction;
 
+use Heystack\Subsystem\Core\State\State;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Core\Storage\Storage;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
+use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
-
-use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
-
-use Heystack\Subsystem\Ecommerce\Currency\Events as CurrencyEvents;
-use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
-
-use Heystack\Subsystem\Shipping\Output\Processor as ShippingService;
-
-use Heystack\Subsystem\Core\Storage\Storage;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-
-use Heystack\Subsystem\Core\State\State;
 
 /**
  * Handles both subscribing to events and acting on those events needed for Transaction to work properly
@@ -57,6 +48,8 @@ class Subscriber implements EventSubscriberInterface
      * Creates the Susbcriber object
      * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface               $eventDispatcher
+     * @param \Heystack\Subsystem\Core\Storage\Storage                                  $storageService
+     * @param \Heystack\Subsystem\Core\State\State                                      $state
      */
     public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService, State $state)
     {
@@ -106,7 +99,4 @@ class Subscriber implements EventSubscriberInterface
         $this->state->removeAll(array(CurrencyService::IDENTIFIER, 'shipping', 'localeservice', 'loggedInAs'));
 
     }
-
-   
-
 }

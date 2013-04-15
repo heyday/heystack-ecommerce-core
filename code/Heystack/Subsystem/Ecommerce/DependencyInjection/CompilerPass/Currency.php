@@ -19,7 +19,7 @@ use Heystack\Subsystem\Ecommerce\Services;
 
 /**
  * @copyright  Heyday
- * @author     Cam Spiers
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package    Heystack
  */
 class Currency implements CompilerPassInterface

@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
- * @author Cameron Spiers <cam@heyday.co.nz>
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Ecommerce-Core
  */
 class ContainerExtension extends Extension

@@ -6,6 +6,7 @@ use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
 
 /**
  * Class Country
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Heystack\Subsystem\Ecommerce\Locale
  */
 class Country implements CountryInterface

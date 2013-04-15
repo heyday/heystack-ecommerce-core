@@ -7,6 +7,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Heystack\Subsystem\Ecommerce\Config
  */
 class ContainerConfig implements ConfigurationInterface

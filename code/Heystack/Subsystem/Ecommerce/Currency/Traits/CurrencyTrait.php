@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\NullOutput;
  * Provides a basic implementation of the CurrencyInterface for dataobjects
  *
  * @copyright  Heyday
- * @author Cam Spiers
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Ecommerce-Core
  */
 trait CurrencyTrait

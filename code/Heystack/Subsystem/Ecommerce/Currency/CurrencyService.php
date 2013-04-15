@@ -26,6 +26,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
+ * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Ecommerce-Core
  *
  */

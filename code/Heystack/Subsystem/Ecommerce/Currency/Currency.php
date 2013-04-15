@@ -6,6 +6,7 @@ use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
 
 /**
  * Class Currency
+ * @author Cam Spiers <cameron@heyday.co.nz>
  */
 class Currency implements CurrencyInterface
 {
