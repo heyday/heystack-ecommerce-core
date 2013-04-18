@@ -72,8 +72,6 @@ class Processor implements ProcessorInterface
 
             if ($this->currencyService->setActiveCurrency($identifier)) {
 
-                $this->currencyService->saveState();
-
                 return array(
                     'Success' => true
                 );
