@@ -101,7 +101,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     public function restoreState()
     {
         if ($identifier = $this->sessionState->getByKey(self::ACTIVE_CURRENCY_KEY)) {
-            $this->setActiveCurrency($identifier);
+            $this->setActiveCurrency($identifier, false);
         }
     }
     /**
@@ -114,19 +114,23 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     /**
      * Sets the currently active Currency
      * @param string $identifier
+     * @param bool $saveState Determines whether the state is saved and the update event is dispatched
      * @return bool
      */
-    public function setActiveCurrency($identifier)
+    public function setActiveCurrency($identifier, $saveState = true)
     {
         if ($currency = $this->getCurrency($identifier)) {
             $this->activeCurrency = $currency;
-            $this->saveState();
-            $this->eventDispatcher->dispatch(
-                Events::CHANGED,
-                new CurrencyEvent(
-                    $currency
-                )
-            );
+
+            if($saveState){
+                $this->saveState();
+                $this->eventDispatcher->dispatch(
+                    Events::CHANGED,
+                    new CurrencyEvent(
+                        $currency
+                    )
+                );
+            }
             return true;
         }
         return false;

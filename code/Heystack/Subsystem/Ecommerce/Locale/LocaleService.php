@@ -54,7 +54,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         EventDispatcherInterface $eventService
     ) {
         $this->setCountries($countries);
-        $this->defaultCounty = $this->activeCountry = $defaultCountry;
+        $this->defaultCountry = $this->activeCountry = $defaultCountry;
         $this->sessionState = $sessionState;
         $this->eventService = $eventService;
     }
@@ -83,7 +83,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     public function restoreState()
     {
         if ($identifier = $this->sessionState->getByKey(self::ACTIVE_COUNTRY_KEY)) {
-            $this->setActiveCountry($identifier);
+            $this->setActiveCountry($identifier, false);
         }
     }
     /**
@@ -95,15 +95,19 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     }
     /**
      * @param $identifier
+     * @param bool $saveState Determines whether the state is saved and the update event is dispatched
      */
-    public function setActiveCountry($identifier)
+    public function setActiveCountry($identifier, $saveState = true)
     {
         if ($country = $this->getCountry($identifier)) {
             $this->activeCountry = $country;
-            $this->saveState();
-            $this->eventService->dispatch(
-                Events::CHANGED
-            );
+
+            if($saveState){
+                $this->saveState();
+                $this->eventService->dispatch(
+                    Events::CHANGED
+                );
+            }
         }
     }
     /**
