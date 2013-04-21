@@ -10,9 +10,7 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency\Traits;
 
-use Heystack\Subsystem\Core\Console\Command\GenerateContainer;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
+use Heystack\Subsystem\Core\GenerateContainerDataObjectTrait;
 
 /**
  * Provides a basic implementation of the CurrencyInterface for dataobjects
@@ -23,6 +21,8 @@ use Symfony\Component\Console\Output\NullOutput;
  */
 trait CurrencyTrait
 {
+    use GenerateContainerDataObjectTrait;
+
     /**
      * @return mixed
      */
@@ -57,22 +57,5 @@ trait CurrencyTrait
     public function getValue()
     {
         return $this->getField('Value');
-    }
-    /**
-     * Save all currencies to the container
-     */
-    public function onAfterWrite()
-    {
-        (new GenerateContainer())->run(
-            new ArrayInput(array()),
-            new NullOutput()
-        );
-    }
-    /**
-     * Save all currencies to the container
-     */
-    public function onAfterDelete()
-    {
-        $this->onAfterWrite();
     }
 }
