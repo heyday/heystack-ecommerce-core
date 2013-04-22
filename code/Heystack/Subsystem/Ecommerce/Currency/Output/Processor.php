@@ -10,6 +10,7 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency\Output;
 
+use Heystack\Subsystem\Core\Identifier\Identifier;
 use Heystack\Subsystem\Core\Output\ProcessorInterface;
 
 /**
@@ -18,8 +19,8 @@ use Heystack\Subsystem\Core\Output\ProcessorInterface;
  * Handles all output related to Currency
  *
  * @copyright  Heyday
- * @author Glenn Bautista <glenn@heyday.co.nz>
- * @package Ecommerce-Core
+ * @author     Glenn Bautista <glenn@heyday.co.nz>
+ * @package    Ecommerce-Core
  *
  */
 class Processor implements ProcessorInterface
@@ -29,33 +30,28 @@ class Processor implements ProcessorInterface
      * @var string
      */
     private $currencyClass;
-
     /**
      * Currency Input Processor Constructor
      * @param string $currencyClass
      */
     public function __construct($currencyClass)
     {
-
         $this->currencyClass = $currencyClass;
-
     }
-
     /**
      * Returns the identifier for this object
-     * @return string
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-
-        return strtolower($this->currencyClass);
-
+        return new Identifier(
+            strtolower($this->currencyClass)
+        );
     }
-
     /**
      * Method used to determine how to handle the output based on the InputProcessor's result
-     * @param  \Controller     $controller
-     * @param  type            $result
+     * @param  \Controller $controller
+     * @param  type        $result
      * @return SS_HTTPResponse
      */
     public function process(\Controller $controller, $result = null)
@@ -75,5 +71,4 @@ class Processor implements ProcessorInterface
 
         return null;
     }
-
 }

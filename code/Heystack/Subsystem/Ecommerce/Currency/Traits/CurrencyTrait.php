@@ -11,6 +11,7 @@
 namespace Heystack\Subsystem\Ecommerce\Currency\Traits;
 
 use Heystack\Subsystem\Core\GenerateContainerDataObjectTrait;
+use Heystack\Subsystem\Core\Identifier\Identifier;
 
 /**
  * Provides a basic implementation of the CurrencyInterface for dataobjects
@@ -24,11 +25,11 @@ trait CurrencyTrait
     use GenerateContainerDataObjectTrait;
 
     /**
-     * @return mixed
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return $this->getCurrencyCode();
+        return new Identifier($this->getCurrencyCode());
     }
     /**
      * @return mixed

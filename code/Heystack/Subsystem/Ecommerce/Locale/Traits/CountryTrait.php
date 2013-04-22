@@ -11,24 +11,25 @@
 namespace Heystack\Subsystem\Ecommerce\Locale\Traits;
 
 use Heystack\Subsystem\Core\GenerateContainerDataObjectTrait;
+use Heystack\Subsystem\Core\Identifier\Identifier;
 
 /**
  * Provides a basic implementation of the CountryInterface for dataobjects
  *
  * @copyright  Heyday
- * @author Glenn Bautista <glenn@heyday.co.nz>
- * @author Cam Spiers <cameron@heyday.co.nz>
- * @package Ecommerce-Core
+ * @author     Glenn Bautista <glenn@heyday.co.nz>
+ * @author     Cam Spiers <cameron@heyday.co.nz>
+ * @package    Ecommerce-Core
  */
 trait CountryTrait
 {
     use GenerateContainerDataObjectTrait;
     /**
-     * @return mixed
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return $this->CountryCode;
+        return new Identifier($this->CountryCode);
     }
     /**
      * @return mixed

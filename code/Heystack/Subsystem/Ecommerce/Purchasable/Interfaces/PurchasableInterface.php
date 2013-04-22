@@ -30,6 +30,7 @@ interface PurchasableInterface
 
     /**
      * Returns a unique identifier for the Purchasable object
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier();
 

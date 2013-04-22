@@ -21,6 +21,7 @@ interface CurrencyInterface
 {
     /**
      * Returns the identifier
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier();
 

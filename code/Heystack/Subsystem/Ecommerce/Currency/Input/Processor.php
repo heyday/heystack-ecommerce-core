@@ -12,6 +12,7 @@ namespace Heystack\Subsystem\Ecommerce\Currency\Input;
 
 use Heystack\Subsystem\Core\Input\ProcessorInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Subsystem\Core\Identifier\Identifier;
 
 /**
  * Input Processor for Currency
@@ -19,13 +20,12 @@ use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
  * Handles all input related to Currency
  *
  * @copyright  Heyday
- * @author Glenn Bautista <glenn@heyday.co.nz>
- * @package Ecommerce-Core
+ * @author     Glenn Bautista <glenn@heyday.co.nz>
+ * @package    Ecommerce-Core
  *
  */
 class Processor implements ProcessorInterface
 {
-
     /**
      * Stores the identifier for this object
      * @var string
@@ -36,30 +36,26 @@ class Processor implements ProcessorInterface
      * @var Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
      */
     private $currencyService;
-
-
     /**
      * Currency Input Processor Constructor
-     * @param $identifier
+     * @param                          $identifier
      * @param CurrencyServiceInterface $currencyService
      */
     public function __construct($identifier, CurrencyServiceInterface $currencyService)
     {
-
         $this->identifier = $identifier;
         $this->currencyService = $currencyService;
-
     }
-
     /**
      * Returns the identifier for this object
-     * @return string
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return strtolower($this->identifier);
+        return new Identifier(
+            strtolower($this->identifier)
+        );
     }
-
     /**
      * Method to determine how to handle the request.
      * Uses the currency service to set the active currency
@@ -84,5 +80,4 @@ class Processor implements ProcessorInterface
         );
 
     }
-
 }

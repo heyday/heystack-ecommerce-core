@@ -21,6 +21,7 @@ interface CountryInterface
 {
     /**
      * Returns a unique identifier
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier();
 

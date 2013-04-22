@@ -4,14 +4,14 @@ namespace Heystack\Subsystem\Ecommerce\Locale;
 
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
+use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class LocaleService
- * @author Cam Spiers <cameron@heyday.co.nz>
+ * @author  Cam Spiers <cameron@heyday.co.nz>
  * @package Heystack\Subsystem\Ecommerce\Locale
  */
 class LocaleService implements LocaleServiceInterface, StateableInterface
@@ -40,7 +40,6 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventService;
-
     /**
      * @param array                    $countries
      * @param CountryInterface         $defaultCountry
@@ -48,7 +47,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      * @param EventDispatcherInterface $eventService
      */
     public function __construct(
-        array $countries = array(),
+        array $countries,
         CountryInterface $defaultCountry,
         State $sessionState,
         EventDispatcherInterface $eventService
@@ -72,7 +71,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function addCountry(CountryInterface $country)
     {
-        $this->countries[$country->getIdentifier()] = $country;
+        $this->countries[$country->getIdentifier()->getPrimary()] = $country;
     }
 
     /**
@@ -91,10 +90,13 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function saveState()
     {
-        $this->sessionState->setByKey(self::ACTIVE_CURRENCY_KEY, $this->activeCountry->getIdentifier());
+        $this->sessionState->setByKey(
+            self::ACTIVE_CURRENCY_KEY,
+            $this->activeCountry->getIdentifier()->getPrimary()
+        );
     }
     /**
-     * @param $identifier
+     * @param      $identifier
      * @param bool $saveState Determines whether the state is saved and the update event is dispatched
      */
     public function setActiveCountry($identifier, $saveState = true)
@@ -102,7 +104,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         if ($country = $this->getCountry($identifier)) {
             $this->activeCountry = $country;
 
-            if($saveState){
+            if ($saveState) {
                 $this->saveState();
                 $this->eventService->dispatch(
                     Events::CHANGED
@@ -119,7 +121,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     }
     /**
      * Uses the identifier to retrive the country object from the cache
-     * @param  type                                                                  $identifier
+     * @param  type $identifier
      * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
      */
     public function getCountry($identifier)

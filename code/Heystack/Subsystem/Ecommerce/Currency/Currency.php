@@ -3,6 +3,7 @@
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Subsystem\Core\Identifier\Identifier;
 
 /**
  * Class Currency
@@ -49,10 +50,11 @@ class Currency implements CurrencyInterface
     }
     /**
      * Returns the identifier
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return $this->code;
+        return new Identifier($this->code);
     }
     /**
      * Returns the Currency's code, e.g. NZD, USD

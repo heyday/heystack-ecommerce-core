@@ -21,6 +21,7 @@ interface TransactionModifierInterface
 {
     /**
      * Returns a unique identifier for use in the Transaction
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier();
 

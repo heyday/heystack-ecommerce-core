@@ -2,6 +2,7 @@
 
 namespace Heystack\Subsystem\Ecommerce\Locale;
 
+use Heystack\Subsystem\Core\Identifier\Identifier;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
 
 /**
@@ -53,10 +54,11 @@ class Country implements CountryInterface
     }
     /**
      * Returns a unique identifier
+     * @return \Heystack\Subsystem\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return $this->code;
+        return new Identifier($this->code);
     }
     /**
      * Returns the name of the country object

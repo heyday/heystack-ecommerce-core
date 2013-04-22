@@ -91,7 +91,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     protected function addCurrency(CurrencyInterface $currency)
     {
-        $this->currencies[$currency->getIdentifier()] = $currency;
+        $this->currencies[$currency->getIdentifier()->getPrimary()] = $currency;
     }
     /**
      * Uses the State service to restore the data array. It also sets all the
@@ -109,7 +109,10 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function saveState()
     {
-        $this->sessionState->setByKey(self::ACTIVE_CURRENCY_KEY, $this->activeCurrency->getIdentifier());
+        $this->sessionState->setByKey(
+            self::ACTIVE_CURRENCY_KEY,
+            $this->activeCurrency->getIdentifier()->getPrimary()
+        );
     }
     /**
      * Sets the currently active Currency
@@ -122,7 +125,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         if ($currency = $this->getCurrency($identifier)) {
             $this->activeCurrency = $currency;
 
-            if($saveState){
+            if ($saveState) {
                 $this->saveState();
                 $this->eventDispatcher->dispatch(
                     Events::CHANGED,
