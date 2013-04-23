@@ -77,7 +77,7 @@ class ContainerExtension extends Extension
                     $definition = new Definition(
                         'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
                         array(
-                            $identifier = $record->getIdentifier()->getPrimary(),
+                            $identifier = $record->getIdentifier()->getFull(),
                             $record->getValue(),
                             (boolean) $default = $record->isDefaultCurrency(),
                             $record->getSymbol()

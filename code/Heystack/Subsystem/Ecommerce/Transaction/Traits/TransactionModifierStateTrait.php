@@ -24,7 +24,7 @@ trait TransactionModifierStateTrait
      */
     public function saveState()
     {
-        $this->stateService->setByKey($this->getIdentifier()->getPrimary(), $this->data);
+        $this->stateService->setByKey($this->getIdentifier()->getFull(), $this->data);
     }
 
     /**
@@ -32,6 +32,6 @@ trait TransactionModifierStateTrait
      */
     public function restoreState()
     {
-        $this->data = $this->stateService->getByKey($this->getIdentifier()->getPrimary());
+        $this->data = $this->stateService->getByKey($this->getIdentifier()->getFull());
     }
 }

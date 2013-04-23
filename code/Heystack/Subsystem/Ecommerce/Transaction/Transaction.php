@@ -146,7 +146,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function addModifier(TransactionModifierInterface $modifier)
     {
-        $this->modifiers[$modifier->getIdentifier()->getPrimary()] = $modifier;
+        $this->modifiers[$modifier->getIdentifier()->getFull()] = $modifier;
     }
 
     /**
@@ -218,7 +218,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
         foreach ($this->modifiers as $modifier) {
 
-            if (!in_array($modifier->getIdentifier()->getPrimary(), $exclude)) {
+            if (!in_array($modifier->getIdentifier()->getFull(), $exclude)) {
 
                 switch ($modifier->getType()) {
                     case TransactionModifierTypes::CHARGEABLE:

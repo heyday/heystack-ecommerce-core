@@ -71,7 +71,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function addCountry(CountryInterface $country)
     {
-        $this->countries[$country->getIdentifier()->getPrimary()] = $country;
+        $this->countries[$country->getIdentifier()->getFull()] = $country;
     }
 
     /**
@@ -92,7 +92,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     {
         $this->sessionState->setByKey(
             self::ACTIVE_CURRENCY_KEY,
-            $this->activeCountry->getIdentifier()->getPrimary()
+            $this->activeCountry->getIdentifier()->getFull()
         );
     }
     /**
