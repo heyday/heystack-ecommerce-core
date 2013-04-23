@@ -10,8 +10,9 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Purchasable\Interfaces;
 
+use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
 use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
-use \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
+use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
 /**
  * PurchasableHolderInterface
@@ -56,16 +57,16 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
     /**
      * Retrieves a purchasable from the implementing class' internal cache of
      * purchasables
-     * @param type $identifier
+     * @param \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
      */
-    public function getPurchasable($identifier);
+    public function getPurchasable(IdentifierInterface $identifier);
 
     /**
      * Removes a purchasable from the implementing class' internal cache of
      * purchasables
-     * @param type $identifier
+     * @param \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
      */
-    public function removePurchasable($identifier);
+    public function removePurchasable(IdentifierInterface $identifier);
 
     /**
      * Updates the prices of the currently held purchasables
