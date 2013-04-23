@@ -44,8 +44,10 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
     /**
      * Add a purchasable to the implementing class
      * @param PurchasableInterface $purchasable
+     * @param int                  $quantity
+     * @return
      */
-    public function addPurchasable(PurchasableInterface $purchasable, $quantity);
+    public function addPurchasable(PurchasableInterface $purchasable, $quantity = 1);
 
     /**
      * Sets the quantity of the purchasable in the implementing class
