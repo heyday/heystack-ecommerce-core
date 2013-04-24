@@ -46,7 +46,7 @@ class Currency implements CurrencyInterface
         $this->code = $code;
         $this->value = $value;
         $this->default = $default;
-        $this->symbol;
+        $this->symbol = $symbol;
     }
     /**
      * Returns the identifier
@@ -61,7 +61,7 @@ class Currency implements CurrencyInterface
      */
     public function getCurrencyCode()
     {
-        $this->code;
+        return $this->code;
     }
     /**
      * Returns the Currency's Symbol, e.g. $,

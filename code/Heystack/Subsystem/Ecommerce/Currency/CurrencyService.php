@@ -152,7 +152,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function getActiveCurrencyCode()
     {
-        return $this->getActiveCurrency()->CurrencyCode;
+        return $this->getActiveCurrency()->getCurrencyCode();
     }
     /**
      * Retrieves all the available currencies
@@ -176,7 +176,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     /**
      * Returns a currency object based on the identifier
      * @param  type                                                               $identifier
-     * @return Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getCurrency($identifier)
     {
@@ -184,7 +184,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * Returns the default currency object
-     * @return Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getDefaultCurrency()
     {
