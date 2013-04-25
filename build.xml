@@ -35,8 +35,7 @@
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
 
-        <exec executable="heybuild">
-            <arg value="changephp"/>
+        <exec executable="changephp">
             <arg value="54"/>
         </exec>
 
