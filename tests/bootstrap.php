@@ -1,8 +1,8 @@
 <?php
 
 define('UNIT_TESTING', true);
-define('ECOMMERCE_BASE_PATH', dirname(__DIR__));
-define('BASE_PATH', ECOMMERCE_BASE_PATH);
+define('ECOMMERCE_CORE_BASE_PATH', dirname(__DIR__));
+define('BASE_PATH', ECOMMERCE_CORE_BASE_PATH);
 
 if (!file_exists(BASE_PATH . '/vendor/autoload.php')) {
     echo 'You must first install the vendors using composer.' . PHP_EOL;
