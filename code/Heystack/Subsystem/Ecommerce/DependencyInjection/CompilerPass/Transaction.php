@@ -35,7 +35,6 @@ class Transaction implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition(Services::TRANSACTION)) {
-
             return;
 
         }

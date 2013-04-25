@@ -15,13 +15,13 @@ trait OutputHandlerControllerTrait
      */
     public function process()
     {
-        
+
         $inputHandlerService = ServiceStore::getService('input_processor_handler'); //TODO
         $outputHandlerService = ServiceStore::getService('output_processor_handler'); //TODO
 
         $request = $this->getRequest();
         $identifier = $request->param('Processor');
-        
+
         return $outputHandlerService->process(
                 $identifier,
                 $this,

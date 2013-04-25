@@ -3,7 +3,10 @@
 $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->name('*.php')
     ->exclude(array(
-        'vendor'
+        'vendor',
+        'build',
+        'heystack',
+        'sapphire'
     ))
     ->in(__DIR__);
 

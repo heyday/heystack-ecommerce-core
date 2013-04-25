@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Heystack\Subsystem\Ecommerce\Config;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

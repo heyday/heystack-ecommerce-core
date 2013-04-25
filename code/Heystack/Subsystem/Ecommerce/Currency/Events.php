@@ -26,10 +26,10 @@ final class Events
      * Used to denote the event fired whe the active currency is changed
      */
     const CHANGED = 'currency.changed';
-    
+
     /**
      * Used to denote the event fired when the active currency is first set
      */
     const SET = 'currency.set';
-    
+
 }

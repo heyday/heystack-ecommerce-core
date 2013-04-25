@@ -19,7 +19,7 @@
  */
 class EcommerceInputController extends Controller
 {
-    
+
     use \Heystack\Subsystem\Ecommerce\Traits\OutputHandlerControllerTrait;
 
     public static $url_segment = 'ecommerce/input';

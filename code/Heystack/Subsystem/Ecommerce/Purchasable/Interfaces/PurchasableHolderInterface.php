@@ -66,7 +66,7 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
     /**
      * Retrieves purchasables from the implementing class' internal cache of
      * purchasables using the Primary string on the Identifier object
-     * @param \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
+     * @param  \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
      * @return array
      */
     public function getPurchasablesByPrimaryIdentifier(IdentifierInterface $identifier);

@@ -9,9 +9,9 @@ parameters:
   transaction.default: Pending
   transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
   collator.class: Heystack\Subsystem\Ecommerce\Transaction\Collator
-  
+
 services:
-  
+
   transaction:
     class: %transaction.class%
     arguments: [ @state, %collator.class%, @currency_service, %transaction.statuses%, %transaction.default% ]
@@ -19,42 +19,42 @@ services:
       - [ restoreState ]
     tags:
       - { name: ss_orm_backend.data_provider }
-      
+
   transaction_subscriber:
     class: %transaction_subscriber.class%
     arguments: [ @transaction, @event_dispatcher, @storage, @state ]
     tags:
       - { name: event_dispatcher.subscriber }
-    
+
   locale_service:
     class: %locale_service.class%
     arguments: [ [], null, @state, @event_dispatcher ]
     calls:
       - [ restoreState ]
-    
+
   currency_service:
     class: %currency_service.class%
     arguments: [ [], null, @state, @event_dispatcher ]
     calls:
       - [ restoreState ]
-  
+
   currency_subscriber:
     class: %currency_subscriber.class%
-      
+
   currency_input_processor:
     class: %currency_input_processor.class%
     arguments: [ 'currency', @currency_service ]
     tags:
       - { name: input_processor_handler.processor }
-    
+
   currency_output_processor:
     class: %currency_output_processor.class%
     arguments: [ 'currency' ]
     tags:
       - { name: output_processor_handler.processor }
-      
+
   transaction_schema:
     class: %yaml_data_object_schema.class%
     arguments: [ ecommerce-core/config/storage/transaction.yml, @state_global ]
     tags:
-      - { name: dataobject_generator.schema }      
+      - { name: dataobject_generator.schema }

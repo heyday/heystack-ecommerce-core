@@ -32,7 +32,6 @@ class Collator implements ViewableDataInterface
 
     public function getCastings()
     {
-
         return array(
             'Total' => 'Money',
             'SubTotal' => 'Money'
@@ -81,7 +80,7 @@ class Collator implements ViewableDataInterface
             }
 
         }
-        
+
         return array(
             'Amount' => $this->round($this->sumModifiers($modifiers)),
             'Currency' => $this->currencyService->getActiveCurrencyCode()

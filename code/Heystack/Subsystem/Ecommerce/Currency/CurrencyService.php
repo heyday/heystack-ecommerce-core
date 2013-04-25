@@ -10,7 +10,6 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
-use Heystack\Subsystem\Core\Exception\ConfigurationException;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
@@ -116,8 +115,8 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * Sets the currently active Currency
-     * @param string $identifier
-     * @param bool $saveState Determines whether the state is saved and the update event is dispatched
+     * @param  string $identifier
+     * @param  bool   $saveState  Determines whether the state is saved and the update event is dispatched
      * @return bool
      */
     public function setActiveCurrency($identifier, $saveState = true)
@@ -134,8 +133,10 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
                     )
                 );
             }
+
             return true;
         }
+
         return false;
     }
     /**
@@ -164,9 +165,9 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * Converts amount from one currency to another using the currency's identifier
-     * @param float  $amount
-     * @param string $from
-     * @param string $to
+     * @param  float  $amount
+     * @param  string $from
+     * @param  string $to
      * @return float
      */
     public function convert($amount, $from, $to)
@@ -175,7 +176,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * Returns a currency object based on the identifier
-     * @param  type                                                               $identifier
+     * @param  type                                                                $identifier
      * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getCurrency($identifier)

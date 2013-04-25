@@ -41,7 +41,7 @@ class Subscriber implements EventSubscriberInterface
     protected $eventDispatcher;
 
     protected $storageService;
-    
+
     protected $state;
 
     /**
@@ -88,9 +88,9 @@ class Subscriber implements EventSubscriberInterface
     {
         $this->storageService->process($this->transaction);
     }
-    
+
     /**
-     * Called after the Transaction is stored, clears state apart from the 
+     * Called after the Transaction is stored, clears state apart from the
      * active currency.
      */
     public function onTransactionStored()

@@ -6,7 +6,6 @@ use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
-use Monolog\Logger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -97,7 +96,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     }
     /**
      * @param      $identifier
-     * @param bool $saveState Determines whether the state is saved and the update event is dispatched
+     * @param bool $saveState  Determines whether the state is saved and the update event is dispatched
      */
     public function setActiveCountry($identifier, $saveState = true)
     {
@@ -121,7 +120,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     }
     /**
      * Uses the identifier to retrive the country object from the cache
-     * @param  type $identifier
+     * @param  type                                                                  $identifier
      * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
      */
     public function getCountry($identifier)

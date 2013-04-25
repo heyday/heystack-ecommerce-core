@@ -41,7 +41,7 @@ class ContainerExtension extends Extension
      * Loads a specific configuration. Additionally calls processConfig, which handles overriding
      * the subsytem level configuration with more relevant mysite/config level configuration
      *
-     * @param array            $configs    An array of configuration values
+     * @param array            $configs   An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -59,7 +59,7 @@ class ContainerExtension extends Extension
             new ContainerConfig(),
             $configs
         );
-        
+
         if (isset($config['yml_transaction']) && $container->hasDefinition('transaction_schema')) {
             $definition = $container->getDefinition('transaction_schema');
             $definition->replaceArgument(0, $config['yml_transaction']);

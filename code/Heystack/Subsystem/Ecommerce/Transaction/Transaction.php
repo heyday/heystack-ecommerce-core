@@ -49,7 +49,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Holds the key used for storing the active currency code on the data array
      */
     const CURRENCY_CODE_KEY = 'currencycode';
-    
+
     /**
      * Holds the key used for storing the status of the transaction
      */
@@ -60,10 +60,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var \Heystack\Subsystem\Core\State\State
      */
     protected $stateService;
-    
+
     /**
      * Holds the currency service
-     * @var \Heystack\Subsystem\Ecommerce\Currency\CurrencyService 
+     * @var \Heystack\Subsystem\Ecommerce\Currency\CurrencyService
      */
     protected $currencyService;
 
@@ -90,13 +90,13 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * @var \Heystack\Subsystem\Ecommerce\Transaction\Collator
      */
     protected $collator;
-    
+
     /**
      * Holds an array of statuses that is accepted by the setStatus() method
-     * @var array 
+     * @var array
      */
     protected $validStatuses;
-    
+
     /**
      * Holds the default status of the transaction
      * @var string
@@ -116,11 +116,11 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         } else {
             throw new ConfigurationException($collatorClassName . ' does not exist');
         }
-        
+
         $this->currencyService = $currencyService;
-        
+
         $this->validStatuses = $validStatuses;
-        
+
         $this->defaultStatus = $defaultStatus;
     }
 
@@ -242,7 +242,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableIdentifier()
     {
-
         return self::IDENTIFIER;
 
     }
@@ -253,7 +252,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getSchemaName()
     {
-
         return 'Transaction';
 
     }
@@ -264,7 +262,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableData()
     {
-
         return array(
             'id' => 'Transaction',
             'flat' => array(
@@ -283,7 +280,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableBackendIdentifiers()
     {
-
         return array(
             Backend::IDENTIFIER
         );
@@ -298,10 +294,10 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getCollator()
     {
-     
-        
+
+
         if (!$this->collator) {
-            
+
             $collator = new $this->collatorClassName($this, $this->currencyService);
 
             if ($collator instanceof Collator) {
@@ -313,30 +309,29 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
         return $this->collator;
     }
-    
+
     /**
      * Sets the status of the transaction
      * @param string $status the status of the transaction
      */
     public function setStatus($status)
     {
-        
-        if(in_array($status, $this->validStatuses)){
-            
+
+        if (in_array($status, $this->validStatuses)) {
+
             $this->data[self::STATUS_KEY] = $status;
 
             $this->saveState();
         }
-        
+
     }
-    
+
     /**
      * Retrieves the Transaction's status
      */
     public function getStatus()
     {
-        
         return isset($this->data[self::STATUS_KEY]) ? $this->data[self::STATUS_KEY] : $this->defaultStatus;
-        
+
     }
 }
