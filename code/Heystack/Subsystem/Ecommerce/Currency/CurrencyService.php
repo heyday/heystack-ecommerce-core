@@ -147,8 +147,8 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         return $this->activeCurrency;
     }
     /**
-     * Retrieves the currently active currency
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * Retrieves the currently active currency code
+     * @return string
      */
     public function getActiveCurrencyCode()
     {

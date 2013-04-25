@@ -53,4 +53,9 @@ interface CurrencyServiceInterface
      * Retrieves the default currency object
      */
     public function getDefaultCurrency();
+    /**
+     * Retrieves the currently active currency code
+     * @return string
+     */
+    public function getActiveCurrencyCode();
 }
