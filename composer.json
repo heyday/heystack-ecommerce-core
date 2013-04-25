@@ -1,9 +1,17 @@
 {
     "name": "heystack/ecommerce-core",
     "type": "silverstripe-module",
-    "require": {        
+    "require": {
         "php": ">=5.4.0",
-        "composer/installers": "~1.0.0"
+        "composer/installers": "~1.0",
+        "heystack/heystack": "self.version"
+    },
+    "require-dev": {
+        "silverstripe/framework": "~2.4",
+        "symfony/class-loader": "~2.2",
+        "phpmd/phpmd": "1.4.*",
+        "pdepend/pdepend": "1.1.*",
+        "sami/sami": "dev-master"
     },
     "autoload": {
         "psr-0": {
@@ -12,6 +20,11 @@
         "classmap": ["code/SilverStripe"]
     },
     "extra": {
+        "installer-paths": {
+            "sapphire": [
+                "silverstripe/framework"
+            ]
+        },
         "branch-alias": {
             "dev-master": "1.1.x-dev"
         }
