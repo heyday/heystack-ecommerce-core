@@ -90,7 +90,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     public function saveState()
     {
         $this->sessionState->setByKey(
-            self::ACTIVE_CURRENCY_KEY,
+            self::ACTIVE_COUNTRY_KEY,
             $this->activeCountry->getIdentifier()->getFull()
         );
     }
