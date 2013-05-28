@@ -3,6 +3,7 @@
 namespace Heystack\Subsystem\Ecommerce\Locale;
 
 use Heystack\Subsystem\Core\Identifier\Identifier;
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
 
 /**
@@ -10,7 +11,7 @@ use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
  * @author Cam Spiers <cameron@heyday.co.nz>
  * @package Heystack\Subsystem\Ecommerce\Locale
  */
-class Country implements CountryInterface
+class Country implements CountryInterface, ViewableDataInterface
 {
     /**
      * @var
@@ -80,5 +81,19 @@ class Country implements CountryInterface
     public function isDefault()
     {
         return $this->default;
+    }
+    /**
+     * Defines what methods the implementing class implements dynamically through __get and __set
+     */
+    public function getDynamicMethods()
+    {
+        return array();
+    }
+    /**
+     * Returns an array of SilverStripe DBField castings keyed by field name
+     */
+    public function getCastings()
+    {
+        return array();
     }
 }

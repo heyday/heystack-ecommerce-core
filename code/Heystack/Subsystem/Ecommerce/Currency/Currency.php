@@ -2,6 +2,7 @@
 
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Subsystem\Core\Identifier\Identifier;
 
@@ -9,7 +10,7 @@ use Heystack\Subsystem\Core\Identifier\Identifier;
  * Class Currency
  * @author Cam Spiers <cameron@heyday.co.nz>
  */
-class Currency implements CurrencyInterface
+class Currency implements CurrencyInterface, ViewableDataInterface
 {
     /**
      * The currency code
@@ -83,5 +84,19 @@ class Currency implements CurrencyInterface
     public function getValue()
     {
         return $this->value;
+    }
+    /**
+     * Defines what methods the implementing class implements dynamically through __get and __set
+     */
+    public function getDynamicMethods()
+    {
+        return array();
+    }
+    /**
+     * Returns an array of SilverStripe DBField castings keyed by field name
+     */
+    public function getCastings()
+    {
+        return array();
     }
 }
