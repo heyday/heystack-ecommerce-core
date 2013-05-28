@@ -107,7 +107,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService, Array $validStatuses, $defaultStatus)
+    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService, array $validStatuses, $defaultStatus)
     {
         $this->stateService = $stateService;
 
