@@ -1,6 +1,7 @@
 <?php
 
 use Heystack\Subsystem\Core\ServiceStore;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 
 class PricingDecorator extends DataObjectDecorator
 {
@@ -12,9 +13,13 @@ class PricingDecorator extends DataObjectDecorator
 
         $currencyService = ServiceStore::getService(\Heystack\Subsystem\Ecommerce\Services::CURRENCY_SERVICE);
 
-        foreach ($currencyService->getCurrencies() as $currency) {
+        if ($currencyService instanceof CurrencyService) {
 
-            $db[$currency->getCurrencyCode()."Price"] = 'Decimal(10, 2)';
+            foreach ($currencyService->getCurrencies() as $currency) {
+
+                $db[$currency->getCurrencyCode()."Price"] = 'Decimal(10, 2)';
+
+            }
 
         }
 
