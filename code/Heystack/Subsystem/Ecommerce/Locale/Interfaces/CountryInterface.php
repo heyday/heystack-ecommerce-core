@@ -39,5 +39,4 @@ interface CountryInterface
      * Returns a boolean indicating whether this is the default country
      */
     public function isDefault();
-
 }

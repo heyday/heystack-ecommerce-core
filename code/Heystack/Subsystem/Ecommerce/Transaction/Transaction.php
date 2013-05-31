@@ -294,8 +294,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getCollator()
     {
-
-
         if (!$this->collator) {
 
             $collator = new $this->collatorClassName($this, $this->currencyService);
