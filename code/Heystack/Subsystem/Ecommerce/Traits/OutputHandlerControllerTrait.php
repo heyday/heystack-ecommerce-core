@@ -3,6 +3,7 @@
 namespace Heystack\Subsystem\Ecommerce\Traits;
 
 use Heystack\Subsystem\Core\ServiceStore;
+use Heystack\Subsystem\Core\Services;
 
 trait OutputHandlerControllerTrait
 {
@@ -16,8 +17,8 @@ trait OutputHandlerControllerTrait
     public function process()
     {
 
-        $inputHandlerService = ServiceStore::getService('input_processor_handler'); //TODO
-        $outputHandlerService = ServiceStore::getService('output_processor_handler'); //TODO
+        $inputHandlerService = ServiceStore::getService(Services::INPUT_PROCESSOR_HANDLER);
+        $outputHandlerService = ServiceStore::getService(Services::OUTPUT_PROCESSOR_HANDLER);
 
         $request = $this->getRequest();
         $identifier = $request->param('Processor');
