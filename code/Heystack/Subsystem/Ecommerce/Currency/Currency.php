@@ -90,12 +90,7 @@ class Currency implements CurrencyInterface, ViewableDataInterface
      */
     public function getDynamicMethods()
     {
-        return array(
-            'getCurrencyCode',
-            'getSymbol',
-            'getValue',
-            'isDefaultCurrency'
-        );
+        return array();
     }
     /**
      * Returns an array of SilverStripe DBField castings keyed by field name
