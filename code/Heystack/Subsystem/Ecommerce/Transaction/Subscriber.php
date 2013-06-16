@@ -95,8 +95,6 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onTransactionStored()
     {
-
-        $this->state->removeAll(array(CurrencyService::IDENTIFIER, 'shipping', 'localeservice', 'loggedInAs'));
-
+        $this->state->removeAll(array(CurrencyService::ACTIVE_CURRENCY_KEY, 'shipping', 'localeservice', 'loggedInAs'));
     }
 }
