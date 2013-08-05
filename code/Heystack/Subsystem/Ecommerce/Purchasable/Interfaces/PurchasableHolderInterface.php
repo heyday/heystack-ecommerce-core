@@ -37,7 +37,7 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
 
     /**
      * Sets the purchasables array to be held by the implementing class
-     * @param array $purchasables
+     * @param \Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface[] $purchasables
      */
     public function setPurchasables(array $purchasables);
 
@@ -67,7 +67,7 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
      * Retrieves purchasables from the implementing class' internal cache of
      * purchasables using the Primary string on the Identifier object
      * @param  \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
-     * @return array
+     * @return \Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface[]
      */
     public function getPurchasablesByPrimaryIdentifier(IdentifierInterface $identifier);
 

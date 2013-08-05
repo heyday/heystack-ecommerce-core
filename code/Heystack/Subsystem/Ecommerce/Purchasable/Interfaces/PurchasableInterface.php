@@ -53,7 +53,7 @@ interface PurchasableInterface
 
     /**
      * Sets the quantity of the Purchasable object in the PurchasableHolder
-     * @param type $quantity
+     * @param int $quantity
      */
     public function setQuantity($quantity = 1);
 

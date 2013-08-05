@@ -52,7 +52,7 @@ trait TransactionModifierStateTrait
     /**
      * @throws \RuntimeException
      */
-    protected function getStateService()
+    public function getStateService()
     {
         if (!$this->stateService instanceof State) {
             throw new \RuntimeException('To use TransactionModifierStateTrait a stateService must be available');
