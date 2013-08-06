@@ -22,22 +22,13 @@ use Heystack\Subsystem\Core\State\State;
 trait TransactionModifierStateTrait
 {
     /**
-     * Stores data for state
-     * @var array
-     */
-    protected $data;
-    /**
-     * @var \Heystack\Subsystem\Core\State\State
-     */
-    protected $stateService;
-    /**
      * Saves the data array on the State service
      */
     public function saveState()
     {
         $this->getStateService()->setByKey(
             $this->getIdentifier()->getFull(),
-            $this->data
+            $this->getData()
         );
     }
     /**
@@ -45,27 +36,10 @@ trait TransactionModifierStateTrait
      */
     public function restoreState()
     {
-        $this->data = $this->getStateService()->getByKey(
-            $this->getIdentifier()->getFull()
-        );
-    }
-    /**
-     * @throws \RuntimeException
-     */
-    public function getStateService()
-    {
-        if (!$this->stateService instanceof State) {
-            throw new \RuntimeException('To use TransactionModifierStateTrait a stateService must be available');
-        }
-        return $this->stateService;
-    }
-    /**
-     * @throws \RuntimeException
-     */
-    public function getIdentifier()
-    {
-        throw new \RuntimeException(
-            'To use TransactionModifierStateTrait a getIdentifier method must be provided on the using class'
+        $this->setData(
+            $this->getStateService()->getByKey(
+                $this->getIdentifier()->getFull()
+            )
         );
     }
 }

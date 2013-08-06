@@ -19,18 +19,14 @@ namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
  */
 trait TransactionModifierSerializeTrait
 {
-    /**
-     * Stores data for state
-     * @var array
-     */
-    protected $data;
+
     /**
      * Returns a serialized string from the data array
      * @return string
      */
     public function serialize()
     {
-        return serialize($this->data);
+        return serialize($this->getData());
     }
     /**
      * Unserializes the data into the data array
@@ -38,6 +34,6 @@ trait TransactionModifierSerializeTrait
      */
     public function unserialize($data)
     {
-        $this->data = unserialize($data);
+        $this->setData(unserialize($data));
     }
 }
