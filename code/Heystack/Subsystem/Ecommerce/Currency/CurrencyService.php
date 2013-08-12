@@ -10,6 +10,7 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
+use Heystack\Subsystem\Core\Identifier\Identifier;
 use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
@@ -94,14 +95,22 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         $this->currencies[$currency->getIdentifier()->getFull()] = $currency;
     }
     /**
-     * Uses the State service to restore the data array. It also sets all the
-     * currencies/default currency on the data array if this is the first time
-     * this method has been called.
+     * Uses the State service to retrieve the active currency's identifier and sets the active currency.
+     *
+     * If the retrieved identifier is not an instance of the Identifier Interface, then it checks if it is a string,
+     * which it uses to create a new Identifier object to set the active currency.
+     *
      */
     public function restoreState()
     {
         if ($identifier = $this->sessionState->getByKey(self::ACTIVE_CURRENCY_KEY)) {
-            $this->setActiveCurrency($identifier, false);
+
+            if ($identifier instanceof IdentifierInterface) {
+                $this->setActiveCurrency($identifier, false);
+            } else if (is_string($identifier)) {
+                $this->setActiveCurrency(new Identifier($identifier), false);
+            }
+
         }
     }
     /**

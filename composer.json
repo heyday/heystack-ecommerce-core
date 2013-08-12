@@ -10,7 +10,7 @@
 	"require": {
 		"php": ">=5.4.0",
 		"composer/installers": "~1.0",
-		"heystack/heystack": "self.version"
+		"heystack/heystack": "~2.1"
 	},
 	"require-dev": {
 		"silverstripe/framework": "~2.4",
