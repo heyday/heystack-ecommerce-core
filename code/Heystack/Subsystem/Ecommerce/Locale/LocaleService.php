@@ -2,6 +2,7 @@
 
 namespace Heystack\Subsystem\Ecommerce\Locale;
 
+use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
@@ -91,14 +92,14 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     {
         $this->sessionState->setByKey(
             self::ACTIVE_COUNTRY_KEY,
-            $this->activeCountry->getIdentifier()->getFull()
+            $this->activeCountry->getIdentifier()
         );
     }
     /**
      * @param      $identifier
      * @param bool $saveState  Determines whether the state is saved and the update event is dispatched
      */
-    public function setActiveCountry($identifier, $saveState = true)
+    public function setActiveCountry(IdentifierInterface $identifier, $saveState = true)
     {
         if ($country = $this->getCountry($identifier)) {
             $this->activeCountry = $country;
@@ -119,13 +120,13 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         return $this->activeCountry;
     }
     /**
-     * Uses the identifier to retrive the country object from the cache
-     * @param  type                                                                  $identifier
-     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface
+     * Uses the identifier to retrieve the country object from the cache
+     * @param IdentifierInterface $identifier
+     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface || null
      */
-    public function getCountry($identifier)
+    public function getCountry(IdentifierInterface $identifier)
     {
-        return isset($this->countries[$identifier]) ? $this->countries[$identifier] : null;
+        return isset($this->countries[$identifier->getFull()]) ? $this->countries[$identifier->getFull()] : null;
     }
 
     /**
