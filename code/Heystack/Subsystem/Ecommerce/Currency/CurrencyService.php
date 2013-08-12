@@ -10,6 +10,7 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency;
 
+use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
 use Heystack\Subsystem\Core\State\State;
 use Heystack\Subsystem\Core\State\StateableInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
@@ -110,16 +111,15 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         $this->sessionState->setByKey(
             self::ACTIVE_CURRENCY_KEY,
-            $this->activeCurrency->getIdentifier()->getFull()
+            $this->activeCurrency->getIdentifier()
         );
     }
     /**
-     * Sets the currently active Currency
-     * @param  string $identifier
-     * @param  bool   $saveState  Determines whether the state is saved and the update event is dispatched
+     * @param IdentifierInterface $identifier
+     * @param bool $saveState Determines whether the state is saved and the update event is dispatched
      * @return bool
      */
-    public function setActiveCurrency($identifier, $saveState = true)
+    public function setActiveCurrency(IdentifierInterface $identifier, $saveState = true)
     {
         if ($currency = $this->getCurrency($identifier)) {
             $this->activeCurrency = $currency;
@@ -175,13 +175,12 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         return $amount * ($this->currencies[$to]->getValue() / $this->currencies[$from]->getValue());
     }
     /**
-     * Returns a currency object based on the identifier
-     * @param  type                                                                $identifier
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @param IdentifierInterface $identifier
+     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface || null
      */
-    public function getCurrency($identifier)
+    public function getCurrency(IdentifierInterface $identifier)
     {
-        return isset($this->currencies[$identifier]) ? $this->currencies[$identifier] : null;
+        return isset($this->currencies[$identifier->getFull()]) ? $this->currencies[$identifier->getFull()] : null;
     }
     /**
      * Returns the default currency object

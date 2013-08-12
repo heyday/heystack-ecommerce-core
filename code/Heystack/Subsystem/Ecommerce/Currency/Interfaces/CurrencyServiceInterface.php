@@ -10,6 +10,8 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency\Interfaces;
 
+use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
+
 /**
  * Defines what a Currency Service needs to implement
  *
@@ -23,7 +25,7 @@ interface CurrencyServiceInterface
      * Sets the currently active currency
      * @param \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
      */
-    public function setActiveCurrency($identifier);
+    public function setActiveCurrency(IdentifierInterface $identifier);
 
     /**
      * Retrieves the currently active currency
@@ -47,7 +49,7 @@ interface CurrencyServiceInterface
      * Retrieves a currency object based on the identifier
      * @param type $identifier
      */
-    public function getCurrency($identifier);
+    public function getCurrency(IdentifierInterface $identifier);
 
     /**
      * Retrieves the default currency object
