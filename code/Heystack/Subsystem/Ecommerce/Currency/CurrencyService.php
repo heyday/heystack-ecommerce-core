@@ -189,7 +189,19 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function getCurrency(IdentifierInterface $identifier)
     {
-        return isset($this->currencies[$identifier->getFull()]) ? $this->currencies[$identifier->getFull()] : null;
+        if (is_string($identifier)) {
+
+            $identifier = new Identifier($identifier);
+
+        }
+
+        if ($identifier instanceof IdentifierInterface) {
+
+            return isset($this->currencies[$identifier->getFull()]) ? $this->currencies[$identifier->getFull()] : null;
+
+        }
+
+        return null;
     }
     /**
      * Returns the default currency object
