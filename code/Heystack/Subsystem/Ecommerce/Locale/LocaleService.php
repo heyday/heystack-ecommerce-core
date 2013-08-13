@@ -134,7 +134,19 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function getCountry(IdentifierInterface $identifier)
     {
-        return isset($this->countries[$identifier->getFull()]) ? $this->countries[$identifier->getFull()] : null;
+        if (is_string($identifier)) {
+
+            $identifier = new Identifier($identifier);
+
+        }
+
+        if ($identifier instanceof IdentifierInterface) {
+
+            return isset($this->countries[$identifier->getFull()]) ? $this->countries[$identifier->getFull()] : null;
+
+        }
+
+        return null;
     }
 
     /**
