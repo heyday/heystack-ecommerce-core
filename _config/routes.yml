@@ -1,0 +1,13 @@
+---
+Name: ecommerceroutes
+After: framework/routes#coreroutes
+---
+Director:
+  rules:
+    'ecommerce': 'EcommerceInputController'
+
+EcommerceInputController:
+  url_handlers:
+    'input//$Action/$Processor/$ID/$OtherID/$ExtraID': '$Action'
+  allowed_actions:
+    - 'process'

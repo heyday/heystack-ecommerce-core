@@ -3,10 +3,10 @@
 use Heystack\Subsystem\Core\ServiceStore;
 use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 
-class PricingDecorator extends DataObjectDecorator
+class PricingExtension extends DataExtension
 {
 
-    public function extraStatics()
+    public static function get_extra_config($class, $extension, $args)
     {
 
         $db = array();
@@ -29,7 +29,7 @@ class PricingDecorator extends DataObjectDecorator
 
     }
 
-    public function updateCMSFields(\FieldSet &$fields)
+    public function updateCMSFields(FieldList $fields)
     {
 
         $currencyService = ServiceStore::getService(\Heystack\Subsystem\Ecommerce\Services::CURRENCY_SERVICE);

@@ -16,7 +16,6 @@ trait OutputHandlerControllerTrait
      */
     public function process()
     {
-
         $inputHandlerService = ServiceStore::getService(Services::INPUT_PROCESSOR_HANDLER);
         $outputHandlerService = ServiceStore::getService(Services::OUTPUT_PROCESSOR_HANDLER);
 
