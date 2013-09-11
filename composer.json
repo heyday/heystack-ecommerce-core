@@ -26,11 +26,6 @@
 		"classmap": ["code/SilverStripe"]
 	},
 	"extra": {
-		"installer-paths": {
-			"sapphire": [
-				"silverstripe/framework"
-			]
-		},
 		"branch-alias": {
 			"dev-master": "3.0.x-dev",
 			"dev-1.0": "1.0.x-dev"

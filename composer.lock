@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "bc13daae2daac351fc50c1de6d699812",
+    "hash": "34d6c179ca29beba91cc36e23db120c6",
     "packages": [
         {
             "name": "camspiers/shared-dependency-injection",
