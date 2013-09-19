@@ -1,0 +1,8 @@
+Heystack\Subsystem\Ecommerce\Controller\InputController:
+  dependencies:
+    InputHandler: %$heystack.input_processor_handler
+    OutputHandler: %$heystack.output_processor_handler
+
+Heystack\Subsystem\Ecommerce\Currency\DataExtension\PricingExtension:
+  dependencies:
+    CurrencyService: %$heystack.currency_service

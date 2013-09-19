@@ -4,9 +4,9 @@ After: framework/routes#coreroutes
 ---
 Director:
   rules:
-    'ecommerce': 'EcommerceInputController'
+    'ecommerce': 'Heystack\Subsystem\Ecommerce\Controller\InputController'
 
-EcommerceInputController:
+Heystack\Subsystem\Ecommerce\Controller\InputController:
   url_handlers:
     'input//$Action/$Processor/$ID/$OtherID/$ExtraID': '$Action'
   allowed_actions:
