@@ -126,7 +126,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     /**
      * @param IdentifierInterface $identifier
      * @param bool $saveState Determines whether the state is saved and the update event is dispatched
-     * @return bool
+     * @return bool true on success false on failure
      */
     public function setActiveCurrency(IdentifierInterface $identifier, $saveState = true)
     {
@@ -189,12 +189,6 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function getCurrency(IdentifierInterface $identifier)
     {
-        if (is_string($identifier)) {
-
-            $identifier = new Identifier($identifier);
-
-        }
-
         if ($identifier instanceof IdentifierInterface) {
 
             return isset($this->currencies[$identifier->getFull()]) ? $this->currencies[$identifier->getFull()] : null;
@@ -211,19 +205,26 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->defaultCurrency;
     }
+
     /**
-     * @param null $identifier
+     * Sets the default currency
+     * @param IdentifierInterface $identifier
+     * @return bool true on success and false on failure
      */
-    public function setDefaultCurrency($identifier = null)
+    public function setDefaultCurrency(IdentifierInterface $identifier = null)
     {
-        if (!is_null($identifier)) {
-            $this->defaultCurrency = $this->currencies[$identifier];
+        if (!is_null($identifier) && isset($this->currencies[$identifier->getFull()])) {
+            $this->defaultCurrency = $this->currencies[$identifier->getFull()];
+            return true;
         } else {
             foreach ($this->currencies as $currency) {
                 if ($currency->isDefaultCurrency()) {
                     $this->defaultCurrency = $currency;
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 }

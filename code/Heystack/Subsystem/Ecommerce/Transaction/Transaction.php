@@ -10,17 +10,16 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Transaction;
 
+use Heystack\Subsystem\Core\Exception\ConfigurationException;
+use Heystack\Subsystem\Core\State\State;
+use Heystack\Subsystem\Core\State\StateableInterface;
+use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Subsystem\Core\Storage\StorableInterface;
+use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\State\StateableInterface;
-
-use Heystack\Subsystem\Core\Storage\StorableInterface;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-
-use Heystack\Subsystem\Core\Exception\ConfigurationException;
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
 /**
  * Transaction Service
  *
@@ -107,14 +106,26 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Creates the Transaction object
      * @param \Heystack\Subsystem\Core\State\State $stateService
      */
-    public function __construct(State $stateService, $collatorClassName, CurrencyService $currencyService, array $validStatuses, $defaultStatus)
-    {
+    public function __construct(
+        State $stateService,
+        $collatorClassName,
+        CurrencyService $currencyService,
+        array $validStatuses,
+        $defaultStatus
+    ) {
         $this->stateService = $stateService;
 
-        if (class_exists($collatorClassName)) {
+        if (class_exists($collatorClassName) && in_array(
+                'Heystack\Subsystem\Core\ViewableData\ViewableDataInterface',
+                class_implements($collatorClassName)
+            )
+        ) {
             $this->collatorClassName = $collatorClassName;
         } else {
-            throw new ConfigurationException($collatorClassName . ' does not exist');
+            throw new ConfigurationException(
+                $collatorClassName .
+                ' does not exist or does not implement Heystack\Subsystem\Core\ViewableData\ViewableDataInterface'
+            );
         }
 
         $this->currencyService = $currencyService;
@@ -296,13 +307,8 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     {
         if (!$this->collator) {
 
-            $collator = new $this->collatorClassName($this, $this->currencyService);
+            $this->collator = new $this->collatorClassName($this, $this->currencyService);
 
-            if ($collator instanceof Collator) {
-                $this->collator = $collator;
-            } else {
-                throw new ConfigurationException($this->collatorClassName . ' is not an instance of Heystack\Subsystem\Ecommerce\Transaction\Collator');
-            }
         }
 
         return $this->collator;

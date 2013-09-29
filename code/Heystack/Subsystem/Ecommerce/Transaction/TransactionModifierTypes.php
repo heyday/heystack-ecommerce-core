@@ -24,7 +24,7 @@ final class TransactionModifierTypes
     /**
      * Indicates a positive sign on the Transaction Modifier's total
      */
-    const CHARGEABLE = 'chargable';
+    const CHARGEABLE = 'chargeable';
 
     /**
      * Indicates a negative sign on the Transaction Modifier's total

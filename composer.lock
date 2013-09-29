@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "34d6c179ca29beba91cc36e23db120c6",
+    "hash": "5f493e7976e79e943b34d9034da22a76",
     "packages": [
         {
             "name": "camspiers/shared-dependency-injection",
-            "version": "0.4.1",
+            "version": "0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/camspiers/shared-dependency-injection.git",
-                "reference": "7482484e0864aec8650e3e9656ffb4d177d4b47e"
+                "reference": "9d6f2a5d089a15c687bbb5e61befa3658ae65687"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/camspiers/shared-dependency-injection/zipball/7482484e0864aec8650e3e9656ffb4d177d4b47e",
-                "reference": "7482484e0864aec8650e3e9656ffb4d177d4b47e",
+                "url": "https://api.github.com/repos/camspiers/shared-dependency-injection/zipball/9d6f2a5d089a15c687bbb5e61befa3658ae65687",
+                "reference": "9d6f2a5d089a15c687bbb5e61befa3658ae65687",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "Shared Dependency Injection",
-            "time": "2013-04-09 05:12:02"
+            "time": "2013-09-22 23:09:40"
         },
         {
             "name": "composer/installers",
@@ -122,7 +122,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://git@git.heyday.net.nz:1234/heystack/heystack.git",
-                "reference": "09f53a542c15a616ecb9ec0b0b54f5a452e52844"
+                "reference": "f7891e21a02c534cbc0c3163185c3bbb1b20b00d"
             },
             "require": {
                 "camspiers/shared-dependency-injection": "~0.4",
@@ -150,14 +150,11 @@
                 "psr-0": {
                     "Heystack": "code/"
                 },
-                "classmap": [
-                    "code/SilverStripe"
-                ],
                 "files": [
                     "code/Heystack/Subsystem/Core/Util/functions.php"
                 ]
             },
-            "time": "2013-09-11 06:13:21"
+            "time": "2013-09-24 02:38:29"
         },
         {
             "name": "monolog/monolog",
@@ -568,22 +565,27 @@
     "packages-dev": [
         {
             "name": "dflydev/markdown",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dflydev/dflydev-markdown.git",
-                "reference": "2a1b3516bd5af6e722b40ae9e1fccd03e1772060"
+                "reference": "6baed9b50f29c980795b6656d43722aadb126f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dflydev/dflydev-markdown/zipball/2a1b3516bd5af6e722b40ae9e1fccd03e1772060",
-                "reference": "2a1b3516bd5af6e722b40ae9e1fccd03e1772060",
+                "url": "https://api.github.com/repos/dflydev/dflydev-markdown/zipball/6baed9b50f29c980795b6656d43722aadb126f7e",
+                "reference": "6baed9b50f29c980795b6656d43722aadb126f7e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "dflydev\\markdown": "src"
@@ -591,7 +593,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "New BSD License"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -618,7 +620,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2012-01-16 03:36:37"
+            "time": "2013-09-23 12:00:18"
         },
         {
             "name": "nikic/php-parser",
@@ -771,12 +773,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Sami.git",
-                "reference": "cc3bcaf63a87378957921f10d3ef16c493f2c5c7"
+                "reference": "a0c61407331850fa3999127496d7e7e4a1919829"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Sami/zipball/cc3bcaf63a87378957921f10d3ef16c493f2c5c7",
-                "reference": "cc3bcaf63a87378957921f10d3ef16c493f2c5c7",
+                "url": "https://api.github.com/repos/fabpot/Sami/zipball/a0c61407331850fa3999127496d7e7e4a1919829",
+                "reference": "a0c61407331850fa3999127496d7e7e4a1919829",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +822,7 @@
             "keywords": [
                 "phpdoc"
             ],
-            "time": "2013-08-04 15:19:13"
+            "time": "2013-09-19 04:52:25"
         },
         {
             "name": "silverstripe/framework",

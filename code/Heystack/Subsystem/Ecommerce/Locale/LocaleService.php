@@ -61,7 +61,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     /**
      * @param array $countries
      */
-    public function setCountries(array $countries)
+    protected function setCountries(array $countries)
     {
         foreach ($countries as $country) {
             $this->addCountry($country);
@@ -70,7 +70,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     /**
      * @param CountryInterface $country
      */
-    public function addCountry(CountryInterface $country)
+    protected function addCountry(CountryInterface $country)
     {
         $this->countries[$country->getIdentifier()->getFull()] = $country;
     }
@@ -134,12 +134,6 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     public function getCountry(IdentifierInterface $identifier)
     {
-        if (is_string($identifier)) {
-
-            $identifier = new Identifier($identifier);
-
-        }
-
         if ($identifier instanceof IdentifierInterface) {
 
             return isset($this->countries[$identifier->getFull()]) ? $this->countries[$identifier->getFull()] : null;
@@ -157,20 +151,26 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     {
         return $this->countries;
     }
+
     /**
      * @param null $identifier
+     * @return bool true on success and false on failure
      */
-    public function setDefaultCountry($identifier = null)
+    public function setDefaultCountry(IdentifierInterface $identifier = null)
     {
-        if (!is_null($identifier)) {
-            $this->defaultCountry = $this->countries[$identifier];
+        if (!is_null($identifier) && isset($this->countries[$identifier->getFull()])) {
+            $this->defaultCountry = $this->countries[$identifier->getFull()];
+            return true;
         } else {
             foreach ($this->countries as $country) {
                 if ($country->isDefault()) {
                     $this->defaultCountry = $country;
+                    return true;
                 }
             }
         }
+
+        return false;
     }
     /**
      * @return mixed
