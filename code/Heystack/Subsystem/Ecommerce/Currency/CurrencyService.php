@@ -60,11 +60,12 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      * @var Interfaces\CurrencyInterface
      */
     protected $defaultCurrency;
+
     /**
      * CurrencySerivce Constructor
-     * @param array                                                       $currencies
+     * @param array $currencies
      * @param                                                             $defaultCurrency
-     * @param \Heystack\Subsystem\Core\State\State                        $sessionState
+     * @param \Heystack\Subsystem\Core\State\State $sessionState
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
@@ -72,12 +73,14 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         CurrencyInterface $defaultCurrency,
         State $sessionState,
         EventDispatcherInterface $eventDispatcher
-    ) {
+    )
+    {
         $this->setCurrencies($currencies);
         $this->defaultCurrency = $this->activeCurrency = $defaultCurrency;
         $this->sessionState = $sessionState;
         $this->eventDispatcher = $eventDispatcher;
     }
+
     /**
      * @param array $currencies
      */
@@ -87,6 +90,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
             $this->addCurrency($currency);
         }
     }
+
     /**
      * @param CurrencyInterface $currency
      */
@@ -94,6 +98,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         $this->currencies[$currency->getIdentifier()->getFull()] = $currency;
     }
+
     /**
      * Uses the State service to retrieve the active currency's identifier and sets the active currency.
      *
@@ -113,6 +118,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
 
         }
     }
+
     /**
      * Saves the data array on the State service
      */
@@ -123,6 +129,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
             $this->activeCurrency->getIdentifier()
         );
     }
+
     /**
      * @param IdentifierInterface $identifier
      * @param bool $saveState Determines whether the state is saved and the update event is dispatched
@@ -148,6 +155,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
 
         return false;
     }
+
     /**
      * Retrieves the currently active currency
      * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
@@ -156,6 +164,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->activeCurrency;
     }
+
     /**
      * Retrieves the currently active currency code
      * @return string
@@ -164,6 +173,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->getActiveCurrency()->getCurrencyCode();
     }
+
     /**
      * Retrieves all the available currencies
      * @return array
@@ -172,17 +182,19 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->currencies;
     }
+
     /**
      * Converts amount from one currency to another using the currency's identifier
-     * @param  float  $amount
+     * @param  float $amount
      * @param  string $from
      * @param  string $to
      * @return float
      */
-    public function convert($amount, $from, $to)
+    public function convert($amount, IdentifierInterface $from, IdentifierInterface $to)
     {
-        return $amount * ($this->currencies[$to]->getValue() / $this->currencies[$from]->getValue());
+        return $amount * ($this->currencies[$to->getFull()]->getValue() / $this->currencies[$from->getFull()]->getValue());
     }
+
     /**
      * @param IdentifierInterface $identifier
      * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface || null
@@ -203,6 +215,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
 
         return null;
     }
+
     /**
      * Returns the default currency object
      * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
@@ -211,6 +224,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->defaultCurrency;
     }
+
     /**
      * @param null $identifier
      */

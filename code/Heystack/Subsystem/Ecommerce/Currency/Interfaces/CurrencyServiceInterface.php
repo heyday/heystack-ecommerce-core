@@ -40,14 +40,14 @@ interface CurrencyServiceInterface
     /**
      * Converts amount from one currency to another using the currency's identifier
      * @param float  $amount
-     * @param string $from
-     * @param string $to
+     * @param Heystack\Subsystem\Core\Identifier\IdentifierInterface $from
+     * @param Heystack\Subsystem\Core\Identifier\IdentifierInterface $to
      */
-    public function convert($amount, $from, $to);
+    public function convert($amount, IdentifierInterface $from, IdentifierInterface $to);
 
     /**
      * Retrieves a currency object based on the identifier
-     * @param type $identifier
+     * @param Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
      */
     public function getCurrency(IdentifierInterface $identifier);
 
