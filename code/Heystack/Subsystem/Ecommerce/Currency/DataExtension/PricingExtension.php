@@ -10,7 +10,10 @@
  */
 namespace Heystack\Subsystem\Ecommerce\Currency\DataExtension;
 
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+use FieldList;
+use NumericField;
+use Injector;
+use DataExtension;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 
 /**
@@ -23,7 +26,7 @@ use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
  * @package Ecommerce-Core
  *
  */
-class PricingExtension extends \DataExtension
+class PricingExtension extends DataExtension
 {
     protected $currencyService;
 
@@ -37,7 +40,7 @@ class PricingExtension extends \DataExtension
 
         $db = array();
 
-        $currencyService = \Injector::inst()->create('heystack.currency_service');
+        $currencyService = Injector::inst()->create('heystack.currency_service');
 
         if ($currencyService instanceof CurrencyServiceInterface) {
 
@@ -68,7 +71,7 @@ class PricingExtension extends \DataExtension
 
                 $fields->addFieldToTab(
                     'Root.Prices',
-                    new \NumericField($currencyCode . "Price", $currencyCode . " Price")
+                    new NumericField($currencyCode . "Price", $currencyCode . " Price")
                 );
 
             }

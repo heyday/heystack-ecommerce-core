@@ -10,6 +10,7 @@
  */
 namespace Heystack\Subsystem\Ecommerce\DependencyInjection;
 
+use DataList;
 use Heystack\Subsystem\Core\Loader\DBClosureLoader;
 use Heystack\Subsystem\Ecommerce\Config\ContainerConfig;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
@@ -67,32 +68,30 @@ class ContainerExtension extends Extension
 
         // Configure currencies from DB
         if (isset($config['currency_db'])) {
-            $currencyQuery = new \SQLQuery(
-                $config['currency_db']['select'],
-                $config['currency_db']['from'],
-                $config['currency_db']['where']
-            );
-            (new DBClosureLoader(
-                function (CurrencyInterface $record) use ($container) {
-                    $definition = new Definition(
-                        'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
-                        array(
-                            $identifier = $record->getIdentifier()->getFull(),
-                            $record->getValue(),
-                            (boolean) $default = $record->isDefaultCurrency(),
-                            $record->getSymbol()
-                        )
-                    );
-                    $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
-                    $container->setDefinition(
-                        "currency.$identifier",
-                        $definition
-                    );
-                    if ($default) {
-                        $definition->addTag(Services::CURRENCY_SERVICE . '.currency_default');
-                    }
+            $handler = function (CurrencyInterface $record) use ($container) {
+                $definition = new Definition(
+                    'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
+                    array(
+                        $identifier = $record->getIdentifier()->getFull(),
+                        $record->getValue(),
+                        (boolean) $default = $record->isDefaultCurrency(),
+                        $record->getSymbol()
+                    )
+                );
+                $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
+                $container->setDefinition(
+                    "currency.$identifier",
+                    $definition
+                );
+                if ($default) {
+                    $definition->addTag(Services::CURRENCY_SERVICE . '.currency_default');
                 }
-            ))->load($currencyQuery);
+            };
+
+            $resource = call_user_func([$config['currency_db']['from'], 'get'])->where($config['currency_db']['where']);
+            
+            (new DBClosureLoader($handler))->load($resource);
+            
         } elseif (isset($config['currency'])) {
             foreach ($config['currency'] as $currency) {
                 $container->setDefinition(
@@ -116,31 +115,29 @@ class ContainerExtension extends Extension
 
         // Configure locale from DB
         if (isset($config['locale_db'])) {
-            $localeQuery = new \SQLQuery(
-                $config['locale_db']['select'],
-                $config['locale_db']['from'],
-                $config['locale_db']['where']
-            );
-            (new DBClosureLoader(
-                function (CountryInterface $record) use ($container) {
-                    $definition = new Definition(
-                        'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
-                        array(
-                            $identifier = $record->getCountryCode(),
-                            $record->getName(),
-                            (boolean) $default = $record->isDefault()
-                        )
-                    );
-                    $definition->addTag(Services::LOCALE_SERVICE . '.locale');
-                    $container->setDefinition(
-                        "locale.$identifier",
-                        $definition
-                    );
-                    if ($default) {
-                        $definition->addTag(Services::LOCALE_SERVICE . '.locale_default');
-                    }
+            $resource = call_user_func([$config['locale_db']['from'], 'get'])->where($config['locale_db']['where']);
+            
+            $handler = function (CountryInterface $record) use ($container) {
+                $definition = new Definition(
+                    'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
+                    array(
+                        $identifier = $record->getCountryCode(),
+                        $record->getName(),
+                        (boolean) $default = $record->isDefault()
+                    )
+                );
+                $definition->addTag(Services::LOCALE_SERVICE . '.locale');
+                $container->setDefinition(
+                    "locale.$identifier",
+                    $definition
+                );
+                if ($default) {
+                    $definition->addTag(Services::LOCALE_SERVICE . '.locale_default');
                 }
-            ))->load($localeQuery);
+            };
+            
+            (new DBClosureLoader($handler))->load($resource);
+            
         } elseif (isset($config['locale'])) {
             foreach ($config['locale'] as $locale) {
                 $container->setDefinition(
