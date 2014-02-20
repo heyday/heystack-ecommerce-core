@@ -65,11 +65,11 @@ class Subscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            Events::UPDATE => array('onUpdate',0),
-            Events::STORE => array('onStore', 0),
-            Backend::IDENTIFIER . '.' . TransactionEvents::STORED  => array('onTransactionStored', 0)
-        );
+        return [
+            Events::UPDATE => ['onUpdate',0],
+            Events::STORE => ['onStore', 0],
+            Backend::IDENTIFIER . '.' . TransactionEvents::STORED  => ['onTransactionStored', 0]
+        ];
     }
 
     /**
@@ -95,6 +95,6 @@ class Subscriber implements EventSubscriberInterface
      */
     public function onTransactionStored()
     {
-        $this->state->removeAll(array(CurrencyService::ACTIVE_CURRENCY_KEY, 'shipping', 'localeservice', 'loggedInAs'));
+        $this->state->removeAll([CurrencyService::ACTIVE_CURRENCY_KEY, 'shipping', 'localeservice', 'loggedInAs']);
     }
 }

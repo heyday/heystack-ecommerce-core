@@ -47,7 +47,7 @@ class Transaction implements CompilerPassInterface
 
             $definition->addMethodCall(
                 'addModifier',
-                array(new Reference($id))
+                [new Reference($id)]
             );
 
         }

@@ -70,13 +70,13 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      * Holds an array of currently managed TransactionModifiers
      * @var array
      */
-    protected $modifiers = array();
+    protected $modifiers = [];
 
     /**
      * Holds all the data that is stored on State
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * The classname to be used to instantiate the Collator
@@ -185,7 +185,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     public function getModifiersByType($type)
     {
 
-        $modifiers = array();
+        $modifiers = [];
 
         foreach ($this->modifiers as $identifier => $modifier) {
 
@@ -214,7 +214,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function updateTotal()
     {
-        $this->data[self::TOTAL_KEY] = $this->getTotalWithExclusions(array());
+        $this->data[self::TOTAL_KEY] = $this->getTotalWithExclusions([]);
 
         $this->saveState();
     }
@@ -273,15 +273,15 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableData()
     {
-        return array(
+        return [
             'id' => 'Transaction',
-            'flat' => array(
+            'flat' => [
                 'Total' => $this->getTotal(),
                 'Status' => $this->getStatus(),
                 'Currency' => $this->currencyService->getActiveCurrencyCode()
-            ),
-            'related' => array()
-        );
+            ],
+            'related' => []
+        ];
 
     }
 
@@ -291,9 +291,9 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function getStorableBackendIdentifiers()
     {
-        return array(
+        return [
             Backend::IDENTIFIER
-        );
+        ];
 
     }
 

@@ -67,14 +67,14 @@ class Processor implements ProcessorInterface
         if ($identifier = $request->param('ID')) {
 
             if ($this->currencyService->setActiveCurrency(new Identifier($identifier))) {
-                return array(
+                return [
                     'Success' => true
-                );
+                ];
             }
         }
 
-        return array(
+        return [
             'Success' => false
-        );
+        ];
     }
 }

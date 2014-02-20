@@ -38,7 +38,7 @@ class PricingExtension extends DataExtension
     public static function get_extra_config($class, $extension, $args)
     {
 
-        $db = array();
+        $db = [];
 
         $currencyService = Injector::inst()->create('heystack.currency_service');
 
@@ -52,9 +52,9 @@ class PricingExtension extends DataExtension
 
         }
 
-        return array(
+        return [
             'db' => $db
-        );
+        ];
 
     }
 

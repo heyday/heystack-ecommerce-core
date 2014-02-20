@@ -87,13 +87,13 @@ class Country implements CountryInterface, ViewableDataInterface
      */
     public function getDynamicMethods()
     {
-        return array();
+        return [];
     }
     /**
      * Returns an array of SilverStripe DBField castings keyed by field name
      */
     public function getCastings()
     {
-        return array();
+        return [];
     }
 }

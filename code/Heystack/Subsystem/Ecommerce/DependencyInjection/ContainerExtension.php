@@ -71,12 +71,12 @@ class ContainerExtension extends Extension
             $handler = function (CurrencyInterface $record) use ($container) {
                 $definition = new Definition(
                     'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
-                    array(
+                    [
                         $identifier = $record->getIdentifier()->getFull(),
                         $record->getValue(),
                         (boolean) $default = $record->isDefaultCurrency(),
                         $record->getSymbol()
-                    )
+                    ]
                 );
                 $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
                 $container->setDefinition(
@@ -98,12 +98,12 @@ class ContainerExtension extends Extension
                     "currency.{$currency['code']}",
                     $definition = new Definition(
                         'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
-                        array(
+                        [
                             $currency['code'],
                             $currency['value'],
                             $currency['default'],
                             $currency['symbol']
-                        )
+                        ]
                     )
                 );
                 $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
@@ -120,11 +120,11 @@ class ContainerExtension extends Extension
             $handler = function (CountryInterface $record) use ($container) {
                 $definition = new Definition(
                     'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
-                    array(
+                    [
                         $identifier = $record->getCountryCode(),
                         $record->getName(),
                         (boolean) $default = $record->isDefault()
-                    )
+                    ]
                 );
                 $definition->addTag(Services::LOCALE_SERVICE . '.locale');
                 $container->setDefinition(
@@ -144,11 +144,11 @@ class ContainerExtension extends Extension
                     "locale.{$locale['code']}",
                     $definition = new Definition(
                         'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
-                        array(
+                        [
                             $locale['code'],
                             $locale['name'],
                             $locale['default']
-                        )
+                        ]
                     )
                 );
                 $definition->addTag(Services::LOCALE_SERVICE . '.locale');

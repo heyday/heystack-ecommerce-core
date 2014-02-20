@@ -33,7 +33,7 @@ class Currency implements CompilerPassInterface
             return;
         }
 
-        $currencies = array();
+        $currencies = [];
 
         foreach ($container->findTaggedServiceIds(Services::CURRENCY_SERVICE . '.currency') as $id => $tags) {
             foreach ($tags as $tag) {

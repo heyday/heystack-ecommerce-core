@@ -33,7 +33,7 @@ class Locale implements CompilerPassInterface
             return;
         }
 
-        $locales = array();
+        $locales = [];
 
         foreach ($container->findTaggedServiceIds(Services::LOCALE_SERVICE . '.locale') as $id => $tags) {
             foreach ($tags as $tag) {

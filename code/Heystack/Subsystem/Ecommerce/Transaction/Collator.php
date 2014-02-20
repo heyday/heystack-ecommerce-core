@@ -32,16 +32,16 @@ class Collator implements ViewableDataInterface
 
     public function getCastings()
     {
-        return array(
+        return [
             'Total' => 'Money',
             'SubTotal' => 'Money'
-        );
+        ];
 
     }
 
     public function getDynamicMethods()
     {
-        return array();
+        return [];
     }
 
     public function setPrecision($precision)
@@ -60,10 +60,10 @@ class Collator implements ViewableDataInterface
 
     public function getTotal()
     {
-        return array(
+        return [
             'Amount' => $this->round($this->transaction->getTotal()),
             'Currency' => $this->currencyService->getActiveCurrencyCode()
-        );
+        ];
     }
 
     public function getSubTotal()
@@ -81,10 +81,10 @@ class Collator implements ViewableDataInterface
 
         }
 
-        return array(
+        return [
             'Amount' => $this->round($this->sumModifiers($modifiers)),
             'Currency' => $this->currencyService->getActiveCurrencyCode()
-        );
+        ];
 
     }
 
