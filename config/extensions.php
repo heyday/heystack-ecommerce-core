@@ -1,9 +1,13 @@
 <?php
 
 use Camspiers\DependencyInjection\SharedContainerFactory;
-use Heystack\Subsystem\Ecommerce\DependencyInjection;
+use Heystack\Subsystem\Ecommerce\DependencyInjection\ContainerExtension;
+use Heystack\Subsystem\Ecommerce\DependencyInjection\CompilerPass;
 
-SharedContainerFactory::addExtension(new DependencyInjection\ContainerExtension());
-SharedContainerFactory::addCompilerPass(new DependencyInjection\CompilerPass\Transaction());
-SharedContainerFactory::addCompilerPass(new DependencyInjection\CompilerPass\Currency());
-SharedContainerFactory::addCompilerPass(new DependencyInjection\CompilerPass\Locale());
+SharedContainerFactory::addExtension(new ContainerExtension());
+SharedContainerFactory::addCompilerPass(new CompilerPass\Transaction());
+SharedContainerFactory::addCompilerPass(new CompilerPass\Currency());
+SharedContainerFactory::addCompilerPass(new CompilerPass\Locale());
+SharedContainerFactory::addCompilerPass(new CompilerPass\HasTransactionService());
+SharedContainerFactory::addCompilerPass(new CompilerPass\HasCurrencyService());
+SharedContainerFactory::addCompilerPass(new CompilerPass\HasLocaleService());

@@ -50,19 +50,20 @@ class Processor implements ProcessorInterface
     }
     /**
      * Method used to determine how to handle the output based on the InputProcessor's result
-     * @param  \Controller     $controller
-     * @param  type            $result
-     * @return SS_HTTPResponse
+     * @param  \Controller          $controller
+     * @param  array|void           $result
+     * @return \SS_HTTPResponse
      */
     public function process(\Controller $controller, $result = null)
     {
-        if ($controller->isAjax()) {
-
+        if ($controller->getRequest()->isAjax()) {
             $response = $controller->getResponse();
             $response->setStatusCode(200);
-            $response->addHeader('Content-Type', 'application/json');
 
-            $response->setBody(json_encode($result));
+            if (is_array($result)) {
+                $response->addHeader('Content-Type', 'application/json');
+                $response->setBody(json_encode($result));
+            }
 
             return $response;
         } else {

@@ -13,6 +13,7 @@ namespace Heystack\Subsystem\Ecommerce\Currency\Input;
 use Heystack\Subsystem\Core\Input\ProcessorInterface;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 use Heystack\Subsystem\Core\Identifier\Identifier;
+use Heystack\Subsystem\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 
 /**
  * Input Processor for Currency
@@ -26,16 +27,14 @@ use Heystack\Subsystem\Core\Identifier\Identifier;
  */
 class Processor implements ProcessorInterface
 {
+    use HasCurrencyServiceTrait;
+    
     /**
      * Stores the identifier for this object
      * @var string
      */
     private $identifier;
-    /**
-     * Stores the CurrencyService
-     * @var Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
-     */
-    private $currencyService;
+    
     /**
      * Currency Input Processor Constructor
      * @param                          $identifier

@@ -11,10 +11,12 @@
 namespace Heystack\Subsystem\Ecommerce\Currency\DataExtension;
 
 use FieldList;
+use Heystack\Subsystem\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use NumericField;
 use Injector;
 use DataExtension;
 use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Subsystem\Ecommerce\Services;
 
 /**
  * Pricing Extension
@@ -28,19 +30,13 @@ use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
  */
 class PricingExtension extends DataExtension
 {
-    protected $currencyService;
-
-    public function setCurrencyService(CurrencyServiceInterface $service)
-    {
-        $this->currencyService = $service;
-    }
+    use HasCurrencyServiceTrait;
 
     public static function get_extra_config($class, $extension, $args)
     {
-
         $db = [];
 
-        $currencyService = Injector::inst()->create('heystack.currency_service');
+        $currencyService = Injector::inst()->create(sprintf('heystack.%s', Services::CURRENCY_SERVICE));
 
         if ($currencyService instanceof CurrencyServiceInterface) {
 
@@ -55,7 +51,6 @@ class PricingExtension extends DataExtension
         return [
             'db' => $db
         ];
-
     }
 
     public function updateCMSFields(FieldList $fields)
