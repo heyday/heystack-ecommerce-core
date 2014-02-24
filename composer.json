@@ -20,8 +20,8 @@
 		"sami/sami": "dev-master"
 	},
 	"autoload": {
-		"psr-0": {
-			"Heystack": "code/"
+		"psr-4": {
+			"Heystack\\Subsystem\\Ecommerce\\": "src/"
 		}
 	},
 	"extra": {
