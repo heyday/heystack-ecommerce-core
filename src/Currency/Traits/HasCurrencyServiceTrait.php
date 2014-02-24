@@ -1,18 +1,18 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Currency\Traits;
+namespace Heystack\Ecommerce\Currency\Traits;
 
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 
 trait HasCurrencyServiceTrait
 {
     /**
-     * @var \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
+     * @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
      */
     protected $currencyService;
 
     /**
-     * @param \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
      */
     public function setCurrencyService(CurrencyServiceInterface $currencyService)
     {
@@ -20,7 +20,7 @@ trait HasCurrencyServiceTrait
     }
 
     /**
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface
      */
     public function getCurrencyService()
     {

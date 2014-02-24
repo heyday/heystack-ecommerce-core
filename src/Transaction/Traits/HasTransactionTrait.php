@@ -1,22 +1,22 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
+namespace Heystack\Ecommerce\Transaction\Traits;
 
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 
 /**
  * Class HasTransactionTrait
- * @package Heystack\Subsystem\Ecommerce\Transaction\Traits
+ * @package Heystack\Ecommerce\Transaction\Traits
  */
 trait HasTransactionTrait
 {
     /**
-     * @var \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface
+     * @var \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface
      */
     protected $transaction;
 
     /**
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
      */
     public function setTransaction(TransactionInterface $transaction)
     {
@@ -24,7 +24,7 @@ trait HasTransactionTrait
     }
 
     /**
-     * @return \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface
      */
     public function getTransaction()
     {

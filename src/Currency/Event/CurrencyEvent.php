@@ -8,10 +8,10 @@
 /**
  * Event namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency\Event;
+namespace Heystack\Ecommerce\Currency\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 
 /**
  * Currency Event
@@ -27,13 +27,13 @@ class CurrencyEvent extends Event
 {
     /**
      * Holds the currency object relevant to this event
-     * @var \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     protected $currency;
 
     /**
      * Creates the CurrencyEvent object
-     * @param \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
      */
     public function __construct(CurrencyInterface $currency)
     {
@@ -42,7 +42,7 @@ class CurrencyEvent extends Event
 
     /**
      * Returns the currency object relevant to this event
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getCurrency()
     {

@@ -1,16 +1,16 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Transaction;
+namespace Heystack\Ecommerce\Transaction;
 
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 
-use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableHolderInterface;
+use Heystack\Ecommerce\Purchasable\Interfaces\PurchasableHolderInterface;
 
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
+use Heystack\Core\ViewableData\ViewableDataInterface;
 
-use Heystack\Subsystem\Core\Exception\ConfigurationException;
+use Heystack\Core\Exception\ConfigurationException;
 
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
+use Heystack\Ecommerce\Currency\CurrencyService;
 
 class Collator implements ViewableDataInterface
 {

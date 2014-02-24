@@ -8,12 +8,12 @@
 /**
  * Input namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency\Input;
+namespace Heystack\Ecommerce\Currency\Input;
 
-use Heystack\Subsystem\Core\Input\ProcessorInterface;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
-use Heystack\Subsystem\Core\Identifier\Identifier;
-use Heystack\Subsystem\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
+use Heystack\Core\Input\ProcessorInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Core\Identifier\Identifier;
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 
 /**
  * Input Processor for Currency
@@ -47,7 +47,7 @@ class Processor implements ProcessorInterface
     }
     /**
      * Returns the identifier for this object
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {

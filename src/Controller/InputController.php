@@ -1,8 +1,8 @@
 <?php
-namespace Heystack\Subsystem\Ecommerce\Controller;
+namespace Heystack\Ecommerce\Controller;
 
-use Heystack\Subsystem\Core\Input\Handler as InputHandler;
-use Heystack\Subsystem\Core\Output\Handler as OutputHandler;
+use Heystack\Core\Input\Handler as InputHandler;
+use Heystack\Core\Output\Handler as OutputHandler;
 
 class InputController extends \Controller
 {
@@ -43,7 +43,7 @@ class InputController extends \Controller
         if ($this->inputHandler instanceof InputHandler) {
             return $this->inputHandler;
         }else{
-            throw new \RuntimeException('The Heystack\Subsystem\Ecommerce\Controller\InputController requires Heystack\Subsystem\Core\Input\Handler to be set');
+            throw new \RuntimeException('The Heystack\Ecommerce\Controller\InputController requires Heystack\Core\Input\Handler to be set');
         }
     }
 
@@ -52,7 +52,7 @@ class InputController extends \Controller
         if ($this->outputHandler instanceof OutputHandler) {
             return $this->outputHandler;
         }else{
-            throw new \RuntimeException('The Heystack\Subsystem\Ecommerce\Controller\InputController requires Heystack\Subsystem\Core\Output\Handler to be set');
+            throw new \RuntimeException('The Heystack\Ecommerce\Controller\InputController requires Heystack\Core\Output\Handler to be set');
         }
     }
 }

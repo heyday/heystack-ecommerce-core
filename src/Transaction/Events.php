@@ -8,7 +8,7 @@
 /**
  * Transaction namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction;
+namespace Heystack\Ecommerce\Transaction;
 
 /**
  * Events definition for Transaction

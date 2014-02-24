@@ -8,15 +8,15 @@
 /**
  * Extension namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency\DataExtension;
+namespace Heystack\Ecommerce\Currency\DataExtension;
 
 use FieldList;
-use Heystack\Subsystem\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use NumericField;
 use Injector;
 use DataExtension;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
-use Heystack\Subsystem\Ecommerce\Services;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Services;
 
 /**
  * Pricing Extension

@@ -1,10 +1,10 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Currency;
+namespace Heystack\Ecommerce\Currency;
 
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
-use Heystack\Subsystem\Core\Identifier\Identifier;
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Core\Identifier\Identifier;
 
 /**
  * Class Currency
@@ -51,7 +51,7 @@ class Currency implements CurrencyInterface, ViewableDataInterface
     }
     /**
      * Returns the identifier
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {

@@ -1,15 +1,15 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Locale;
+namespace Heystack\Ecommerce\Locale;
 
-use Heystack\Subsystem\Core\Identifier\Identifier;
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
+use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
 
 /**
  * Class Country
  * @author Cam Spiers <cameron@heyday.co.nz>
- * @package Heystack\Subsystem\Ecommerce\Locale
+ * @package Heystack\Ecommerce\Locale
  */
 class Country implements CountryInterface, ViewableDataInterface
 {
@@ -55,7 +55,7 @@ class Country implements CountryInterface, ViewableDataInterface
     }
     /**
      * Returns a unique identifier
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {

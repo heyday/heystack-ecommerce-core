@@ -8,17 +8,17 @@
 /**
  * Transaction namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction;
+namespace Heystack\Ecommerce\Transaction;
 
-use Heystack\Subsystem\Core\Exception\ConfigurationException;
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Subsystem\Core\Storage\StorableInterface;
-use Heystack\Subsystem\Core\ViewableData\ViewableDataInterface;
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
+use Heystack\Core\Exception\ConfigurationException;
+use Heystack\Core\State\State;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Storage\StorableInterface;
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Currency\CurrencyService;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
 /**
  * Transaction Service
@@ -56,13 +56,13 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
     /**
      * Holds the State service
-     * @var \Heystack\Subsystem\Core\State\State
+     * @var \Heystack\Core\State\State
      */
     protected $stateService;
 
     /**
      * Holds the currency service
-     * @var \Heystack\Subsystem\Ecommerce\Currency\CurrencyService
+     * @var \Heystack\Ecommerce\Currency\CurrencyService
      */
     protected $currencyService;
 
@@ -86,7 +86,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
     /**
      * Holds the Collator object
-     * @var \Heystack\Subsystem\Ecommerce\Transaction\Collator
+     * @var \Heystack\Ecommerce\Transaction\Collator
      */
     protected $collator;
 
@@ -104,7 +104,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
     /**
      * Creates the Transaction object
-     * @param \Heystack\Subsystem\Core\State\State $stateService
+     * @param \Heystack\Core\State\State $stateService
      */
     public function __construct(
         State $stateService,
@@ -116,7 +116,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         $this->stateService = $stateService;
 
         if (class_exists($collatorClassName) && in_array(
-                'Heystack\Subsystem\Core\ViewableData\ViewableDataInterface',
+                'Heystack\Core\ViewableData\ViewableDataInterface',
                 class_implements($collatorClassName)
             )
         ) {
@@ -124,7 +124,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         } else {
             throw new ConfigurationException(
                 $collatorClassName .
-                ' does not exist or does not implement Heystack\Subsystem\Core\ViewableData\ViewableDataInterface'
+                ' does not exist or does not implement Heystack\Core\ViewableData\ViewableDataInterface'
             );
         }
 
@@ -153,7 +153,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
     /**
      * Add a TransactionModifier to the Transaction
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
      */
     public function addModifier(TransactionModifierInterface $modifier)
     {

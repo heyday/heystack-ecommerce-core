@@ -8,16 +8,16 @@
 /**
  * Currency namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency;
+namespace Heystack\Ecommerce\Currency;
 
-use Heystack\Subsystem\Core\Identifier\Identifier;
-use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Ecommerce\Currency\Event\CurrencyEvent;
-use Heystack\Subsystem\Ecommerce\Currency\Events;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\Identifier\IdentifierInterface;
+use Heystack\Core\State\State;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Ecommerce\Currency\Event\CurrencyEvent;
+use Heystack\Ecommerce\Currency\Events;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -64,7 +64,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      * CurrencySerivce Constructor
      * @param array                                                       $currencies
      * @param                                                             $defaultCurrency
-     * @param \Heystack\Subsystem\Core\State\State                        $sessionState
+     * @param \Heystack\Core\State\State                        $sessionState
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
@@ -150,7 +150,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * Retrieves the currently active currency
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getActiveCurrency()
     {
@@ -185,7 +185,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * @param IdentifierInterface $identifier
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface || null
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface || null
      */
     public function getCurrency(IdentifierInterface $identifier)
     {
@@ -199,7 +199,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     }
     /**
      * Returns the default currency object
-     * @return \Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     public function getDefaultCurrency()
     {

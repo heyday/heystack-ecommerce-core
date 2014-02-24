@@ -8,7 +8,7 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency\Interfaces;
+namespace Heystack\Ecommerce\Currency\Interfaces;
 
 /**
  * Defines what a Currency data object needs to implement
@@ -21,7 +21,7 @@ interface CurrencyInterface
 {
     /**
      * Returns the identifier
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier();
 

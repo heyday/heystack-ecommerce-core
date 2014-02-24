@@ -9,13 +9,13 @@
 /**
  * CompilerPass namespace
  */
-namespace Heystack\Subsystem\Ecommerce\DependencyInjection\CompilerPass;
+namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
 
-use Heystack\Subsystem\Ecommerce\Services;
+use Heystack\Ecommerce\Services;
 
 /**
  * Merges extensions definition calls into the container builder.

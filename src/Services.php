@@ -8,7 +8,7 @@
 /**
  * Ecommerce namespace
  */
-namespace Heystack\Subsystem\Ecommerce;
+namespace Heystack\Ecommerce;
 
 /**
  * Holds constants corresponding to the services defined in the services.yml file

@@ -1,19 +1,19 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Locale;
+namespace Heystack\Ecommerce\Locale;
 
-use Heystack\Subsystem\Core\Identifier\Identifier;
-use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\State\StateableInterface;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
+use Heystack\Core\Identifier\Identifier;
+use Heystack\Core\Identifier\IdentifierInterface;
+use Heystack\Core\State\State;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
+use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class LocaleService
  * @author  Cam Spiers <cameron@heyday.co.nz>
- * @package Heystack\Subsystem\Ecommerce\Locale
+ * @package Heystack\Ecommerce\Locale
  */
 class LocaleService implements LocaleServiceInterface, StateableInterface
 {
@@ -34,7 +34,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     protected $activeCountry;
     /**
-     * @var \Heystack\Subsystem\Core\State\State
+     * @var \Heystack\Core\State\State
      */
     protected $sessionState;
     /**
@@ -130,7 +130,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     /**
      * Uses the identifier to retrieve the country object from the cache
      * @param IdentifierInterface $identifier
-     * @return \Heystack\Subsystem\Shipping\CountryBased\Interfaces\CountryInterface || null
+     * @return \Heystack\Shipping\CountryBased\Interfaces\CountryInterface || null
      */
     public function getCountry(IdentifierInterface $identifier)
     {

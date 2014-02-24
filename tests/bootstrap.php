@@ -14,4 +14,4 @@ $loader = require BASE_PATH . '/vendor/autoload.php';
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 
 $loader->addClassMap(ClassMapGenerator::createMap(BASE_PATH . '/framework'));
-$loader->add('Heystack\Subsystem\Ecommerce', __DIR__);
+$loader->add('Heystack\Ecommerce', __DIR__);

@@ -1,8 +1,8 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Locale\Interfaces;
+namespace Heystack\Ecommerce\Locale\Interfaces;
 
-use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
+use Heystack\Core\Identifier\IdentifierInterface;
 
 interface LocaleServiceInterface
 {

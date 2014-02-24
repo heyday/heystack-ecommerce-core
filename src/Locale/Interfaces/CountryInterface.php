@@ -8,7 +8,7 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Locale\Interfaces;
+namespace Heystack\Ecommerce\Locale\Interfaces;
 
 /**
  * Defines what methods/functions a Country class needs to implement
@@ -21,7 +21,7 @@ interface CountryInterface
 {
     /**
      * Returns a unique identifier
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier();
 

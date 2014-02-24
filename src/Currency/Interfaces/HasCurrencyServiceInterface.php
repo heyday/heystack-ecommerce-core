@@ -1,10 +1,10 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Currency\Interfaces;
+namespace Heystack\Ecommerce\Currency\Interfaces;
 
 /**
  * Interface HasCurrencyServiceInterface
- * @package Heystack\Subsystem\Ecommerce\Currency\Interfaces
+ * @package Heystack\Ecommerce\Currency\Interfaces
  */
 interface HasCurrencyServiceInterface
 {

@@ -8,10 +8,10 @@
 /**
  * Traits namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency\Traits;
+namespace Heystack\Ecommerce\Currency\Traits;
 
-use Heystack\Subsystem\Core\GenerateContainerDataObjectTrait;
-use Heystack\Subsystem\Core\Identifier\Identifier;
+use Heystack\Core\GenerateContainerDataObjectTrait;
+use Heystack\Core\Identifier\Identifier;
 
 /**
  * Provides a basic implementation of the CurrencyInterface for dataobjects
@@ -25,7 +25,7 @@ trait CurrencyTrait
     use GenerateContainerDataObjectTrait;
 
     /**
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {

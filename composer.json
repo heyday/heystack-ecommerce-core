@@ -21,7 +21,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Heystack\\Subsystem\\Ecommerce\\": "src/"
+			"Heystack\\Ecommerce\\": "src/"
 		}
 	},
 	"extra": {

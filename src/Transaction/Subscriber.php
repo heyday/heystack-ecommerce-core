@@ -8,14 +8,14 @@
 /**
  * Transaction namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction;
+namespace Heystack\Ecommerce\Transaction;
 
-use Heystack\Subsystem\Core\State\State;
-use Heystack\Subsystem\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Subsystem\Core\Storage\Storage;
-use Heystack\Subsystem\Ecommerce\Currency\CurrencyService;
-use Heystack\Subsystem\Ecommerce\Transaction\Events as TransactionEvents;
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface;
+use Heystack\Core\State\State;
+use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Storage\Storage;
+use Heystack\Ecommerce\Currency\CurrencyService;
+use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -30,7 +30,7 @@ class Subscriber implements EventSubscriberInterface
 {
     /**
      * Holds the Transaction object
-     * @var \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface
+     * @var \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface
      */
     protected $transaction;
 
@@ -46,10 +46,10 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Creates the Susbcriber object
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface               $eventDispatcher
-     * @param \Heystack\Subsystem\Core\Storage\Storage                                  $storageService
-     * @param \Heystack\Subsystem\Core\State\State                                      $state
+     * @param \Heystack\Core\Storage\Storage                                  $storageService
+     * @param \Heystack\Core\State\State                                      $state
      */
     public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService, State $state)
     {

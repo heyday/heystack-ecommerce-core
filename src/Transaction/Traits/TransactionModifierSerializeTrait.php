@@ -8,7 +8,7 @@
 /**
  * Traits namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
+namespace Heystack\Ecommerce\Transaction\Traits;
 
 /**
  * Provides an implementation for the Serializable Interface for Transaction Modifiers

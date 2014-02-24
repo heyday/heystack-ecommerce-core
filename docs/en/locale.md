@@ -16,8 +16,8 @@ One way to populate the Locale Service with locale/country objects is through th
 You must first define the country data object:
 
 ```
-use Heystack\Subsystem\Ecommerce\Locale\Traits\CountryTrait;
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\CountryInterface;
+use Heystack\Ecommerce\Locale\Traits\CountryTrait;
+use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
 
 class Country extends DataObject implements CountryInterface
 {
@@ -78,4 +78,4 @@ This will add two locales New Zealand, and Australia once the container is regen
 
 Command to regenerate the container: `heystack\bin\heystack generate-container`
 
-The Country class used for the Country objects as populated this way is at `Heystack\Subsystem\Ecommerce\Locale\Country`
+The Country class used for the Country objects as populated this way is at `Heystack\Ecommerce\Locale\Country`

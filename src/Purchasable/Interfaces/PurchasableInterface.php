@@ -8,9 +8,9 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Purchasable\Interfaces;
+namespace Heystack\Ecommerce\Purchasable\Interfaces;
 
-use Heystack\Subsystem\Core\State\State;
+use Heystack\Core\State\State;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -30,7 +30,7 @@ interface PurchasableInterface
 
     /**
      * Returns a unique identifier for the Purchasable object
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier();
 
@@ -41,7 +41,7 @@ interface PurchasableInterface
 
     /**
      * Adds the State service to the Purchasable object
-     * @param \Heystack\Subsystem\Core\State\State $stateService
+     * @param \Heystack\Core\State\State $stateService
      */
     public function addStateService(State $stateService);
 

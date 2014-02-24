@@ -8,11 +8,11 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Purchasable\Interfaces;
+namespace Heystack\Ecommerce\Purchasable\Interfaces;
 
-use Heystack\Subsystem\Core\Identifier\IdentifierInterface;
-use Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
-use Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
+use Heystack\Core\Identifier\IdentifierInterface;
+use Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
 /**
  * PurchasableHolderInterface
@@ -37,7 +37,7 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
 
     /**
      * Sets the purchasables array to be held by the implementing class
-     * @param \Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface[] $purchasables
+     * @param \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface[] $purchasables
      */
     public function setPurchasables(array $purchasables);
 
@@ -59,22 +59,22 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
     /**
      * Retrieves a purchasable from the implementing class' internal cache of
      * purchasables
-     * @param \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      */
     public function getPurchasable(IdentifierInterface $identifier);
 
     /**
      * Retrieves purchasables from the implementing class' internal cache of
      * purchasables using the Primary string on the Identifier object
-     * @param  \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
-     * @return \Heystack\Subsystem\Ecommerce\Purchasable\Interfaces\PurchasableInterface[]
+     * @param  \Heystack\Core\Identifier\IdentifierInterface $identifier
+     * @return \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface[]
      */
     public function getPurchasablesByPrimaryIdentifier(IdentifierInterface $identifier);
 
     /**
      * Removes a purchasable from the implementing class' internal cache of
      * purchasables
-     * @param \Heystack\Subsystem\Core\Identifier\IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      */
     public function removePurchasable(IdentifierInterface $identifier);
 

@@ -8,7 +8,7 @@
 /**
  * Currency namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Currency;
+namespace Heystack\Ecommerce\Currency;
 
 /**
  * Events definition for Currency

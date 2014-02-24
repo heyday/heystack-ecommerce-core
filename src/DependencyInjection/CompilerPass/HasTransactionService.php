@@ -1,13 +1,13 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\DependencyInjection\CompilerPass;
+namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
-use Heystack\Subsystem\Ecommerce\Services;
-use Heystack\Subsystem\Core\DependencyInjection\CompilerPass\HasService;
+use Heystack\Ecommerce\Services;
+use Heystack\Core\DependencyInjection\CompilerPass\HasService;
 
 /**
  * Class HasTransactionService
- * @package Heystack\Subsystem\Ecommerce\DependencyInjection\CompilerPass
+ * @package Heystack\Ecommerce\DependencyInjection\CompilerPass
  */
 class HasTransactionService extends HasService
 {

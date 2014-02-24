@@ -1,14 +1,14 @@
 parameters:
-  currency_service.class: Heystack\Subsystem\Ecommerce\Currency\CurrencyService
-  currency_subscriber.class: Heystack\Subsystem\Ecommerce\Currency\Subscriber
-  currency_input_processor.class: Heystack\Subsystem\Ecommerce\Currency\Input\Processor
-  currency_output_processor.class: Heystack\Subsystem\Ecommerce\Currency\Output\Processor
-  locale_service.class: Heystack\Subsystem\Ecommerce\Locale\LocaleService
-  transaction.class: Heystack\Subsystem\Ecommerce\Transaction\Transaction
+  currency_service.class: Heystack\Ecommerce\Currency\CurrencyService
+  currency_subscriber.class: Heystack\Ecommerce\Currency\Subscriber
+  currency_input_processor.class: Heystack\Ecommerce\Currency\Input\Processor
+  currency_output_processor.class: Heystack\Ecommerce\Currency\Output\Processor
+  locale_service.class: Heystack\Ecommerce\Locale\LocaleService
+  transaction.class: Heystack\Ecommerce\Transaction\Transaction
   transaction.statuses: [ 'Pending', 'Successful', 'Failed', 'Dispatched', 'Processing', 'Cancelled' ]
   transaction.default: Pending
-  transaction_subscriber.class: Heystack\Subsystem\Ecommerce\Transaction\Subscriber
-  collator.class: Heystack\Subsystem\Ecommerce\Transaction\Collator
+  transaction_subscriber.class: Heystack\Ecommerce\Transaction\Subscriber
+  collator.class: Heystack\Ecommerce\Transaction\Collator
 
 services:
 

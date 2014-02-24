@@ -15,8 +15,8 @@ One way to populate the Currency Service with currency objects is via the use of
 You must first define the currency dataobject:
 
 ```
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
-use Heystack\Subsystem\Ecommerce\Currency\Traits\CurrencyTrait;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Ecommerce\Currency\Traits\CurrencyTrait;
 
 class Currency extends DataObject implements CurrencyInterface{
 
@@ -85,7 +85,7 @@ This will add two currencies the New Zealand Dollar and the Australian Dollar on
 
 Command to regenerate the container: `heystack/bin/heystack generate-container`
 
-The Currency class used for the Currency objects as populated this way is at `Heystack\Subsystem\Ecommerce\Currency\Currency`
+The Currency class used for the Currency objects as populated this way is at `Heystack\Ecommerce\Currency\Currency`
 
 ## Input/Output Processor
 

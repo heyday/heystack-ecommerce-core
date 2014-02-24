@@ -8,14 +8,14 @@
 /**
  * DependencyInjection namespace
  */
-namespace Heystack\Subsystem\Ecommerce\DependencyInjection;
+namespace Heystack\Ecommerce\DependencyInjection;
 
 use DataList;
-use Heystack\Subsystem\Core\Loader\DBClosureLoader;
-use Heystack\Subsystem\Ecommerce\Config\ContainerConfig;
-use Heystack\Subsystem\Ecommerce\Currency\Interfaces\CurrencyInterface;
-use Heystack\Subsystem\Shipping\Types\CountryBased\Interfaces\CountryInterface;
-use Heystack\Subsystem\Ecommerce\Services;
+use Heystack\Core\Loader\DBClosureLoader;
+use Heystack\Ecommerce\Config\ContainerConfig;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Heystack\Shipping\Types\CountryBased\Interfaces\CountryInterface;
+use Heystack\Ecommerce\Services;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -70,7 +70,7 @@ class ContainerExtension extends Extension
         if (isset($config['currency_db'])) {
             $handler = function (CurrencyInterface $record) use ($container) {
                 $definition = new Definition(
-                    'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
+                    'Heystack\\Ecommerce\\Currency\\Currency',
                     [
                         $identifier = $record->getIdentifier()->getFull(),
                         $record->getValue(),
@@ -97,7 +97,7 @@ class ContainerExtension extends Extension
                 $container->setDefinition(
                     "currency.{$currency['code']}",
                     $definition = new Definition(
-                        'Heystack\\Subsystem\\Ecommerce\\Currency\\Currency',
+                        'Heystack\\Ecommerce\\Currency\\Currency',
                         [
                             $currency['code'],
                             $currency['value'],
@@ -119,7 +119,7 @@ class ContainerExtension extends Extension
             
             $handler = function (CountryInterface $record) use ($container) {
                 $definition = new Definition(
-                    'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
+                    'Heystack\\Ecommerce\\Locale\\Country',
                     [
                         $identifier = $record->getCountryCode(),
                         $record->getName(),
@@ -143,7 +143,7 @@ class ContainerExtension extends Extension
                 $container->setDefinition(
                     "locale.{$locale['code']}",
                     $definition = new Definition(
-                        'Heystack\\Subsystem\\Ecommerce\\Locale\\Country',
+                        'Heystack\\Ecommerce\\Locale\\Country',
                         [
                             $locale['code'],
                             $locale['name'],

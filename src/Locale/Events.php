@@ -8,7 +8,7 @@
 /**
  * Locale namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Locale;
+namespace Heystack\Ecommerce\Locale;
 
 /**
  * Events holds constant references to triggerable dispatch events.

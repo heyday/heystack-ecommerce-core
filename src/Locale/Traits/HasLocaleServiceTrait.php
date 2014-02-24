@@ -1,22 +1,22 @@
 <?php
 
-namespace Heystack\Subsystem\Ecommerce\Locale\Traits;
+namespace Heystack\Ecommerce\Locale\Traits;
 
-use Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
+use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 
 /**
  * Class HasLocaleServiceTrait
- * @package Heystack\Subsystem\Ecommerce\Locale\Traits
+ * @package Heystack\Ecommerce\Locale\Traits
  */
 trait HasLocaleServiceTrait
 {
     /**
-     * @var \Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface
+     * @var \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface
      */
     protected $localeService;
 
     /**
-     * @param \Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localService
+     * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localService
      */
     public function setLocaleService(LocaleServiceInterface $localService)
     {
@@ -24,7 +24,7 @@ trait HasLocaleServiceTrait
     }
 
     /**
-     * @return \Heystack\Subsystem\Ecommerce\Locale\Interfaces\LocaleServiceInterface
+     * @return \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface
      */
     public function getLocaleService()
     {

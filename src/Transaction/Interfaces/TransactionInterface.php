@@ -8,7 +8,7 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction\Interfaces;
+namespace Heystack\Ecommerce\Transaction\Interfaces;
 
 /**
  * Defines what functions a Transaction Class needs to implement
@@ -21,7 +21,7 @@ interface TransactionInterface
 {
     /**
      * Add a TransactionModifier to the Transaction
-     * @param \Heystack\Subsystem\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
      */
     public function addModifier(TransactionModifierInterface $modifier);
 

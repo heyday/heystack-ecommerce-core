@@ -8,9 +8,9 @@
 /**
  * Traits namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction\Traits;
+namespace Heystack\Ecommerce\Transaction\Traits;
 
-use Heystack\Subsystem\Core\State\State;
+use Heystack\Core\State\State;
 
 /**
  * Provides an implementation for the Statable Interface for Transaction Modifiers

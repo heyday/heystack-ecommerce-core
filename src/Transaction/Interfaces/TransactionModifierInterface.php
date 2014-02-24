@@ -8,7 +8,7 @@
 /**
  * Interfaces namespace
  */
-namespace Heystack\Subsystem\Ecommerce\Transaction\Interfaces;
+namespace Heystack\Ecommerce\Transaction\Interfaces;
 
 /**
  * Defines what functions a TransactionModifier Class needs to implement
@@ -21,7 +21,7 @@ interface TransactionModifierInterface
 {
     /**
      * Returns a unique identifier for use in the Transaction
-     * @return \Heystack\Subsystem\Core\Identifier\Identifier
+     * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier();
 
