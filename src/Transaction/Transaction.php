@@ -14,17 +14,17 @@ use Heystack\Core\Exception\ConfigurationException;
 use Heystack\Core\State\State;
 use Heystack\Core\State\StateableInterface;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Core\Storage\StorableInterface;
-use Heystack\Core\ViewableData\ViewableDataInterface;
 use Heystack\Ecommerce\Currency\CurrencyService;
+use Heystack\Ecommerce\Exception\MoneyOverflowException;
+use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
+use SebastianBergmann\Money\CurrencyMismatchException;
 
 /**
  * Transaction Service
  *
  * Handles all the TransactionModifiers and calculates the order's total.
- * Also holds the collator for displaying data
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
@@ -32,27 +32,12 @@ use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
  * @author Stevie Mayhew <stevie@heyday.co.nz>
  * @package Ecommerce-Core
  */
-class Transaction implements TransactionInterface, StateableInterface, StorableInterface
+class Transaction implements TransactionInterface, StateableInterface
 {
     /**
      * Holds the key used for storing state
      */
     const IDENTIFIER = 'transaction';
-
-    /**
-     * Holds the key used for storing the Total on the data array
-     */
-    const TOTAL_KEY = 'total';
-
-    /**
-     * Holds the key used for storing the active currency code on the data array
-     */
-    const CURRENCY_CODE_KEY = 'currencycode';
-
-    /**
-     * Holds the key used for storing the status of the transaction
-     */
-    const STATUS_KEY = 'status';
 
     /**
      * Holds the State service
@@ -68,27 +53,19 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
     /**
      * Holds an array of currently managed TransactionModifiers
-     * @var array
+     * @var \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
     protected $modifiers = [];
 
     /**
-     * Holds all the data that is stored on State
-     * @var array
+     * @var \SebastianBergmann\Money\Money
      */
-    protected $data = [];
+    protected $total;
 
     /**
-     * The classname to be used to instantiate the Collator
      * @var string
      */
-    protected $collatorClassName;
-
-    /**
-     * Holds the Collator object
-     * @var \Heystack\Ecommerce\Transaction\Collator
-     */
-    protected $collator;
+    protected $status;
 
     /**
      * Holds an array of statuses that is accepted by the setStatus() method
@@ -97,42 +74,29 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     protected $validStatuses;
 
     /**
-     * Holds the default status of the transaction
-     * @var string
-     */
-    protected $defaultStatus;
-
-    /**
      * Creates the Transaction object
-     * @param \Heystack\Core\State\State $stateService
+     * @param State $stateService
+     * @param CurrencyService $currencyService
+     * @param array $validStatuses
+     * @param $defaultStatus
+     * @throws ConfigurationException
      */
     public function __construct(
         State $stateService,
-        $collatorClassName,
         CurrencyService $currencyService,
         array $validStatuses,
         $defaultStatus
     ) {
         $this->stateService = $stateService;
-
-        if (class_exists($collatorClassName) && in_array(
-                'Heystack\Core\ViewableData\ViewableDataInterface',
-                class_implements($collatorClassName)
-            )
-        ) {
-            $this->collatorClassName = $collatorClassName;
-        } else {
+        $this->currencyService = $currencyService;
+        $this->validStatuses = $validStatuses;
+        if (!$this->isValidStatus($defaultStatus)) {
             throw new ConfigurationException(
-                $collatorClassName .
-                ' does not exist or does not implement Heystack\Core\ViewableData\ViewableDataInterface'
+                sprintf("The default status '%s' is not a valid status", $defaultStatus)
             );
         }
-
-        $this->currencyService = $currencyService;
-
-        $this->validStatuses = $validStatuses;
-
-        $this->defaultStatus = $defaultStatus;
+        $this->status = $defaultStatus;
+        $this->total = $this->currencyService->getZeroMoney();
     }
 
     /**
@@ -140,7 +104,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function saveState()
     {
-       $this->stateService->setByKey(self::IDENTIFIER, $this->data);
+       $this->stateService->setByKey(self::IDENTIFIER, [$this->total, $this->status]);
     }
 
     /**
@@ -148,7 +112,9 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function restoreState()
     {
-        $this->data = $this->stateService->getByKey(self::IDENTIFIER);
+        if ($data = $this->stateService->getByKey(self::IDENTIFIER)) {
+            list($this->total, $this->status) = $data;
+        }
     }
 
     /**
@@ -158,11 +124,15 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     public function addModifier(TransactionModifierInterface $modifier)
     {
         $this->modifiers[$modifier->getIdentifier()->getFull()] = $modifier;
+        if ($modifier instanceof HasTransactionInterface) {
+            $modifier->setTransaction($this);
+        }
     }
 
     /**
      * Returns a TransactionModifier based on the identifier
      * @param string $identifier
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface|null
      */
     public function getModifier($identifier)
     {
@@ -171,6 +141,7 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
 
     /**
      * Returns all the TransactionModifiers held by the Transaction object
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
     public function getModifiers()
     {
@@ -180,33 +151,28 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     /**
      * Returns modifiers on the transaction by TranactionModifierType
      * @param  string $type
-     * @return array
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
     public function getModifiersByType($type)
     {
-
         $modifiers = [];
 
         foreach ($this->modifiers as $identifier => $modifier) {
-
-            if ($modifier->getType() == $type) {
-
+            if ($modifier->getType() === $type) {
                 $modifiers[$identifier] = $modifier;
-
             }
-
         }
 
         return $modifiers;
-
     }
 
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotal()
     {
-        return isset($this->data[self::TOTAL_KEY]) ? $this->data[self::TOTAL_KEY] : 0;
+        return $this->total;
     }
 
     /**
@@ -214,34 +180,42 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
      */
     public function updateTotal()
     {
-        $this->data[self::TOTAL_KEY] = $this->getTotalWithExclusions([]);
-
+        $this->total = $this->getTotalWithExclusions([]);
         $this->saveState();
     }
 
     /**
      * Retrieves the total without adding excluded modifiers
+     *
      * @param array $exclude an array of identifiers to be excluded
+     * @throws \Heystack\Ecommerce\Exception\MoneyOverflowException
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotalWithExclusions(array $exclude)
     {
-        $total = 0;
+        $total = $this->currencyService->getZeroMoney();
 
         foreach ($this->modifiers as $modifier) {
-
             if (!in_array($modifier->getIdentifier()->getFull(), $exclude)) {
-
-                switch ($modifier->getType()) {
-                    case TransactionModifierTypes::CHARGEABLE:
-                        $total += $modifier->getTotal();
-                        break;
-                    case TransactionModifierTypes::DEDUCTIBLE:
-                        $total -= $modifier->getTotal();
-                        break;
+                try {
+                    switch ($modifier->getType()) {
+                        case TransactionModifierTypes::CHARGEABLE:
+                            $operationTotal = $modifier->getTotal();
+                            if ($operationTotal->getAmount() + $total->getAmount() > PHP_INT_MAX) {
+                                throw new MoneyOverflowException;
+                            }
+                            $total = $total->add($operationTotal);
+                            break;
+                        case TransactionModifierTypes::DEDUCTIBLE:
+                            $total = $total->subtract($modifier->getTotal());
+                            break;
+                    }
+                } catch (CurrencyMismatchException $e) {
+                    // This occurs as the modifiers are updating
+                    // in response to currency change events
+                    // let it happen and all will be well
                 }
-
             }
-
         }
 
         return $total;
@@ -254,7 +228,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     public function getStorableIdentifier()
     {
         return self::IDENTIFIER;
-
     }
 
     /**
@@ -264,7 +237,6 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
     public function getSchemaName()
     {
         return 'Transaction';
-
     }
 
     /**
@@ -276,8 +248,8 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         return [
             'id' => 'Transaction',
             'flat' => [
-                'Total' => $this->getTotal(),
-                'Status' => $this->getStatus(),
+                'Total' => $this->total->getAmount() / $this->total->getCurrency()->getSubUnit(),
+                'Status' => $this->status,
                 'Currency' => $this->currencyService->getActiveCurrencyCode()
             ],
             'related' => []
@@ -294,48 +266,41 @@ class Transaction implements TransactionInterface, StateableInterface, StorableI
         return [
             Backend::IDENTIFIER
         ];
-
-    }
-
-    /**
-     * Get collator for the transaction, using a classname
-     *
-     * @return type
-     * @throws ConfigurationException
-     */
-    public function getCollator()
-    {
-        if (!$this->collator) {
-
-            $this->collator = new $this->collatorClassName($this, $this->currencyService);
-
-        }
-
-        return $this->collator;
     }
 
     /**
      * Sets the status of the transaction
      * @param string $status the status of the transaction
+     * @throws \InvalidArgumentException
      */
     public function setStatus($status)
     {
-
-        if (in_array($status, $this->validStatuses)) {
-
-            $this->data[self::STATUS_KEY] = $status;
-
+        if ($this->isValidStatus($status)) {
+            $this->status = $status;
             $this->saveState();
+        } else {
+            throw new \InvalidArgumentException(
+                sprintf("Status '%s' is not a valid status", $status)
+            );
         }
-
     }
 
     /**
      * Retrieves the Transaction's status
+     * @return string
      */
     public function getStatus()
     {
-        return isset($this->data[self::STATUS_KEY]) ? $this->data[self::STATUS_KEY] : $this->defaultStatus;
+        return $this->status;
+    }
 
+    /**
+     * Checks if a status is valid
+     * @param $status
+     * @return bool
+     */
+    protected function isValidStatus($status)
+    {
+        return in_array($status, $this->validStatuses);
     }
 }

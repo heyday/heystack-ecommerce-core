@@ -8,50 +8,63 @@ parameters:
   transaction.statuses: [ 'Pending', 'Successful', 'Failed', 'Dispatched', 'Processing', 'Cancelled' ]
   transaction.default: Pending
   transaction_subscriber.class: Heystack\Ecommerce\Transaction\Subscriber
-  collator.class: Heystack\Ecommerce\Transaction\Collator
+  transaction_collator.class: Heystack\Ecommerce\Transaction\Collator
 
 services:
-
   transaction:
     class: %transaction.class%
-    arguments: [ @state, %collator.class%, @currency_service, %transaction.statuses%, %transaction.default% ]
-    calls:
-      - [ restoreState ]
+    arguments:
+      3: %transaction.statuses%
+      4: %transaction.default%
     tags:
-      - { name: ss_orm_backend.data_provider }
+      - { name: state.restore }
+      - { name: autoinject, all: true }
+      - { name: autoinject.provides, all: true }
 
   transaction_subscriber:
     class: %transaction_subscriber.class%
-    arguments: [ @transaction, @event_dispatcher, @storage, @state ]
     tags:
       - { name: event_dispatcher.subscriber }
+      - { name: autoinject, all: true }
+      
+  transaction_collator:
+    class: %transaction_collator.class%
+    tags:
+      - { name: autoinject.provides, all: true }
+      - { name: autoinject, arguments: true }
 
   locale_service:
     class: %locale_service.class%
-    arguments: [ [], null, @state, @event_dispatcher ]
-    calls:
-      - [ restoreState ]
+    arguments: [ [], null ]
+    tags:
+      - { name: state.restore }
+      - { name: autoinject, arguments: true }
+      - { name: autoinject.provides, all: true }
 
   currency_service:
     class: %currency_service.class%
-    arguments: [ [], null, @state, @event_dispatcher ]
-    calls:
-      - [ restoreState ]
+    arguments: [ [], null ]
+    tags:
+      - { name: state.restore }
+      - { name: autoinject, arguments: true }
+      - { name: autoinject.provides, all: true }
 
   currency_subscriber:
     class: %currency_subscriber.class%
 
   currency_input_processor:
     class: %currency_input_processor.class%
-    arguments: [ 'currency', @currency_service ]
+    arguments: [ 'currency' ]
     tags:
-      - { name: input_processor_handler.processor }
+      - { name: autoinject, arguments: true }
+      - { name: autoinject.provides, arguments: true }
 
   currency_output_processor:
     class: %currency_output_processor.class%
     arguments: [ 'currency' ]
     tags:
       - { name: output_processor_handler.processor }
+      - { name: autoinject.provides, arguments: true }
 
   transaction_schema:
     class: %yaml_data_object_schema.class%

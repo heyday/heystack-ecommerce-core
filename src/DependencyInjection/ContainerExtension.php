@@ -13,6 +13,7 @@ namespace Heystack\Ecommerce\DependencyInjection;
 use DataList;
 use Heystack\Core\Loader\DBClosureLoader;
 use Heystack\Ecommerce\Config\ContainerConfig;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyDataProvider;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Shipping\Types\CountryBased\Interfaces\CountryInterface;
 use Heystack\Ecommerce\Services;
@@ -68,19 +69,19 @@ class ContainerExtension extends Extension
 
         // Configure currencies from DB
         if (isset($config['currency_db'])) {
-            $handler = function (CurrencyInterface $record) use ($container) {
+            $handler = function (CurrencyDataProvider $record) use ($container) {
+                $code = $record->getCurrencyCode();
                 $definition = new Definition(
                     'Heystack\\Ecommerce\\Currency\\Currency',
                     [
-                        $identifier = $record->getIdentifier()->getFull(),
+                        $record->getCurrencyCode(),
                         $record->getValue(),
-                        (boolean) $default = $record->isDefaultCurrency(),
-                        $record->getSymbol()
+                        (boolean) $default = $record->isDefaultCurrency()
                     ]
                 );
                 $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
                 $container->setDefinition(
-                    "currency.$identifier",
+                    "currency.$code",
                     $definition
                 );
                 if ($default) {

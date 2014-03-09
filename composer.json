@@ -9,8 +9,10 @@
 	"type": "silverstripe-module",
 	"require": {
 		"php": ">=5.4.0",
+		"ext-intl": "*",
 		"composer/installers": "~1.0",
-		"heystack/heystack": "~3.0@dev"
+		"heystack/heystack": "~3.0@dev",
+		"sebastian/money": "dev-master"
 	},
 	"require-dev": {
 		"silverstripe/framework": "~3.1@dev",

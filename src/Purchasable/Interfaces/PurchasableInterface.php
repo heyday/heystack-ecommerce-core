@@ -11,7 +11,9 @@
 namespace Heystack\Ecommerce\Purchasable\Interfaces;
 
 use Heystack\Core\State\State;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Heystack\Core\Storage\Interfaces\ParentReferenceInterface;
+use SebastianBergmann\Money\Money;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Purchasable
@@ -25,9 +27,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * @package Ecommerce-Core
  *
  */
-interface PurchasableInterface
+interface PurchasableInterface extends ParentReferenceInterface
 {
-
     /**
      * Returns a unique identifier for the Purchasable object
      * @return \Heystack\Core\Identifier\Identifier
@@ -36,6 +37,7 @@ interface PurchasableInterface
 
     /**
      * Returns the price of the Purchasable object
+     * @return \SebastianBergmann\Money\Money
      */
     public function getPrice();
 
@@ -47,9 +49,9 @@ interface PurchasableInterface
 
     /**
      * Adds the Event service to the Purchasable object
-     * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventService
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
      */
-    public function addEventService(EventDispatcher $eventService);
+    public function addEventService(EventDispatcherInterface $eventService);
 
     /**
      * Sets the quantity of the Purchasable object in the PurchasableHolder
@@ -59,23 +61,26 @@ interface PurchasableInterface
 
     /**
      * Returns the quantity of the Purchasable object in the PurchasableHolder
+     * @return int
      */
     public function getQuantity();
 
     /**
      * Sets the price of the Purchasable object in the PurchasableHolder
-     * @param type $unitPrice
+     * 
+     * @param \SebastianBergmann\Money\Money $unitPrice
      */
-    public function setUnitPrice($unitPrice);
+    public function setUnitPrice(Money $unitPrice);
 
     /**
      * Returns the price of the Purchasable object in the PurchasableHolder
+     * @return \SebastianBergmann\Money\Money
      */
     public function getUnitPrice();
 
     /**
      * Returns the total price of the Purchasble object in the PurchasableHolder
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotal();
-
 }

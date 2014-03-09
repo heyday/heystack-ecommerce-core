@@ -5,18 +5,17 @@ namespace Heystack\Ecommerce\Currency;
 use Heystack\Core\ViewableData\ViewableDataInterface;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Core\Identifier\Identifier;
+use SebastianBergmann\Money\Currency as BaseCurrency;
 
 /**
  * Class Currency
  * @author Cam Spiers <cameron@heyday.co.nz>
  */
-class Currency implements CurrencyInterface, ViewableDataInterface
+class Currency extends BaseCurrency
+    implements
+        CurrencyInterface,
+        ViewableDataInterface
 {
-    /**
-     * The currency code
-     * @var
-     */
-    protected $code;
     /**
      * The currency value
      * @var
@@ -28,26 +27,18 @@ class Currency implements CurrencyInterface, ViewableDataInterface
      */
     protected $default;
     /**
-     * The currencies symbol
-     * @var
-     */
-    protected $symbol;
-    /**
-     * @param        $code
+     * @param string $currencyCode
      * @param        $value
      * @param bool   $default
-     * @param string $symbol
      */
     public function __construct(
-        $code,
+        $currencyCode,
         $value,
-        $default = false,
-        $symbol = '$'
+        $default = false
     ) {
-        $this->code = $code;
         $this->value = $value;
         $this->default = $default;
-        $this->symbol = $symbol;
+        parent::__construct($currencyCode);
     }
     /**
      * Returns the identifier
@@ -55,21 +46,7 @@ class Currency implements CurrencyInterface, ViewableDataInterface
      */
     public function getIdentifier()
     {
-        return new Identifier($this->code);
-    }
-    /**
-     * Returns the Currency's code, e.g. NZD, USD
-     */
-    public function getCurrencyCode()
-    {
-        return $this->code;
-    }
-    /**
-     * Returns the Currency's Symbol, e.g. $,
-     */
-    public function getSymbol()
-    {
-        return $this->symbol;
+        return new Identifier($this->getCurrencyCode());
     }
     /**
      * Returns whether the currency is the System's default

@@ -2,73 +2,73 @@
 
 namespace Heystack\Ecommerce\Transaction;
 
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
+use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
+use Heystack\Ecommerce\Locale\Traits\HasLocaleServiceTrait;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
-
 use Heystack\Ecommerce\Purchasable\Interfaces\PurchasableHolderInterface;
-
 use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Transaction\Traits\HasTransactionTrait;
 
-use Heystack\Core\Exception\ConfigurationException;
-
-use Heystack\Ecommerce\Currency\CurrencyService;
-
+/**
+ * Class Collator
+ * @package Heystack\Ecommerce\Transaction
+ */
 class Collator implements ViewableDataInterface
 {
+    use HasTransactionTrait;
+    use HasCurrencyServiceTrait;
+    use HasLocaleServiceTrait;
 
-    protected $precision = 2;
-    protected $transaction = null;
-    protected $currencyService = null;
-
-    public function __construct(TransactionInterface $transaction, CurrencyService $currencyService, $precision = null)
+    /**
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
+     * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localeService
+     */
+    public function __construct(
+        TransactionInterface $transaction,
+        CurrencyServiceInterface $currencyService,
+        LocaleServiceInterface $localeService
+    )
     {
-        if (!is_null($precision)) {
-            $this->setPrecision($precision);
-        }
-
         $this->transaction = $transaction;
         $this->currencyService = $currencyService;
-
+        $this->localeService = $localeService;
     }
 
+    /**
+     * @return array
+     */
     public function getCastings()
     {
         return [
-            'Total' => 'Money',
-            'SubTotal' => 'Money'
+            'Total' => 'Heystack\Ecommerce\Currency\MoneyCasting',
+            'SubTotal' => 'Heystack\Ecommerce\Currency\MoneyCasting'
         ];
-
     }
 
+    /**
+     * @return array
+     */
     public function getDynamicMethods()
     {
         return [];
     }
 
-    public function setPrecision($precision)
-    {
-        if (is_int($precision)) {
-
-            $this->precision = $precision;
-
-        } else {
-
-            throw new ConfigurationException('Precision must be an integer');
-
-        }
-
-    }
-
+    /**
+     * @return \SebastianBergmann\Money\Money
+     */
     public function getTotal()
     {
-        return [
-            'Amount' => $this->round($this->transaction->getTotal()),
-            'Currency' => $this->currencyService->getActiveCurrencyCode()
-        ];
+        return $this->transaction->getTotal();
     }
 
+    /**
+     * @return \SebastianBergmann\Money\Money
+     */
     public function getSubTotal()
     {
-
         $modifiers = $this->transaction->getModifiersByType(TransactionModifierTypes::CHARGEABLE);
 
         foreach ($modifiers as $identifier => $modifier) {
@@ -80,32 +80,22 @@ class Collator implements ViewableDataInterface
             }
 
         }
-
-        return [
-            'Amount' => $this->round($this->sumModifiers($modifiers)),
-            'Currency' => $this->currencyService->getActiveCurrencyCode()
-        ];
-
+        
+        return $this->sumModifiers($modifiers);
     }
 
-    protected function round($amount)
-    {
-        return round($amount, $this->precision);
-    }
-
+    /**
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[] $modifiers
+     * @return \SebastianBergmann\Money\Money
+     */
     protected function sumModifiers(array $modifiers)
     {
-
-        $total = 0;
+        $total = $this->currencyService->getZeroMoney();
 
         foreach ($modifiers as $modifier) {
-
-            $total += $modifier->getTotal();
-
+            $total = $total->add($modifier->getTotal());
         }
 
         return $total;
-
     }
-
 }

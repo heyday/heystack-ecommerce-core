@@ -19,6 +19,7 @@ namespace Heystack\Ecommerce\Transaction\Traits;
  */
 trait TransactionModifierSerializeTrait
 {
+    use TransactionModifierHasDataTrait;
 
     /**
      * Returns a serialized string from the data array

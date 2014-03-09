@@ -10,6 +10,8 @@
  */
 namespace Heystack\Ecommerce\Transaction\Interfaces;
 
+use Heystack\Core\Storage\StorableInterface;
+
 /**
  * Defines what functions a Transaction Class needs to implement
  *
@@ -17,7 +19,7 @@ namespace Heystack\Ecommerce\Transaction\Interfaces;
  * @author Glenn Bautista <glenn@heyday.co.nz>
  * @package Ecommerce-Core
  */
-interface TransactionInterface
+interface TransactionInterface extends StorableInterface
 {
     /**
      * Add a TransactionModifier to the Transaction
@@ -28,50 +30,53 @@ interface TransactionInterface
     /**
      * Returns a TransactionModifier based on the identifier
      * @param string $identifier
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface
      */
     public function getModifier($identifier);
 
     /**
      * Returns all the TransactionModifiers held by the Transaction object
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
     public function getModifiers();
 
     /**
      * Returns modifiers on the transaction by TranactionModifierType
      * @param  string $type
-     * @return array
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
     public function getModifiersByType($type);
 
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
+     *
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotal();
 
     /**
      * Update the aggregate total of the TransactionModifers held by the Transaction object
+     * @return void
      */
     public function updateTotal();
 
     /**
-     * Retrieves the Transaction's Collator
-     */
-    public function getCollator();
-
-    /**
      * Retrieves the total without adding excluded modifiers
      * @param array $exclude an array of identifiers to be excluded
+     * @return \SebastianBergmann\Money\Money
      */
     public function getTotalWithExclusions(array $exclude);
 
     /**
      * Sets the status of the transaction
      * @param string $status the status of the transaction
+     * @return void
      */
     public function setStatus($status);
 
     /**
      * Retrieves the Transaction's status
+     * @return string
      */
     public function getStatus();
 

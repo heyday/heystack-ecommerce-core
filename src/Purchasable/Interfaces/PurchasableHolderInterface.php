@@ -11,7 +11,9 @@
 namespace Heystack\Ecommerce\Purchasable\Interfaces;
 
 use Heystack\Core\Identifier\IdentifierInterface;
-use Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface;
+use Heystack\Core\State\StateableInterface;
+use Heystack\Core\Storage\Interfaces\ParentReferenceInterface;
+use Heystack\Core\Storage\StorableInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
 /**
@@ -26,12 +28,18 @@ use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
  * @package Ecommerce-Core
  *
  */
-interface PurchasableHolderInterface extends TransactionModifierInterface
+interface PurchasableHolderInterface
+    extends
+        TransactionModifierInterface,
+        ParentReferenceInterface,
+        StateableInterface,
+        \Serializable,
+        StorableInterface
 {
-
     /**
      * Returns an array of all the purchasables held by the implementing class
      * @param array $identifiers
+     * @return \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface[]
      */
     public function getPurchasables(array $identifiers = null);
 
@@ -52,7 +60,7 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
     /**
      * Sets the quantity of the purchasable in the implementing class
      * @param PurchasableInterface $purchasable
-     * @param type                 $quantity
+     * @param int                  $quantity
      */
     public function setPurchasable(PurchasableInterface $purchasable, $quantity);
 
@@ -80,12 +88,13 @@ interface PurchasableHolderInterface extends TransactionModifierInterface
 
     /**
      * Updates the prices of the currently held purchasables
+     * @return void
      */
     public function updatePurchasablePrices();
 
     /**
      * Updates the total based on all purchasables held
+     * @return void
      */
     public function updateTotal();
-
 }

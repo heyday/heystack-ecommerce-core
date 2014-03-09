@@ -10,8 +10,6 @@
  */
 namespace Heystack\Ecommerce\Transaction\Traits;
 
-use Heystack\Core\State\State;
-
 /**
  * Provides an implementation for the Statable Interface for Transaction Modifiers
  *
@@ -21,8 +19,11 @@ use Heystack\Core\State\State;
  */
 trait TransactionModifierStateTrait
 {
+    use TransactionModifierHasDataTrait;
+    
     /**
      * Saves the data array on the State service
+     * @return void
      */
     public function saveState()
     {
@@ -33,6 +34,7 @@ trait TransactionModifierStateTrait
     }
     /**
      * Uses the State service to restore the data array
+     * @return void
      */
     public function restoreState()
     {
@@ -42,4 +44,14 @@ trait TransactionModifierStateTrait
             )
         );
     }
+
+    /**
+     * @return \Heystack\Core\State\State
+     */
+    abstract public function getStateService();
+
+    /**
+     * @return \Heystack\Core\Identifier\IdentifierInterface
+     */
+    abstract public function getIdentifier();
 }

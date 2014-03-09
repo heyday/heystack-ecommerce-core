@@ -13,11 +13,12 @@ namespace Heystack\Ecommerce\Currency;
 use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\State\State;
-use Heystack\Core\State\StateableInterface;
+use Heystack\Core\Traits\HasEventServiceTrait;
+use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Ecommerce\Currency\Event\CurrencyEvent;
-use Heystack\Ecommerce\Currency\Events;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use SebastianBergmann\Money\Money;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -31,55 +32,47 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @package Ecommerce-Core
  *
  */
-class CurrencyService implements CurrencyServiceInterface, StateableInterface
+class CurrencyService implements CurrencyServiceInterface
 {
+    use HasEventServiceTrait;
+    use HasStateServiceTrait;
     /**
      * The key used on the data array to store the active currency
      */
     const ACTIVE_CURRENCY_KEY = 'currencyservice.activecurrency';
     /**
-     * Stores the State Service
-     * @var State
-     */
-    protected $sessionState;
-    /**
-     * Stores the EventDispatcher
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-    /**
      * An array of currencies
-     * @var array
+     * @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface[]
      */
     protected $currencies;
     /**
-     * @var Interfaces\CurrencyInterface
+     * @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     protected $activeCurrency;
     /**
-     * @var Interfaces\CurrencyInterface
+     * @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
      */
     protected $defaultCurrency;
+
     /**
-     * CurrencySerivce Constructor
-     * @param array                                                       $currencies
-     * @param                                                             $defaultCurrency
-     * @param \Heystack\Core\State\State                        $sessionState
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param array $currencies
+     * @param CurrencyInterface $defaultCurrency
+     * @param State $stateService
+     * @param EventDispatcherInterface $eventService
      */
     public function __construct(
         array $currencies,
         CurrencyInterface $defaultCurrency,
-        State $sessionState,
-        EventDispatcherInterface $eventDispatcher
+        State $stateService,
+        EventDispatcherInterface $eventService
     ) {
         $this->setCurrencies($currencies);
         $this->defaultCurrency = $this->activeCurrency = $defaultCurrency;
-        $this->sessionState = $sessionState;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->stateService = $stateService;
+        $this->eventService = $eventService;
     }
     /**
-     * @param array $currencies
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface[] $currencies
      */
     protected function setCurrencies(array $currencies)
     {
@@ -88,7 +81,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
         }
     }
     /**
-     * @param CurrencyInterface $currency
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
      */
     protected function addCurrency(CurrencyInterface $currency)
     {
@@ -99,18 +92,11 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      *
      * If the retrieved identifier is not an instance of the Identifier Interface, then it checks if it is a string,
      * which it uses to create a new Identifier object to set the active currency.
-     *
      */
     public function restoreState()
     {
-        if ($identifier = $this->sessionState->getByKey(self::ACTIVE_CURRENCY_KEY)) {
-
-            if ($identifier instanceof IdentifierInterface) {
-                $this->setActiveCurrency($identifier, false);
-            } else if (is_string($identifier)) {
-                $this->setActiveCurrency(new Identifier($identifier), false);
-            }
-
+        if ($identifier = $this->stateService->getByKey(self::ACTIVE_CURRENCY_KEY)) {
+            $this->setActiveCurrency(new Identifier($identifier), false);
         }
     }
     /**
@@ -118,9 +104,9 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function saveState()
     {
-        $this->sessionState->setByKey(
+        $this->stateService->setByKey(
             self::ACTIVE_CURRENCY_KEY,
-            $this->activeCurrency->getIdentifier()
+            $this->activeCurrency->getIdentifier()->getFull()
         );
     }
     /**
@@ -130,12 +116,14 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
      */
     public function setActiveCurrency(IdentifierInterface $identifier, $saveState = true)
     {
-        if ($currency = $this->getCurrency($identifier)) {
+        $currency = $this->getCurrency($identifier);
+        if ($currency && $currency != $this->activeCurrency) {
             $this->activeCurrency = $currency;
 
             if ($saveState) {
                 $this->saveState();
-                $this->eventDispatcher->dispatch(
+
+                $this->eventService->dispatch(
                     Events::CHANGED,
                     new CurrencyEvent(
                         $currency
@@ -148,6 +136,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
 
         return false;
     }
+
     /**
      * Retrieves the currently active currency
      * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
@@ -156,6 +145,7 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->activeCurrency;
     }
+
     /**
      * Retrieves the currently active currency code
      * @return string
@@ -164,39 +154,56 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     {
         return $this->getActiveCurrency()->getCurrencyCode();
     }
+
     /**
      * Retrieves all the available currencies
-     * @return array
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface[]
      */
     public function getCurrencies()
     {
         return $this->currencies;
     }
+
     /**
      * Converts amount from one currency to another using the currency's identifier
-     * @param  float  $amount
-     * @param  string $from
-     * @param  string $to
-     * @return float
+     * 
+     * Warning this method can lose precision!
+     * 
+     * @param  \SebastianBergmann\Money\Money $amount
+     * @param  \Heystack\Core\Identifier\IdentifierInterface $to
+     * @return \SebastianBergmann\Money\Money
+     * @throws \InvalidArgumentException
      */
-    public function convert($amount, $from, $to)
-    {
-        return $amount * ($this->currencies[$to]->getValue() / $this->currencies[$from]->getValue());
+    public function convert(Money $amount, IdentifierInterface $to)
+    {   
+        if (!$toCurrency = $this->getCurrency($to)) {
+            throw new \InvalidArgumentException("Currency not supported");
+        }
+        
+        /** @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $fromCurrency */
+        $fromCurrency = $amount->getCurrency();
+        
+        return $amount->multiply($fromCurrency->getValue() / $toCurrency->getValue());
     }
+
     /**
      * @param IdentifierInterface $identifier
-     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface || null
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface|null
      */
     public function getCurrency(IdentifierInterface $identifier)
     {
-        if ($identifier instanceof IdentifierInterface) {
-
-            return isset($this->currencies[$identifier->getFull()]) ? $this->currencies[$identifier->getFull()] : null;
-
-        }
-
-        return null;
+        return $this->hasCurrency($identifier) ? $this->currencies[$identifier->getFull()] : null;
     }
+
+    /**
+     * @param IdentifierInterface $identifier
+     * @return bool
+     */
+    public function hasCurrency(IdentifierInterface $identifier)
+    {
+        return isset($this->currencies[$identifier->getFull()]);
+    }
+
     /**
      * Returns the default currency object
      * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
@@ -209,22 +216,23 @@ class CurrencyService implements CurrencyServiceInterface, StateableInterface
     /**
      * Sets the default currency
      * @param IdentifierInterface $identifier
-     * @return bool true on success and false on failure
+     * @return void
+     * @throws \InvalidArgumentException
      */
-    public function setDefaultCurrency(IdentifierInterface $identifier = null)
+    public function setDefaultCurrency(IdentifierInterface $identifier)
     {
-        if (!is_null($identifier) && isset($this->currencies[$identifier->getFull()])) {
-            $this->defaultCurrency = $this->currencies[$identifier->getFull()];
-            return true;
-        } else {
-            foreach ($this->currencies as $currency) {
-                if ($currency->isDefaultCurrency()) {
-                    $this->defaultCurrency = $currency;
-                    return true;
-                }
-            }
+        if (!$currency = $this->getCurrency($identifier)) {
+            throw new \InvalidArgumentException("Currency $identifier not supported");
         }
 
-        return false;
+        $this->defaultCurrency = $currency;
+    }
+
+    /**
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function getZeroMoney()
+    {
+        return new Money(0, $this->activeCurrency);
     }
 }

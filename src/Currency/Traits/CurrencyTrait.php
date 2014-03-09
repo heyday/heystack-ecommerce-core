@@ -22,7 +22,6 @@ use Heystack\Core\Identifier\Identifier;
  */
 trait CurrencyTrait
 {
-    use GenerateContainerDataObjectTrait;
 
     /**
      * @return \Heystack\Core\Identifier\Identifier

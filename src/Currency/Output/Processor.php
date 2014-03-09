@@ -26,17 +26,17 @@ use Heystack\Core\Output\ProcessorInterface;
 class Processor implements ProcessorInterface
 {
     /**
-     * Stores the classname of the currency data object
+     * Stores the identifier for this object
      * @var string
      */
-    private $currencyClass;
+    private $identifier;
     /**
      * Currency Input Processor Constructor
-     * @param string $currencyClass
+     * @param string $identifier
      */
-    public function __construct($currencyClass)
+    public function __construct($identifier)
     {
-        $this->currencyClass = $currencyClass;
+        $this->identifier = $identifier;
     }
     /**
      * Returns the identifier for this object
@@ -45,7 +45,7 @@ class Processor implements ProcessorInterface
     public function getIdentifier()
     {
         return new Identifier(
-            strtolower($this->currencyClass)
+            strtolower($this->identifier)
         );
     }
     /**

@@ -40,20 +40,6 @@ class Country implements CountryInterface, ViewableDataInterface
         $this->default = $default;
     }
     /**
-     *
-     */
-    public function serialize()
-    {
-        // TODO: Implement serialize() method.
-    }
-    /**
-     * @param string $serialized
-     */
-    public function unserialize($serialized)
-    {
-        // TODO: Implement unserialize() method.
-    }
-    /**
      * Returns a unique identifier
      * @return \Heystack\Core\Identifier\Identifier
      */

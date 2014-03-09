@@ -13,7 +13,6 @@ namespace Heystack\Ecommerce\Transaction;
 use Heystack\Core\State\State;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Core\Storage\Storage;
-use Heystack\Ecommerce\Currency\CurrencyService;
 use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -40,18 +39,29 @@ class Subscriber implements EventSubscriberInterface
      */
     protected $eventDispatcher;
 
+    /**
+     * @var \Heystack\Core\Storage\Storage
+     */
     protected $storageService;
 
+    /**
+     * @var \Heystack\Core\State\State
+     */
     protected $state;
 
     /**
      * Creates the Susbcriber object
      * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface               $eventDispatcher
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface     $eventDispatcher
      * @param \Heystack\Core\Storage\Storage                                  $storageService
      * @param \Heystack\Core\State\State                                      $state
      */
-    public function __construct(TransactionInterface $transaction, EventDispatcherInterface $eventDispatcher, Storage $storageService, State $state)
+    public function __construct(
+        TransactionInterface $transaction,
+        EventDispatcherInterface $eventDispatcher,
+        Storage $storageService,
+        State $state
+    )
     {
         $this->transaction = $transaction;
         $this->eventDispatcher = $eventDispatcher;
@@ -90,11 +100,10 @@ class Subscriber implements EventSubscriberInterface
     }
 
     /**
-     * Called after the Transaction is stored, clears state apart from the
-     * active currency.
+     * Called after the Transaction is stored, clears state of transaction
      */
     public function onTransactionStored()
     {
-        $this->state->removeAll([CurrencyService::ACTIVE_CURRENCY_KEY, 'shipping', 'localeservice', 'loggedInAs']);
+        $this->state->removeByKey(Transaction::IDENTIFIER);
     }
 }

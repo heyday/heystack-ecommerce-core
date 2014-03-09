@@ -1,8 +1,13 @@
-Heystack\Ecommerce\Controller\InputController:
-  dependencies:
-    InputHandler: %$heystack.input_processor_handler
-    OutputHandler: %$heystack.output_processor_handler
-
 Heystack\Ecommerce\Currency\DataExtension\PricingExtension:
   dependencies:
     CurrencyService: %$heystack.currency_service
+
+Injector:
+  Heystack\Ecommerce\Controller\InputController:
+    constructor:
+      0: %$heystack.input_processor_handler
+      1: %$heystack.output_processor_handler
+      
+  Heystack\Ecommerce\Currency\MoneyCasting:
+    properties:
+      LocaleService: %$heystack.locale_service

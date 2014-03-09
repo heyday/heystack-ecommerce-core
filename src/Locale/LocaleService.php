@@ -5,7 +5,6 @@ namespace Heystack\Ecommerce\Locale;
 use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\State\State;
-use Heystack\Core\State\StateableInterface;
 use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
 use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -15,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @author  Cam Spiers <cameron@heyday.co.nz>
  * @package Heystack\Ecommerce\Locale
  */
-class LocaleService implements LocaleServiceInterface, StateableInterface
+class LocaleService implements LocaleServiceInterface
 {
     /**
      * The active country key
@@ -26,11 +25,11 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
      */
     protected $countries;
     /**
-     * @var
+     * @var \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     protected $defaultCountry;
     /**
-     * @var
+     * @var \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     protected $activeCountry;
     /**
@@ -106,10 +105,12 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     /**
      * @param      $identifier
      * @param bool $saveState  Determines whether the state is saved and the update event is dispatched
+     * @return void
      */
     public function setActiveCountry(IdentifierInterface $identifier, $saveState = true)
     {
-        if ($country = $this->getCountry($identifier)) {
+        $country = $this->getCountry($identifier);
+        if ($country && $country != $this->activeCountry) {
             $this->activeCountry = $country;
 
             if ($saveState) {
@@ -121,7 +122,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
         }
     }
     /**
-     * @return mixed
+     * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     public function getActiveCountry()
     {
@@ -130,7 +131,7 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     /**
      * Uses the identifier to retrieve the country object from the cache
      * @param IdentifierInterface $identifier
-     * @return \Heystack\Shipping\CountryBased\Interfaces\CountryInterface || null
+     * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface|null
      */
     public function getCountry(IdentifierInterface $identifier)
     {
@@ -153,8 +154,8 @@ class LocaleService implements LocaleServiceInterface, StateableInterface
     }
 
     /**
-     * @param null $identifier
-     * @return bool true on success and false on failure
+     * @param IdentifierInterface $identifier
+     * @return bool
      */
     public function setDefaultCountry(IdentifierInterface $identifier = null)
     {

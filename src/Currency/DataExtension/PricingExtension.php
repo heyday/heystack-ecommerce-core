@@ -36,6 +36,7 @@ class PricingExtension extends DataExtension
     {
         $db = [];
 
+        // Have to rely on the injector because of static method
         $currencyService = Injector::inst()->create(sprintf('heystack.%s', Services::CURRENCY_SERVICE));
 
         if ($currencyService instanceof CurrencyServiceInterface) {
