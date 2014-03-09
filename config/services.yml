@@ -68,6 +68,8 @@ services:
 
   transaction_schema:
     class: %yaml_data_object_schema.class%
-    arguments: [ ecommerce-core/config/storage/transaction.yml, @state_global ]
+    arguments: [ ecommerce-core/config/storage/transaction.yml ]
     tags:
-      - { name: dataobject_generator.schema }
+      - { name: schema }
+      - { name: autoinject, arguments: true }
+    

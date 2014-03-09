@@ -18,9 +18,9 @@ You must first define the currency dataobject:
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Ecommerce\Currency\Traits\CurrencyTrait;
 
-class Currency extends DataObject implements CurrencyInterface{
-
-	use CurrencyTrait;
+class Currency extends DataObject implements CurrencyInterface
+{
+		use CurrencyTrait;
 
     public static $db = array(
         'CurrencyCode' => 'Varchar(255)',

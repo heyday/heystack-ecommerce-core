@@ -222,7 +222,12 @@ class CurrencyService implements CurrencyServiceInterface
     public function setDefaultCurrency(IdentifierInterface $identifier)
     {
         if (!$currency = $this->getCurrency($identifier)) {
-            throw new \InvalidArgumentException("Currency $identifier not supported");
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Currency '%s' not supported",
+                    $identifier
+                )
+            );
         }
 
         $this->defaultCurrency = $currency;
