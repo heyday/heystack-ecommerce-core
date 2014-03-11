@@ -87,6 +87,12 @@ interface PurchasableHolderInterface
     public function removePurchasable(IdentifierInterface $identifier);
 
     /**
+     * Removes all purchasables from the service
+     * @return void
+     */
+    public function removePurchasables();
+
+    /**
      * Updates the prices of the currently held purchasables
      * @return void
      */
@@ -94,7 +100,8 @@ interface PurchasableHolderInterface
 
     /**
      * Updates the total based on all purchasables held
+     * @param bool $saveState
      * @return void
      */
-    public function updateTotal();
+    public function updateTotal($saveState = true);
 }

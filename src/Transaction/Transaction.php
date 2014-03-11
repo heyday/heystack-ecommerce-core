@@ -14,7 +14,9 @@ use Heystack\Core\Exception\ConfigurationException;
 use Heystack\Core\State\State;
 use Heystack\Core\State\StateableInterface;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
+use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Ecommerce\Currency\CurrencyService;
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use Heystack\Ecommerce\Exception\MoneyOverflowException;
 use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
@@ -34,22 +36,12 @@ use SebastianBergmann\Money\CurrencyMismatchException;
  */
 class Transaction implements TransactionInterface, StateableInterface
 {
+    use HasStateServiceTrait;
+    use HasCurrencyServiceTrait;
     /**
      * Holds the key used for storing state
      */
     const IDENTIFIER = 'transaction';
-
-    /**
-     * Holds the State service
-     * @var \Heystack\Core\State\State
-     */
-    protected $stateService;
-
-    /**
-     * Holds the currency service
-     * @var \Heystack\Ecommerce\Currency\CurrencyService
-     */
-    protected $currencyService;
 
     /**
      * Holds an array of currently managed TransactionModifiers
@@ -177,6 +169,7 @@ class Transaction implements TransactionInterface, StateableInterface
 
     /**
      * Update the aggregate total of the TransactionModifers held by the Transaction object
+     * @return void
      */
     public function updateTotal()
     {
