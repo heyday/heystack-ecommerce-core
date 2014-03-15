@@ -53,14 +53,6 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Heystack\Ecommerce\Currency\Currency::getSymbol
-     */
-    public function testGetSymbol()
-    {
-        $this->assertEquals('$', $this->currency->getSymbol());
-    }
-
-    /**
      * @covers Heystack\Ecommerce\Currency\Currency::isDefaultCurrency
      */
     public function testIsDefaultCurrency()

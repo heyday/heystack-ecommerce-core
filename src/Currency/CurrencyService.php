@@ -183,7 +183,7 @@ class CurrencyService implements CurrencyServiceInterface
         /** @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $fromCurrency */
         $fromCurrency = $amount->getCurrency();
         
-        return $amount->multiply($fromCurrency->getValue() / $toCurrency->getValue());
+        return $amount->multiply($toCurrency->getValue() / $fromCurrency->getValue());
     }
 
     /**
