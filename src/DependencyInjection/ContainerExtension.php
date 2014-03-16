@@ -1,21 +1,11 @@
 <?php
-/**
- * This file is part of the Ecommerce-Core package
- *
- * @package Ecommerce-Core
- */
 
-/**
- * DependencyInjection namespace
- */
 namespace Heystack\Ecommerce\DependencyInjection;
 
-use DataList;
 use Heystack\Core\Loader\DBClosureLoader;
 use Heystack\Ecommerce\Config\ContainerConfig;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyDataProvider;
-use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
-use Heystack\Shipping\Types\CountryBased\Interfaces\CountryInterface;
+use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
 use Heystack\Ecommerce\Services;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -76,7 +66,7 @@ class ContainerExtension extends Extension
                     [
                         $record->getCurrencyCode(),
                         $record->getValue(),
-                        (boolean) $default = $record->isDefaultCurrency()
+                        (bool) $default = $record->isDefaultCurrency()
                     ]
                 );
                 $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
@@ -102,8 +92,7 @@ class ContainerExtension extends Extension
                         [
                             $currency['code'],
                             $currency['value'],
-                            $currency['default'],
-                            $currency['symbol']
+                            (bool) $currency['default']
                         ]
                     )
                 );
@@ -124,7 +113,7 @@ class ContainerExtension extends Extension
                     [
                         $identifier = $record->getCountryCode(),
                         $record->getName(),
-                        (boolean) $default = $record->isDefault()
+                        (bool) $default = $record->isDefault()
                     ]
                 );
                 $definition->addTag(Services::LOCALE_SERVICE . '.locale');
@@ -148,7 +137,7 @@ class ContainerExtension extends Extension
                         [
                             $locale['code'],
                             $locale['name'],
-                            $locale['default']
+                            (bool) $locale['default']
                         ]
                     )
                 );

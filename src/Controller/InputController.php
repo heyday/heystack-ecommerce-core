@@ -35,11 +35,11 @@ class InputController extends \Controller
      * Process the request to the controller and direct it to the correct input
      * and output controllers via the input and output processor services.
      *
+     * @param \SS_HTTPRequest $request
      * @return mixed
      */
-    public function process()
+    public function process(\SS_HTTPRequest $request)
     {
-        $request = $this->getRequest();
         $identifier = $request->param('Processor');
 
         return $this->outputHandler->process(
@@ -50,35 +50,17 @@ class InputController extends \Controller
     }
 
     /**
-     * @param InputHandler $service
+     * @return \Heystack\Core\Input\Handler
      */
-    public function setInputHandler(InputHandler $service)
-    {
-        $this->inputHandler = $service;
-    }
-
-    /**
-     * @param OutputHandler $service
-     */
-    public function setOutputHandler(OutputHandler $service)
-    {
-        $this->outputHandler = $service;
-    }
-
-    /**
-     * @return InputHandler
-     * @throws \RuntimeException
-     */
-    protected function getInputHandler()
+    public function getInputHandler()
     {
         return $this->inputHandler;
     }
 
     /**
-     * @return OutputHandler
-     * @throws \RuntimeException
+     * @return \Heystack\Core\Output\Handler
      */
-    protected function getOutputHandler()
+    public function getOutputHandler()
     {
         return $this->outputHandler;
     }

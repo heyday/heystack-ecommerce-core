@@ -28,7 +28,6 @@ class ContainerConfig implements ConfigurationInterface
                             ->scalarNode('code')->isRequired()->end()
                             ->floatNode('value')->defaultValue(1)->end()
                             ->booleanNode('default')->defaultFalse()->end()
-                            ->scalarNode('symbol')->defaultValue('$')->end()
                         ->end()
                     ->end()
                 ->end()

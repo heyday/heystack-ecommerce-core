@@ -1,10 +1,8 @@
 {
-	"repositories": [
-		{
+	"repositories": [{
 			"type": "composer",
 			"url": "http://packages.heyday.net.nz"
-		}
-	],
+	}],
 	"name": "heystack/ecommerce-core",
 	"type": "silverstripe-module",
 	"require": {
