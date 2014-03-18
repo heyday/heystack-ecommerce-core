@@ -14,8 +14,8 @@ services:
   transaction:
     class: %transaction.class%
     arguments:
-      3: %transaction.statuses%
-      4: %transaction.default%
+      2: %transaction.statuses%
+      3: %transaction.default%
     tags:
       - { name: state.restore }
       - { name: autoinject, all: true }
