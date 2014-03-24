@@ -35,6 +35,7 @@ class CurrencyEventTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Heystack\Ecommerce\Currency\Event\CurrencyEvent::getCurrency
+     * @covers Heystack\Ecommerce\Currency\Event\CurrencyEvent::__construct
      */
     public function testGetCurrency()
     {
