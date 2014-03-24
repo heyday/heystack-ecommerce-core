@@ -193,11 +193,11 @@ class Transaction implements TransactionInterface, StateableInterface
                 try {
                     switch ($modifier->getType()) {
                         case TransactionModifierTypes::CHARGEABLE:
-                            $operationTotal = $modifier->getTotal();
-                            if ($operationTotal->getAmount() + $total->getAmount() > PHP_INT_MAX) {
+                            try {
+                                $total = $total->add($modifier->getTotal());
+                            } catch (\Exception $e) {
                                 throw new MoneyOverflowException;
                             }
-                            $total = $total->add($operationTotal);
                             break;
                         case TransactionModifierTypes::DEDUCTIBLE:
                             $total = $total->subtract($modifier->getTotal());
