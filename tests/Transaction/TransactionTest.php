@@ -34,12 +34,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $modifierIdentifier = $this->getMockBuilder('Heystack\Core\Identifier\Identifier')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $modifierIdentifier->expects($this->any())
-            ->method('getFull')
-            ->will($this->returnValue('purchasableholder'));
+        $modifierIdentifier = $this->mockIdentifier('purchasableholder');
 
         $modifier = $this->getMock('Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface');
         $modifier->expects($this->any())
@@ -72,20 +67,33 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Creates a mock Identifier that returns $value when 'getFull' is called.
+     * @param $value
+     */
+    protected function mockIdentifier($value)
+    {
+        $identifier = $this->getMockBuilder('Heystack\Core\Identifier\Identifier')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $identifier->expects($this->any())
+            ->method('getFull')
+            ->will($this->returnValue($value));
+
+        return $identifier;
+    }
+
+
+    /**
      * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
      * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getModifier
      * @covers Heystack\Ecommerce\Transaction\Transaction::getModifiers
      * @covers Heystack\Ecommerce\Transaction\Transaction::getModifiersByType
      */
     public function testModifiersAccess()
     {
-        $modifierIdentifier = $this->getMockBuilder('Heystack\Core\Identifier\Identifier')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $modifierIdentifier->expects($this->any())
-            ->method('getFull')
-            ->will($this->returnValue('taxhandler'));
+        $modifierIdentifier = $this->mockIdentifier('taxhandler');
 
         $modifier = $this->getMock('Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface');
         $modifier->expects($this->any())
@@ -111,7 +119,12 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
      * @covers Heystack\Ecommerce\Transaction\Transaction::getTotal
+     * @covers Heystack\Ecommerce\Transaction\Transaction::saveState
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
+     * @covers Heystack\Ecommerce\Transaction\Transaction::getTotalWithExclusions
      * @covers Heystack\Ecommerce\Transaction\Transaction::updateTotal
      */
     public function testGetTotal()
@@ -125,16 +138,16 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getTotalWithExclusions
+     * @covers Heystack\Ecommerce\Exception\MoneyOverflowException::__construct
+     * @expectedException Heystack\Ecommerce\Exception\MoneyOverflowException
      */
     public function testGetTotalWithExclusions()
     {
-        $modifierIdentifier = $this->getMockBuilder('Heystack\Core\Identifier\Identifier')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $modifierIdentifier->expects($this->any())
-            ->method('getFull')
-            ->will($this->returnValue('voucher'));
+        $modifierIdentifier = $this->mockIdentifier('voucher');
 
         $modifier = $this->getMock('Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface');
         $modifier->expects($this->any())
@@ -157,9 +170,28 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(new NZD(-50), $this->transaction->getTotalWithExclusions(['purchasableholder']));
 
+        $modifierIdentifier = $this->mockIdentifier('taxhandler');
+
+        $modifier = $this->getMock('Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface');
+        $modifier->expects($this->any())
+            ->method('getIdentifier')
+            ->will($this->returnValue($modifierIdentifier));
+        $modifier->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('chargeable'));
+        $modifier->expects($this->any())
+            ->method('getTotal')
+            ->will($this->returnValue(new NZD(intval(PHP_INT_MAX - 49))));
+
+        $this->transaction->addModifier($modifier);
+
+        $this->transaction->getTotalWithExclusions([]);
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getStorableIdentifier
      */
     public function testGetStorableIdentifier()
@@ -168,6 +200,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getSchemaName
      */
     public function testGetSchemaName()
@@ -176,6 +211,12 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::saveState
+     * @covers Heystack\Ecommerce\Transaction\Transaction::updateTotal
+     * @covers Heystack\Ecommerce\Transaction\Transaction::getTotalWithExclusions
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getStorableData
      */
     public function testGetStorableData()
@@ -196,6 +237,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getStorableBackendIdentifiers
      */
     public function testGetStorableBackendIdentifiers()
@@ -204,11 +248,19 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Transaction\Transaction::__construct
+     * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
+     * @covers Heystack\Ecommerce\Transaction\Transaction::saveState
      * @covers Heystack\Ecommerce\Transaction\Transaction::setStatus
+     * @covers Heystack\Ecommerce\Transaction\Transaction::getStatus
+     * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @expectedException \InvalidArgumentException
      */
-    public function testSetStatus()
+    public function testStatus()
     {
+        $this->transaction->setStatus('Pending');
+        $this->assertEquals('Pending', $this->transaction->getStatus());
+
         $this->transaction->setStatus('invalid_status');
     }
 }
