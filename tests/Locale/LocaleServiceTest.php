@@ -76,6 +76,8 @@ class LocaleServiceTest extends \PHPUnit_Framework_TestCase
      * @covers Heystack\Ecommerce\Locale\LocaleService::__construct
      * @covers Heystack\Ecommerce\Locale\LocaleService::setCountries
      * @covers Heystack\Ecommerce\Locale\LocaleService::addCountry
+     * @covers Heystack\Ecommerce\Locale\LocaleService::getCountry
+     * @covers Heystack\Ecommerce\Locale\LocaleService::saveState
      * @covers Heystack\Ecommerce\Locale\LocaleService::setActiveCountry
      * @covers Heystack\Ecommerce\Locale\LocaleService::getActiveCountry
      */
@@ -101,6 +103,9 @@ class LocaleServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Locale\LocaleService::__construct
+     * @covers Heystack\Ecommerce\Locale\LocaleService::setCountries
+     * @covers Heystack\Ecommerce\Locale\LocaleService::addCountry
      * @covers Heystack\Ecommerce\Locale\LocaleService::getCountry
      */
     public function testGetCountry()
@@ -117,6 +122,9 @@ class LocaleServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Locale\LocaleService::__construct
+     * @covers Heystack\Ecommerce\Locale\LocaleService::setCountries
+     * @covers Heystack\Ecommerce\Locale\LocaleService::addCountry
      * @covers Heystack\Ecommerce\Locale\LocaleService::getCountries
      */
     public function testGetCountries()
@@ -128,6 +136,9 @@ class LocaleServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Heystack\Ecommerce\Locale\LocaleService::__construct
+     * @covers Heystack\Ecommerce\Locale\LocaleService::setCountries
+     * @covers Heystack\Ecommerce\Locale\LocaleService::addCountry
      * @covers Heystack\Ecommerce\Locale\LocaleService::setDefaultCountry
      * @covers Heystack\Ecommerce\Locale\LocaleService::getDefaultCountry
      */
