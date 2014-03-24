@@ -59,7 +59,7 @@ interface PurchasableHolderInterface
 
     /**
      * Sets the quantity of the purchasable in the implementing class
-     * @param PurchasableInterface $purchasable
+     * @param \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface $purchasable
      * @param int                  $quantity
      */
     public function setPurchasable(PurchasableInterface $purchasable, $quantity);
@@ -68,6 +68,7 @@ interface PurchasableHolderInterface
      * Retrieves a purchasable from the implementing class' internal cache of
      * purchasables
      * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
+     * @return \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface
      */
     public function getPurchasable(IdentifierInterface $identifier);
 
