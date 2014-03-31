@@ -2,13 +2,13 @@
 
 namespace Heystack\Ecommerce\Transaction;
 
+use Heystack\Core\ViewableData\ViewableDataInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Heystack\Ecommerce\Locale\Traits\HasLocaleServiceTrait;
-use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Ecommerce\Purchasable\Interfaces\PurchasableHolderInterface;
-use Heystack\Core\ViewableData\ViewableDataInterface;
-use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Ecommerce\Transaction\Traits\HasTransactionTrait;
 
 /**

@@ -1,18 +1,10 @@
 <?php
-/**
- * This file is part of the Ecommerce-Core package
- *
- * @package Ecommerce-Core
- */
 
-/**
- * Input namespace
- */
 namespace Heystack\Ecommerce\Currency\Input;
 
+use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Input\ProcessorInterface;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
-use Heystack\Core\Identifier\Identifier;
 use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 
 /**

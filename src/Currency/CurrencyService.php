@@ -1,13 +1,5 @@
 <?php
-/**
- * This file is part of the Ecommerce-Products package
- *
- * @package Ecommerce-Core
- */
 
-/**
- * Currency namespace
- */
 namespace Heystack\Ecommerce\Currency;
 
 use Heystack\Core\Identifier\Identifier;
@@ -18,6 +10,7 @@ use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Ecommerce\Currency\Event\CurrencyEvent;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 use SebastianBergmann\Money\Money;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

@@ -2,8 +2,8 @@
 
 namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
-use Heystack\Ecommerce\Services;
 use Heystack\Core\DependencyInjection\CompilerPass\HasService;
+use Heystack\Ecommerce\Services;
 
 /**
  * Class HasTransactionService

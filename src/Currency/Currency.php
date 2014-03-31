@@ -2,9 +2,9 @@
 
 namespace Heystack\Ecommerce\Currency;
 
+use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\ViewableData\ViewableDataInterface;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
-use Heystack\Core\Identifier\Identifier;
 use SebastianBergmann\Money\Currency as BaseCurrency;
 
 /**

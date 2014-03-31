@@ -3,7 +3,6 @@
 namespace Heystack\Ecommerce\Transaction;
 
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
-use Heystack\Core\ViewableData\ViewableDataInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 use SebastianBergmann\Money\NZD;
 
@@ -142,8 +141,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      * @covers Heystack\Ecommerce\Transaction\Transaction::addModifier
      * @covers Heystack\Ecommerce\Transaction\Transaction::isValidStatus
      * @covers Heystack\Ecommerce\Transaction\Transaction::getTotalWithExclusions
-     * @covers Heystack\Ecommerce\Exception\MoneyOverflowException::__construct
-     * @expectedException Heystack\Ecommerce\Exception\MoneyOverflowException
+     * @expectedException \SebastianBergmann\Money\OverflowException
      */
     public function testGetTotalWithExclusions()
     {

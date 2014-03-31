@@ -10,8 +10,8 @@
  */
 namespace Heystack\Ecommerce\Currency\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Currency Event

@@ -1,13 +1,5 @@
 <?php
-/**
- * This file is part of the Ecommerce-Core package
- *
- * @package Ecommerce-Core
- */
 
-/**
- * Transaction namespace
- */
 namespace Heystack\Ecommerce\Transaction;
 
 use Heystack\Core\Exception\ConfigurationException;

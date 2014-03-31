@@ -10,13 +10,13 @@
  */
 namespace Heystack\Ecommerce\Currency\DataExtension;
 
-use FieldList;
-use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
-use NumericField;
-use Injector;
 use DataExtension;
+use FieldList;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use Heystack\Ecommerce\Services;
+use Injector;
+use NumericField;
 
 /**
  * Pricing Extension
