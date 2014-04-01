@@ -9,11 +9,9 @@ use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Ecommerce\Currency\CurrencyService;
 use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
-use Heystack\Ecommerce\Exception\MoneyOverflowException;
 use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
-use SebastianBergmann\Money\CurrencyMismatchException;
 
 /**
  * Transaction Service
@@ -173,33 +171,25 @@ class Transaction implements TransactionInterface, StateableInterface
      * Retrieves the total without adding excluded modifiers
      *
      * @param array $exclude an array of identifiers to be excluded
-     * @throws \Heystack\Ecommerce\Exception\MoneyOverflowException
+     * @throws \SebastianBergmann\Money\OverflowException
      * @return \SebastianBergmann\Money\Money
      */
     public function getTotalWithExclusions(array $exclude)
     {
+        /** @var \SebastianBergmann\Money\Money $total */
         $total = $this->currencyService->getZeroMoney();
 
         foreach ($this->modifiers as $modifier) {
-            if (!in_array($modifier->getIdentifier()->getFull(), $exclude)) {
-                try {
-                    switch ($modifier->getType()) {
-                        case TransactionModifierTypes::CHARGEABLE:
-                            try {
-                                $total = $total->add($modifier->getTotal());
-                            } catch (\Exception $e) {
-                                throw new MoneyOverflowException;
-                            }
-                            break;
-                        case TransactionModifierTypes::DEDUCTIBLE:
-                            $total = $total->subtract($modifier->getTotal());
-                            break;
-                    }
-                } catch (CurrencyMismatchException $e) {
-                    // This occurs as the modifiers are updating
-                    // in response to currency change events
-                    // let it happen and all will be well
-                }
+            if (in_array($modifier->getIdentifier()->getFull(), $exclude)) {
+                continue;
+            }
+            
+            $type = $modifier->getType();
+            
+            if ($type === TransactionModifierTypes::CHARGEABLE) {
+                $total = $total->add($modifier->getTotal());
+            } elseif ($type === TransactionModifierTypes::DEDUCTIBLE) {
+                $total = $total->subtract($modifier->getTotal());
             }
         }
 
