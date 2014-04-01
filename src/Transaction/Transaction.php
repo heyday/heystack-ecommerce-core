@@ -56,6 +56,12 @@ class Transaction implements TransactionInterface, StateableInterface
     protected $validStatuses;
 
     /**
+     * Tracks if a update has been requested
+     * @var bool
+     */
+    protected $updateRequested;
+
+    /**
      * Creates the Transaction object
      * @param State $stateService
      * @param CurrencyService $currencyService
@@ -86,7 +92,14 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function saveState()
     {
-       $this->stateService->setByKey(self::IDENTIFIER, [$this->total, $this->status]);
+       $this->stateService->setByKey(
+           self::IDENTIFIER,
+           [
+               $this->total,
+               $this->status,
+               $this->updateRequested
+           ]
+       );
     }
 
     /**
@@ -95,7 +108,7 @@ class Transaction implements TransactionInterface, StateableInterface
     public function restoreState()
     {
         if ($data = $this->stateService->getByKey(self::IDENTIFIER)) {
-            list($this->total, $this->status) = $data;
+            list($this->total, $this->status, $this->updateRequested) = $data;
         }
     }
 
@@ -154,8 +167,15 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function getTotal()
     {
+        if ($this->updateRequested) {
+            $this->total = $this->getTotalWithExclusions([]);
+            $this->updateRequested = false;
+            $this->saveState();
+        }
+
         return $this->total;
     }
+
 
     /**
      * Update the aggregate total of the TransactionModifers held by the Transaction object
@@ -163,7 +183,7 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function updateTotal()
     {
-        $this->total = $this->getTotalWithExclusions([]);
+        $this->updateRequested = true;
         $this->saveState();
     }
 
