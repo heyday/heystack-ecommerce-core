@@ -7,6 +7,7 @@ use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\State\State;
 use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
 use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
+use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -82,14 +83,8 @@ class LocaleService implements LocaleServiceInterface
      */
     public function restoreState()
     {
-        if ($identifier = $this->sessionState->getByKey(self::ACTIVE_COUNTRY_KEY)) {
-
-            if ($identifier instanceof IdentifierInterface) {
-                $this->setActiveCountry($identifier, false);
-            } else if (is_string($identifier)) {
-                $this->setActiveCountry(new Identifier($identifier), false);
-            }
-
+        if ($activeCountry = $this->sessionState->getByKey(self::ACTIVE_COUNTRY_KEY)) {
+            $this->activeCountry = $activeCountry;
         }
     }
     /**
@@ -99,26 +94,22 @@ class LocaleService implements LocaleServiceInterface
     {
         $this->sessionState->setByKey(
             self::ACTIVE_COUNTRY_KEY,
-            $this->activeCountry->getIdentifier()
+            $this->activeCountry
         );
     }
     /**
      * @param      $identifier
-     * @param bool $saveState  Determines whether the state is saved and the update event is dispatched
      * @return void
      */
-    public function setActiveCountry(IdentifierInterface $identifier, $saveState = true)
+    public function setActiveCountry(IdentifierInterface $identifier)
     {
         $country = $this->getCountry($identifier);
         if ($country && $country != $this->activeCountry) {
             $this->activeCountry = $country;
 
-            if ($saveState) {
-                $this->saveState();
-                $this->eventService->dispatch(
-                    Events::CHANGED
-                );
-            }
+            $this->saveState();
+            $this->eventService->dispatch(Events::CHANGED);
+            $this->eventService->dispatch(TransactionEvents::UPDATE);
         }
     }
     /**
