@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8537b2f7d19662873fe8d113ed966472",
+    "hash": "86e7fdb8260f09078c5b2ceee1ef92aa",
     "packages": [
         {
             "name": "composer/installers",
@@ -169,7 +169,7 @@
             "source": {
                 "type": "git",
                 "url": "ssh://git@git.heyday.net.nz:1234/heystack/heystack.git",
-                "reference": "b944554f69b9eab05c442aaf89e8f60ebf6e66d3"
+                "reference": "4e33a04ff405adf37fa8ac948c080ada90d9917a"
             },
             "require": {
                 "composer/installers": "~1.0",
@@ -199,7 +199,7 @@
                     "Heystack\\Core\\": "src/"
                 }
             },
-            "time": "2014-03-15 08:42:32"
+            "time": "2014-03-18 00:46:25"
         },
         {
             "name": "psr/log",
@@ -245,12 +245,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/money.git",
-                "reference": "ab32c04397312ea797dda1a435eb003ff471b9ac"
+                "reference": "1425516f304eeefeccbe80cf78a0965a925890f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/money/zipball/ab32c04397312ea797dda1a435eb003ff471b9ac",
-                "reference": "ab32c04397312ea797dda1a435eb003ff471b9ac",
+                "url": "https://api.github.com/repos/sebastianbergmann/money/zipball/1425516f304eeefeccbe80cf78a0965a925890f0",
+                "reference": "1425516f304eeefeccbe80cf78a0965a925890f0",
                 "shasum": ""
             },
             "require": {
@@ -287,7 +287,7 @@
             "keywords": [
                 "money"
             ],
-            "time": "2014-03-09 08:24:46"
+            "time": "2014-03-09 13:04:16"
         },
         {
             "name": "symfony/config",
@@ -831,12 +831,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silverstripe/silverstripe-framework.git",
-                "reference": "3e57cc069e9fabe22fc23c3d46df835335dec478"
+                "reference": "451f9d383f6f34d15b17af02f12ca78848963219"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silverstripe/silverstripe-framework/zipball/3e57cc069e9fabe22fc23c3d46df835335dec478",
-                "reference": "3e57cc069e9fabe22fc23c3d46df835335dec478",
+                "url": "https://api.github.com/repos/silverstripe/silverstripe-framework/zipball/451f9d383f6f34d15b17af02f12ca78848963219",
+                "reference": "451f9d383f6f34d15b17af02f12ca78848963219",
                 "shasum": ""
             },
             "require": {
@@ -874,7 +874,7 @@
                 "framework",
                 "silverstripe"
             ],
-            "time": "2014-03-15 08:42:41"
+            "time": "2014-03-17 21:02:36"
         },
         {
             "name": "symfony/class-loader",

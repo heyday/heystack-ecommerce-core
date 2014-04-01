@@ -1,13 +1,5 @@
 <?php
-/**
- * This file is part of the Ecommerce-Core package
- *
- * @package Ecommerce-Core
- */
 
-/**
- * Interfaces namespace
- */
 namespace Heystack\Ecommerce\Currency\Interfaces;
 
 use Heystack\Core\Identifier\IdentifierInterface;

@@ -56,7 +56,6 @@ class Processor implements ProcessorInterface
     public function process(\SS_HTTPRequest $request)
     {
         if ($identifier = $request->param('ID')) {
-
             if ($this->currencyService->setActiveCurrency(new Identifier($identifier))) {
                 return [
                     'Success' => true

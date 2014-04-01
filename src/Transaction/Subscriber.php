@@ -68,9 +68,9 @@ class Subscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            Events::UPDATE => ['onUpdate',0],
-            Events::STORE => ['onStore', 0],
-            Backend::IDENTIFIER . '.' . TransactionEvents::STORED  => ['onTransactionStored', 0]
+            Events::UPDATE                                                   => ['onUpdate',0],
+            Events::STORE                                                    => ['onStore', 0],
+            sprintf('%s.%s', Backend::IDENTIFIER, TransactionEvents::STORED) => ['onTransactionStored', 0]
         ];
     }
 
