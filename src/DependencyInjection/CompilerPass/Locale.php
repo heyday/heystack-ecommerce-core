@@ -56,5 +56,12 @@ class Locale implements CompilerPassInterface
         $container->getDefinition(Services::LOCALE_SERVICE)->replaceArgument(0, $locales);
         $container->getDefinition(Services::LOCALE_SERVICE)->replaceArgument(1, $defaultLocale);
 
+        $zoneService = $container->getDefinition(Services::ZONE_SERVICE);
+
+        foreach ($container->findTaggedServiceIds(Services::ZONE_SERVICE . '.zone') as $id => $tags) {
+            foreach ($tags as $_) {
+                $zoneService->addMethodCall('addZone', [new Reference($id)]);
+             }
+        }
     }
 }

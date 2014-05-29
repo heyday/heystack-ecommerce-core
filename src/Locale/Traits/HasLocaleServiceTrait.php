@@ -30,4 +30,4 @@ trait HasLocaleServiceTrait
     {
         return $this->localeService;
     }
-} 
+}

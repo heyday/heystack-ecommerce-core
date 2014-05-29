@@ -37,4 +37,10 @@ interface LocaleServiceInterface extends StateableInterface
      * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */
     public function getDefaultCountry();
+
+    /**
+     * @param IdentifierInterface $identifier
+     * @return bool
+     */
+    public function hasCountry(IdentifierInterface $identifier);
 }

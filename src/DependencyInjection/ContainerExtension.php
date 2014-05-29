@@ -5,12 +5,14 @@ namespace Heystack\Ecommerce\DependencyInjection;
 use Heystack\Core\Loader\DBClosureLoader;
 use Heystack\Ecommerce\Config\ContainerConfig;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyDataProvider;
-use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
+use Heystack\Ecommerce\Locale\Interfaces\CountryDataProviderInterface;
+use Heystack\Ecommerce\Locale\Interfaces\ZoneDataProviderInterface;
 use Heystack\Ecommerce\Services;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
@@ -107,22 +109,20 @@ class ContainerExtension extends Extension
         if (isset($config['locale_db'])) {
             $resource = call_user_func([$config['locale_db']['from'], 'get'])->where($config['locale_db']['where']);
             
-            $handler = function (CountryInterface $record) use ($container) {
-                $definition = new Definition(
-                    'Heystack\\Ecommerce\\Locale\\Country',
-                    [
-                        $identifier = $record->getCountryCode(),
-                        $record->getName(),
-                        (bool) $default = $record->isDefault()
-                    ]
-                );
-                $definition->addTag(Services::LOCALE_SERVICE . '.locale');
+            $handler = function (CountryDataProviderInterface $record) use ($container) {
+                $localeDefinition = new DefinitionDecorator(Services::LOCALE_SERVICE . '.country');
+                $localeDefinition->addArgument($identifier = $record->getCountryCode());
+                $localeDefinition->addArgument($record->getName());
+                $localeDefinition->addArgument((bool) $default = $record->isDefault());
+                $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale');
+                
                 $container->setDefinition(
                     "locale.$identifier",
-                    $definition
+                    $localeDefinition
                 );
+
                 if ($default) {
-                    $definition->addTag(Services::LOCALE_SERVICE . '.locale_default');
+                    $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale_default');
                 }
             };
             
@@ -130,21 +130,52 @@ class ContainerExtension extends Extension
             
         } elseif (isset($config['locale'])) {
             foreach ($config['locale'] as $locale) {
+                $localeDefinition = new DefinitionDecorator(Services::LOCALE_SERVICE . '.country');
+                $localeDefinition->addArgument($locale['code']);
+                $localeDefinition->addArgument($locale['name']);
+                $localeDefinition->addArgument((bool) $locale['default']);
+                $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale');
+                
                 $container->setDefinition(
                     "locale.{$locale['code']}",
-                    $definition = new Definition(
-                        'Heystack\\Ecommerce\\Locale\\Country',
-                        [
-                            $locale['code'],
-                            $locale['name'],
-                            (bool) $locale['default']
-                        ]
-                    )
+                    $localeDefinition
                 );
-                $definition->addTag(Services::LOCALE_SERVICE . '.locale');
+
                 if ($locale['default']) {
-                    $definition->addTag(Services::LOCALE_SERVICE . '.locale_default');
+                    $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale_default');
                 }
+            }
+        }
+        
+        if (isset($config['zone_db'])) {
+            $resource = call_user_func([$config['zone_db']['from'], 'get'])->where($config['zone_db']['where']);
+
+            $handler = function (ZoneDataProviderInterface $record, $index) use ($container, $config) {
+                $zoneDefinition = new DefinitionDecorator(Services::ZONE_SERVICE . '.zone');
+
+                $zoneDefinition->addArgument($record->getName());
+                $zoneDefinition->addArgument($record->getCountryCodes());
+                $zoneDefinition->addTag(Services::ZONE_SERVICE . '.zone');
+
+                $container->setDefinition(
+                    sprintf("zone.%s.%s", $config['zone_db']['from'], $index),
+                    $zoneDefinition
+                );
+            };
+
+            (new DBClosureLoader($handler))->load($resource);
+            
+        } elseif (isset($config['zone'])) {
+            foreach ($config['zone'] as $index => $locale) {
+                $zoneDefinition = new DefinitionDecorator(Services::ZONE_SERVICE . '.zone');
+                $zoneDefinition->addArgument($locale['name']);
+                $zoneDefinition->addArgument($locale['countries']);
+                $zoneDefinition->addTag(Services::ZONE_SERVICE . '.zone');
+                
+                $container->setDefinition(
+                    sprintf("zone.%s", $index),
+                    $zoneDefinition
+                );
             }
         }
     }

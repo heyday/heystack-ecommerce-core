@@ -9,6 +9,9 @@ parameters:
   transaction.default: Pending
   transaction_subscriber.class: Heystack\Ecommerce\Transaction\Subscriber
   transaction_collator.class: Heystack\Ecommerce\Transaction\Collator
+  
+  zone.class: Heystack\Ecommerce\Locale\Zone
+  locale.class: Heystack\Ecommerce\Locale\Country
 
 services:
   transaction:
@@ -72,4 +75,17 @@ services:
     tags:
       - { name: schema }
       - { name: autoinject, arguments: true }
+
+  zone_service:
+    class: Heystack\Ecommerce\Locale\ZoneService
+    arguments: [ @locale_service ]
+
+  zone_service.zone:
+    abstract: true
+    class: %zone.class%
+    arguments: [ @locale_service ]
+
+  locale_service.country:
+    abstract: true
+    class: %locale.class%
     

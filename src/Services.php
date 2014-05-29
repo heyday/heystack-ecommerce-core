@@ -53,4 +53,9 @@ final class Services
      * Holds the identifier of the locale service
      */
     const LOCALE_SERVICE = 'locale_service';
+
+    /**
+     * Holds the identifier of the zone service
+     */
+    const ZONE_SERVICE = 'zone_service';
 }

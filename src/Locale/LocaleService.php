@@ -2,7 +2,6 @@
 
 namespace Heystack\Ecommerce\Locale;
 
-use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\State\State;
 use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
@@ -22,7 +21,7 @@ class LocaleService implements LocaleServiceInterface
      */
     const ACTIVE_COUNTRY_KEY = 'localservice.activecountry';
     /**
-     * @var
+     * @var \Heystack\Ecommerce\Locale\Interfaces\CountryInterface[]
      */
     protected $countries;
     /**
@@ -119,6 +118,7 @@ class LocaleService implements LocaleServiceInterface
     {
         return $this->activeCountry;
     }
+
     /**
      * Uses the identifier to retrieve the country object from the cache
      * @param IdentifierInterface $identifier
@@ -126,13 +126,8 @@ class LocaleService implements LocaleServiceInterface
      */
     public function getCountry(IdentifierInterface $identifier)
     {
-        if ($identifier instanceof IdentifierInterface) {
-
-            return isset($this->countries[$identifier->getFull()]) ? $this->countries[$identifier->getFull()] : null;
-
-        }
-
-        return null;
+        $identifierFull = $identifier->getFull();
+        return isset($this->countries[$identifierFull]) ? $this->countries[$identifierFull] : null;
     }
 
     /**
@@ -164,11 +159,21 @@ class LocaleService implements LocaleServiceInterface
 
         return false;
     }
+
     /**
      * @return mixed
      */
     public function getDefaultCountry()
     {
         return $this->defaultCountry;
+    }
+
+    /**
+     * @param IdentifierInterface $identifier
+     * @return bool
+     */
+    public function hasCountry(IdentifierInterface $identifier)
+    {
+        return isset($this->countries[$identifier->getFull()]);
     }
 }
