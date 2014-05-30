@@ -1,12 +1,12 @@
 <?php
 
-namespace Heystack\Ecommerce\Zone\Traits;
+namespace Heystack\Ecommerce\Locale\Traits;
 
 use Heystack\Ecommerce\Locale\Interfaces\ZoneServiceInterface;
 
 /**
  * Class HasZoneServiceTrait
- * @package Heystack\Ecommerce\Zone\Traits
+ * @package Heystack\Ecommerce\Locale\Traits
  */
 trait HasZoneServiceTrait
 {
