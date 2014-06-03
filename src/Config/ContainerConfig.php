@@ -64,6 +64,7 @@ class ContainerConfig implements ConfigurationInterface
                                 ->prototype('scalar')
                                 ->end()
                             ->end()
+                            ->scalarNode('currency')->isRequired()->end()
                         ->end()
                     ->end()
                 ->end()

@@ -54,4 +54,9 @@ interface ZoneInterface
      * @return mixed
      */
     public function hasCountry(IdentifierInterface $identifier);
+
+    /**
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
+     */
+    public function getCurrency();
 }

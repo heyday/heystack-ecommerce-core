@@ -18,4 +18,9 @@ interface ZoneDataProviderInterface
      * @return array
      */
     public function getCountryCodes();
+
+    /**
+     * @return string|null
+     */
+    public function getCurrency();
 }

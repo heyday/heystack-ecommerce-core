@@ -20,18 +20,18 @@ interface ZoneServiceInterface
     public function setZones(array $zones);
 
     /**
-     * @return mixed
+     * @return \Heystack\Ecommerce\Locale\Interfaces\ZoneInterface[]
      */
     public function getZones();
 
     /**
-     * @return mixed
+     * @return \Heystack\Ecommerce\Locale\Interfaces\ZoneInterface
      */
     public function getActiveZone();
 
     /**
      * @param \Heystack\Ecommerce\Locale\Interfaces\CountryInterface $country
-     * @return mixed
+     * @return \Heystack\Ecommerce\Locale\Interfaces\ZoneInterface
      */
     public function getZoneForCountry(CountryInterface $country);
 }

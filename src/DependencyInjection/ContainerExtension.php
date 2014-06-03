@@ -155,6 +155,7 @@ class ContainerExtension extends Extension
 
                 $zoneDefinition->addArgument($record->getName());
                 $zoneDefinition->addArgument($record->getCountryCodes());
+                $zoneDefinition->addArgument($record->getCurrency());
                 $zoneDefinition->addTag(Services::ZONE_SERVICE . '.zone');
 
                 $container->setDefinition(
@@ -170,6 +171,7 @@ class ContainerExtension extends Extension
                 $zoneDefinition = new DefinitionDecorator(Services::ZONE_SERVICE . '.zone');
                 $zoneDefinition->addArgument($locale['name']);
                 $zoneDefinition->addArgument($locale['countries']);
+                $zoneDefinition->addArgument($locale['currency']);
                 $zoneDefinition->addTag(Services::ZONE_SERVICE . '.zone');
                 
                 $container->setDefinition(

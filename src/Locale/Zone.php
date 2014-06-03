@@ -4,6 +4,8 @@ namespace Heystack\Ecommerce\Locale;
 
 use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Identifier\IdentifierInterface;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
+use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Heystack\Ecommerce\Locale\Interfaces\ZoneInterface;
 use Heystack\Ecommerce\Locale\Traits\HasLocaleServiceTrait;
 
@@ -25,15 +27,32 @@ class Zone implements ZoneInterface
     protected $countries = [];
 
     /**
-     * @param LocaleService $localeService
+     * @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface|null
+     */
+    protected $currency;
+
+    /**
+     * @param LocaleServiceInterface $localeService
+     * @param CurrencyServiceInterface $currencyService
      * @param $name
      * @param array $countries
+     * @param string|void $currency
      */
-    public function __construct(LocaleService $localeService, $name, array $countries)
+    public function __construct(
+        LocaleServiceInterface $localeService,
+        CurrencyServiceInterface $currencyService,
+        $name,
+        array $countries,
+        $currency = null
+    )
     {
         $this->localeService = $localeService;
+        $this->currencyService = $currencyService;
         $this->name = $name;
         $this->setCountries($countries);
+        if ($currency !== null) {
+            $this->currency = $this->currencyService->getCurrency(new Identifier($currency));
+        }
     }
 
     /**
@@ -99,5 +118,13 @@ class Zone implements ZoneInterface
     public function hasCountry(IdentifierInterface $identifier)
     {
         return isset($this->countries[$identifier->getFull()]);
+    }
+
+    /**
+     * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }

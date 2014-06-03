@@ -83,7 +83,7 @@ services:
   zone_service.zone:
     abstract: true
     class: %zone.class%
-    arguments: [ @locale_service ]
+    arguments: [ @locale_service, @currency_service ]
 
   locale_service.country:
     abstract: true
