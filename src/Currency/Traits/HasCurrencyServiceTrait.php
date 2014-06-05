@@ -4,6 +4,9 @@ namespace Heystack\Ecommerce\Currency\Traits;
 
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 
+/**
+ * @package Heystack\Ecommerce\Currency\Traits
+ */
 trait HasCurrencyServiceTrait
 {
     /**
