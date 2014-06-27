@@ -192,6 +192,7 @@ class Transaction implements TransactionInterface, StateableInterface
      *
      * @param array $exclude an array of identifiers to be excluded
      * @throws \SebastianBergmann\Money\OverflowException
+     * @throws \RuntimeException
      * @return \SebastianBergmann\Money\Money
      */
     public function getTotalWithExclusions(array $exclude)
@@ -203,14 +204,18 @@ class Transaction implements TransactionInterface, StateableInterface
             if (in_array($modifier->getIdentifier()->getFull(), $exclude)) {
                 continue;
             }
-            
+
             $type = $modifier->getType();
-            
+
             if ($type === TransactionModifierTypes::CHARGEABLE) {
                 $total = $total->add($modifier->getTotal());
             } elseif ($type === TransactionModifierTypes::DEDUCTIBLE) {
                 $total = $total->subtract($modifier->getTotal());
             }
+        }
+        
+        if ($total->getAmount() < 0) {
+            throw new \RuntimeException("Invalid transaction total");
         }
 
         return $total;
