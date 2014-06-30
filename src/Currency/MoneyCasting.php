@@ -16,7 +16,8 @@ class MoneyCasting extends \ViewableData
     use HasLocaleServiceTrait;
     
     private static $casting = [
-        'Nice' => 'Text'
+        'Nice' => 'Text',
+        'Currency' => 'Text'
     ];
 
     /**
@@ -47,6 +48,14 @@ class MoneyCasting extends \ViewableData
     public function Nice()
     {
         return preg_replace('/[A-Za-z]/', '', $this->getFormatter()->format($this->value));
+    }
+
+    /**
+     * @return string
+     */
+    public function Currency()
+    {
+        return $this->value->getCurrency()->getCurrencyCode();
     }
 
     /**
