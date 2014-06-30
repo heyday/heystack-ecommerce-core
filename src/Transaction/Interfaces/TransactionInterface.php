@@ -41,6 +41,21 @@ interface TransactionInterface extends StorableInterface
     public function getModifiers();
 
     /**
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getChargeableModifiers();
+
+    /**
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getDeductibleModifiers();
+
+    /**
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getNeutralModifiers();
+
+    /**
      * Returns modifiers on the transaction by TranactionModifierType
      * @param  string $type
      * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
@@ -49,7 +64,6 @@ interface TransactionInterface extends StorableInterface
 
     /**
      * Returns the aggregate total of the TransactionModifers held by the Transaction object
-     *
      * @return \SebastianBergmann\Money\Money
      */
     public function getTotal();
@@ -66,6 +80,25 @@ interface TransactionInterface extends StorableInterface
      * @return \SebastianBergmann\Money\Money
      */
     public function getTotalWithExclusions(array $exclude);
+
+    /**
+     * @param array $exclude
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function getChargeableTotalWithExclusions(array $exclude);
+
+    /**
+     * @param array $exclude
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function getDeductibleTotalWithExclusions(array $exclude);
+
+    /**
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]|void $fromModifiers
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getLinkedModifers(TransactionModifierInterface $modifier, array $fromModifiers = null);
 
     /**
      * Sets the status of the transaction

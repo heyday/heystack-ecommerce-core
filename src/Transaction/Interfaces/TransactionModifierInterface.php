@@ -1,13 +1,5 @@
 <?php
-/**
- * This file is part of the Ecommerce-Core package
- *
- * @package Ecommerce-Core
- */
 
-/**
- * Interfaces namespace
- */
 namespace Heystack\Ecommerce\Transaction\Interfaces;
 
 /**
@@ -15,7 +7,7 @@ namespace Heystack\Ecommerce\Transaction\Interfaces;
  *
  * @copyright  Heyday
  * @author Glenn Bautista <glenn@heyday.co.nz>
- * @package Ecommerce-Core
+ * @package Heystack\Ecommerce\Transaction\Interfaces
  */
 interface TransactionModifierInterface
 {
@@ -35,6 +27,7 @@ interface TransactionModifierInterface
     /**
      * Indicates the type of amount the modifier will return
      * Must return a constant from TransactionModifierTypes
+     * @return string
      */
     public function getType();
 }

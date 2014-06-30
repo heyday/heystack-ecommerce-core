@@ -10,6 +10,7 @@ use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Ecommerce\Currency\CurrencyService;
 use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\HasLinkedTransactionModifiersInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
@@ -34,10 +35,19 @@ class Transaction implements TransactionInterface, StateableInterface
     const IDENTIFIER = 'transaction';
 
     /**
-     * Holds an array of currently managed TransactionModifiers
      * @var \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
-    protected $modifiers = [];
+    protected $chargeableModifiers = [];
+
+    /**
+     * @var \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    protected $deductibleModifiers = [];
+
+    /**
+     * @var \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    protected $neutralModifiers = [];
 
     /**
      * @var \SebastianBergmann\Money\Money
@@ -92,14 +102,14 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function saveState()
     {
-       $this->stateService->setByKey(
-           self::IDENTIFIER,
-           [
-               $this->total,
-               $this->status,
-               $this->updateRequested
-           ]
-       );
+        $this->stateService->setByKey(
+            self::IDENTIFIER,
+            [
+                $this->total,
+                $this->status,
+                $this->updateRequested
+            ]
+        );
     }
 
     /**
@@ -115,10 +125,30 @@ class Transaction implements TransactionInterface, StateableInterface
     /**
      * Add a TransactionModifier to the Transaction
      * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
+     * @throws \InvalidArgumentException
      */
     public function addModifier(TransactionModifierInterface $modifier)
     {
-        $this->modifiers[$modifier->getIdentifier()->getFull()] = $modifier;
+        switch ($modifier->getType()) {
+            case TransactionModifierTypes::CHARGEABLE:
+                $this->chargeableModifiers[$modifier->getIdentifier()->getFull()] = $modifier;
+                break;
+            case TransactionModifierTypes::DEDUCTIBLE:
+                $this->deductibleModifiers[$modifier->getIdentifier()->getFull()] = $modifier;
+                break;
+            case TransactionModifierTypes::NEUTRAL:
+                $this->neutralModifiers[$modifier->getIdentifier()->getFull()] = $modifier;
+                break;
+            default:
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "Modifier '%s' has an invalid TransactionModifierType '%s'",
+                        $modifier->getIdentifier()->getFull(),
+                        $modifier->getType()
+                    )
+                );
+        }
+
         if ($modifier instanceof HasTransactionInterface) {
             $modifier->setTransaction($this);
         }
@@ -131,7 +161,8 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function getModifier($identifier)
     {
-        return isset($this->modifiers[$identifier]) ? $this->modifiers[$identifier] : null;
+        $modifiers = $this->getModifiers();
+        return isset($modifiers[$identifier]) ? $modifiers[$identifier] : null;
     }
 
     /**
@@ -140,25 +171,60 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function getModifiers()
     {
-        return $this->modifiers;
+        return $this->chargeableModifiers + $this->deductibleModifiers + $this->neutralModifiers;
     }
 
     /**
      * Returns modifiers on the transaction by TranactionModifierType
      * @param  string $type
+     * @throws \InvalidArgumentException
      * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
      */
     public function getModifiersByType($type)
     {
-        $modifiers = [];
-
-        foreach ($this->modifiers as $identifier => $modifier) {
-            if ($modifier->getType() === $type) {
-                $modifiers[$identifier] = $modifier;
-            }
+        switch ($type) {
+            case TransactionModifierTypes::CHARGEABLE:
+                return $this->chargeableModifiers;
+                break;
+            case TransactionModifierTypes::DEDUCTIBLE:
+                return $this->deductibleModifiers;
+                break;
+            case TransactionModifierTypes::NEUTRAL:
+                return $this->neutralModifiers;
+                break;
+            default:
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "Invalid type '%s' used in '%s'",
+                        $type,
+                        __FUNCTION__
+                    )
+                );
         }
+    }
 
-        return $modifiers;
+    /**
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getChargeableModifiers()
+    {
+        return $this->chargeableModifiers;
+    }
+
+    /**
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getDeductibleModifiers()
+    {
+        return $this->deductibleModifiers;
+    }
+
+    /**
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getNeutralModifiers()
+    {
+        return $this->neutralModifiers;
     }
 
     /**
@@ -188,7 +254,7 @@ class Transaction implements TransactionInterface, StateableInterface
     }
 
     /**
-     * Retrieves the total without adding excluded modifiers
+     * Retrieves the total excluding specified modifiers
      *
      * @param array $exclude an array of identifiers to be excluded
      * @throws \SebastianBergmann\Money\OverflowException
@@ -197,28 +263,86 @@ class Transaction implements TransactionInterface, StateableInterface
      */
     public function getTotalWithExclusions(array $exclude)
     {
-        /** @var \SebastianBergmann\Money\Money $total */
+        return $this->getChargeableTotalWithExclusions($exclude)
+            ->subtract($this->getDeductibleTotalWithExclusions($exclude));
+    }
+
+    /**
+     * @param array $exclude
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function getChargeableTotalWithExclusions(array $exclude)
+    {
         $total = $this->currencyService->getZeroMoney();
 
-        foreach ($this->modifiers as $modifier) {
-            if (in_array($modifier->getIdentifier()->getFull(), $exclude)) {
+        foreach ($this->chargeableModifiers as $chargeableModifier) {
+            // Exclude specified modifiers
+            if (in_array($chargeableModifier->getIdentifier()->getFull(), $exclude)) {
                 continue;
             }
 
-            $type = $modifier->getType();
-
-            if ($type === TransactionModifierTypes::CHARGEABLE) {
-                $total = $total->add($modifier->getTotal());
-            } elseif ($type === TransactionModifierTypes::DEDUCTIBLE) {
-                $total = $total->subtract($modifier->getTotal());
-            }
-        }
-        
-        if ($total->getAmount() < 0) {
-            throw new \RuntimeException("Invalid transaction total");
+            $total = $total->add($chargeableModifier->getTotal());
         }
 
         return $total;
+    }
+
+    /**
+     * @param array $exclude
+     * @return \SebastianBergmann\Money\Money
+     */
+    public function getDeductibleTotalWithExclusions(array $exclude)
+    {
+        $deductibleTotal = $this->currencyService->getZeroMoney();
+
+        foreach ($this->chargeableModifiers as $chargeableModifier) {
+            // Exclude specified modifiers
+            if (in_array($chargeableModifier->getIdentifier()->getFull(), $exclude)) {
+                continue;
+            }
+
+            $chargeableModifierTotal = $chargeableModifier->getTotal();
+            $discountSubTotal = $this->currencyService->getZeroMoney();
+
+            foreach ($this->getLinkedModifers($chargeableModifier, $this->deductibleModifiers) as $discountModifier) {
+                if (in_array($discountModifier->getIdentifier()->getFull(), $exclude)) {
+                    continue;
+                }
+
+                $discountSubTotal = $discountSubTotal->add($discountModifier->getTotal());
+            }
+
+            if ($discountSubTotal->greaterThan($chargeableModifierTotal)) {
+                $deductibleTotal = $deductibleTotal->add($chargeableModifierTotal);
+            } else {
+                $deductibleTotal = $deductibleTotal->add($discountSubTotal);
+            }
+        }
+
+        return $deductibleTotal;
+    }
+
+    /**
+     * @param Interfaces\TransactionModifierInterface $modifier
+     * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]|void $fromModifiers
+     * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface[]
+     */
+    public function getLinkedModifers(TransactionModifierInterface $modifier, array $fromModifiers = null)
+    {
+        $linkedModifiers = [];
+
+        $fromModifiers = ($fromModifiers ?: $this->getModifiers());
+
+        foreach ((array) $fromModifiers as $fromModifier) {
+            if (
+                $fromModifier instanceof HasLinkedTransactionModifiersInterface &&
+                in_array($modifier, $fromModifier->getLinkedModifiers(), true)
+            ) {
+                $linkedModifiers[] = $fromModifier;
+            }
+        }
+
+        return $linkedModifiers;
     }
 
     /**

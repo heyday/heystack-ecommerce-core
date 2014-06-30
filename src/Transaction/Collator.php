@@ -69,7 +69,7 @@ class Collator implements ViewableDataInterface
      */
     public function getSubTotal()
     {
-        $modifiers = $this->transaction->getModifiersByType(TransactionModifierTypes::CHARGEABLE);
+        $modifiers = $this->transaction->getChargeableModifiers();
 
         foreach ($modifiers as $identifier => $modifier) {
 
