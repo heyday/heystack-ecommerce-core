@@ -41,11 +41,12 @@ class MoneyCasting extends \ViewableData
     }
 
     /**
+     * Remove country codes that sometimes appear in front of currency symbols
      * @return string
      */
     public function Nice()
     {
-        return $this->getFormatter()->format($this->value);
+        return preg_replace('/[A-Za-z]/', '', $this->getFormatter()->format($this->value));
     }
 
     /**
