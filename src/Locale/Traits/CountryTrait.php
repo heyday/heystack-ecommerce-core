@@ -24,13 +24,15 @@ use Heystack\Core\Identifier\Identifier;
 trait CountryTrait
 {
     use GenerateContainerDataObjectTrait;
+
     /**
      * @return \Heystack\Core\Identifier\Identifier
      */
     public function getIdentifier()
     {
-        return new Identifier($this->CountryCode);
+        return new Identifier($this->getCountryCode());
     }
+
     /**
      * @return mixed
      */
@@ -38,6 +40,7 @@ trait CountryTrait
     {
         return $this->getField('Name');
     }
+
     /**
      * @return mixed
      */
@@ -45,6 +48,7 @@ trait CountryTrait
     {
         return $this->getField('CountryCode');
     }
+
     /**
      * @return mixed
      */
@@ -52,4 +56,10 @@ trait CountryTrait
     {
         return $this->getField('IsDefault');
     }
+
+    /**
+     * @param string $field
+     * @return mixed
+     */
+    public abstract function getField($field);
 }

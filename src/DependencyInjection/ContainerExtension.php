@@ -35,7 +35,7 @@ class ContainerExtension extends Extension
      * Loads a specific configuration. Additionally calls processConfig, which handles overriding
      * the subsytem level configuration with more relevant mysite/config level configuration
      *
-     * @param array            $configs   An array of configuration values
+     * @param array $configs An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -68,7 +68,7 @@ class ContainerExtension extends Extension
                     [
                         $record->getCurrencyCode(),
                         $record->getValue(),
-                        (bool) $default = $record->isDefaultCurrency()
+                        (bool)$default = $record->isDefaultCurrency()
                     ]
                 );
                 $definition->addTag(Services::CURRENCY_SERVICE . '.currency');
@@ -82,9 +82,9 @@ class ContainerExtension extends Extension
             };
 
             $resource = call_user_func([$config['currency_db']['from'], 'get'])->where($config['currency_db']['where']);
-            
+
             (new DBClosureLoader($handler))->load($resource);
-            
+
         } elseif (isset($config['currency'])) {
             foreach ($config['currency'] as $currency) {
                 $container->setDefinition(
@@ -94,7 +94,7 @@ class ContainerExtension extends Extension
                         [
                             $currency['code'],
                             $currency['value'],
-                            (bool) $currency['default']
+                            (bool)$currency['default']
                         ]
                     )
                 );
@@ -108,14 +108,14 @@ class ContainerExtension extends Extension
         // Configure locale from DB
         if (isset($config['locale_db'])) {
             $resource = call_user_func([$config['locale_db']['from'], 'get'])->where($config['locale_db']['where']);
-            
+
             $handler = function (CountryDataProviderInterface $record) use ($container) {
                 $localeDefinition = new DefinitionDecorator(Services::LOCALE_SERVICE . '.country');
                 $localeDefinition->addArgument($identifier = $record->getCountryCode());
                 $localeDefinition->addArgument($record->getName());
-                $localeDefinition->addArgument((bool) $default = $record->isDefault());
+                $localeDefinition->addArgument((bool)$default = $record->isDefault());
                 $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale');
-                
+
                 $container->setDefinition(
                     "locale.$identifier",
                     $localeDefinition
@@ -125,17 +125,17 @@ class ContainerExtension extends Extension
                     $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale_default');
                 }
             };
-            
+
             (new DBClosureLoader($handler))->load($resource);
-            
+
         } elseif (isset($config['locale'])) {
             foreach ($config['locale'] as $locale) {
                 $localeDefinition = new DefinitionDecorator(Services::LOCALE_SERVICE . '.country');
                 $localeDefinition->addArgument($locale['code']);
                 $localeDefinition->addArgument($locale['name']);
-                $localeDefinition->addArgument((bool) $locale['default']);
+                $localeDefinition->addArgument((bool)$locale['default']);
                 $localeDefinition->addTag(Services::LOCALE_SERVICE . '.locale');
-                
+
                 $container->setDefinition(
                     "locale.{$locale['code']}",
                     $localeDefinition
@@ -146,7 +146,7 @@ class ContainerExtension extends Extension
                 }
             }
         }
-        
+
         if (isset($config['zone_db'])) {
             $resource = call_user_func([$config['zone_db']['from'], 'get'])->where($config['zone_db']['where']);
 
@@ -165,7 +165,7 @@ class ContainerExtension extends Extension
             };
 
             (new DBClosureLoader($handler))->load($resource);
-            
+
         } elseif (isset($config['zone'])) {
             foreach ($config['zone'] as $index => $locale) {
                 $zoneDefinition = new DefinitionDecorator(Services::ZONE_SERVICE . '.zone');
@@ -173,7 +173,7 @@ class ContainerExtension extends Extension
                 $zoneDefinition->addArgument($locale['countries']);
                 $zoneDefinition->addArgument($locale['currency']);
                 $zoneDefinition->addTag(Services::ZONE_SERVICE . '.zone');
-                
+
                 $container->setDefinition(
                     sprintf("zone.%s", $index),
                     $zoneDefinition

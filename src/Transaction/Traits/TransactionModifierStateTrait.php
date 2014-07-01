@@ -20,7 +20,7 @@ namespace Heystack\Ecommerce\Transaction\Traits;
 trait TransactionModifierStateTrait
 {
     use TransactionModifierHasDataTrait;
-    
+
     /**
      * Saves the data array on the State service
      * @return void
@@ -32,6 +32,7 @@ trait TransactionModifierStateTrait
             $this->getData()
         );
     }
+
     /**
      * Uses the State service to restore the data array
      * @return void

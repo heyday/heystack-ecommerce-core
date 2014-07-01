@@ -77,7 +77,7 @@ class ZoneService implements ZoneServiceInterface
                 return $zone;
             }
         }
-        
+
         throw new \InvalidArgumentException(
             sprintf(
                 "No zone exists for country '%s'",

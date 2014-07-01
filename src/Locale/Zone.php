@@ -88,7 +88,7 @@ class Zone implements ZoneInterface
                 )
             );
         }
-        
+
         $this->countries[$identifier->getFull()] = $this->localeService->getCountry($identifier);
     }
 
@@ -99,7 +99,7 @@ class Zone implements ZoneInterface
     public function setCountries(array $countries)
     {
         foreach ($countries as $country) {
-            $this->addCountry($country instanceof IdentifierInterface ?: new Identifier($country));
+            $this->addCountry($country instanceof IdentifierInterface ? : new Identifier($country));
         }
     }
 

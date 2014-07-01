@@ -13,8 +13,8 @@ namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
 use Heystack\Ecommerce\Services;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**

@@ -12,7 +12,7 @@ interface HasTransactionInterface
      * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
      */
     public function setTransaction(TransactionInterface $transaction);
-    
+
     /**
      * @return \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface
      */

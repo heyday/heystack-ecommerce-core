@@ -13,8 +13,8 @@ namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
 use Heystack\Ecommerce\Services;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -35,10 +35,8 @@ class Locale implements CompilerPassInterface
 
         $locales = [];
 
-        foreach ($container->findTaggedServiceIds(Services::LOCALE_SERVICE . '.locale') as $id => $tags) {
-            foreach ($tags as $tag) {
-                $locales[] = new Reference($id);
-            }
+        foreach ($container->findTaggedServiceIds(Services::LOCALE_SERVICE . '.locale') as $id => $_) {
+            $locales[] = new Reference($id);
         }
 
         if (count($locales) == 0) {
@@ -47,10 +45,8 @@ class Locale implements CompilerPassInterface
 
         $defaultLocale = reset($locales);
 
-        foreach ($container->findTaggedServiceIds(Services::LOCALE_SERVICE . '.locale_default') as $id => $tags) {
-            foreach ($tags as $tag) {
-                $defaultLocale = new Reference($id);
-            }
+        foreach ($container->findTaggedServiceIds(Services::LOCALE_SERVICE . '.locale_default') as $id => $_) {
+            $defaultLocale = new Reference($id);
         }
 
         $container->getDefinition(Services::LOCALE_SERVICE)->replaceArgument(0, $locales);
@@ -58,10 +54,8 @@ class Locale implements CompilerPassInterface
 
         $zoneService = $container->getDefinition(Services::ZONE_SERVICE);
 
-        foreach ($container->findTaggedServiceIds(Services::ZONE_SERVICE . '.zone') as $id => $tags) {
-            foreach ($tags as $_) {
-                $zoneService->addMethodCall('addZone', [new Reference($id)]);
-             }
+        foreach ($container->findTaggedServiceIds(Services::ZONE_SERVICE . '.zone') as $id => $_) {
+            $zoneService->addMethodCall('addZone', [new Reference($id)]);
         }
     }
 }

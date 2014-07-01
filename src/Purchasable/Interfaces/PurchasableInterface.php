@@ -67,7 +67,7 @@ interface PurchasableInterface extends ParentReferenceInterface
 
     /**
      * Sets the price of the Purchasable object in the PurchasableHolder
-     * 
+     *
      * @param \SebastianBergmann\Money\Money $unitPrice
      */
     public function setUnitPrice(Money $unitPrice);

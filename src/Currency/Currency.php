@@ -26,20 +26,23 @@ class Currency extends BaseCurrency
      * @var bool
      */
     protected $default;
+
     /**
      * @param string $currencyCode
      * @param        $value
-     * @param bool   $default
+     * @param bool $default
      */
     public function __construct(
         $currencyCode,
         $value,
         $default = false
-    ) {
+    )
+    {
         $this->value = $value;
         $this->default = $default;
         parent::__construct($currencyCode);
     }
+
     /**
      * Returns the identifier
      * @return \Heystack\Core\Identifier\Identifier
@@ -48,6 +51,7 @@ class Currency extends BaseCurrency
     {
         return new Identifier($this->getCurrencyCode());
     }
+
     /**
      * Returns whether the currency is the System's default
      */
@@ -55,6 +59,7 @@ class Currency extends BaseCurrency
     {
         return $this->default;
     }
+
     /**
      * Returns the value of the currency vis-a-vis the default currency
      */
@@ -62,6 +67,7 @@ class Currency extends BaseCurrency
     {
         return $this->value;
     }
+
     /**
      * Defines what methods the implementing class implements dynamically through __get and __set
      */
@@ -69,6 +75,7 @@ class Currency extends BaseCurrency
     {
         return [];
     }
+
     /**
      * Returns an array of SilverStripe DBField castings keyed by field name
      */

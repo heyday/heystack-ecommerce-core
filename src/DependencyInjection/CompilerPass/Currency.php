@@ -13,8 +13,8 @@ namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
 use Heystack\Ecommerce\Services;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -35,10 +35,8 @@ class Currency implements CompilerPassInterface
 
         $currencies = [];
 
-        foreach ($container->findTaggedServiceIds(Services::CURRENCY_SERVICE . '.currency') as $id => $tags) {
-            foreach ($tags as $tag) {
-                $currencies[] = new Reference($id);
-            }
+        foreach ($container->findTaggedServiceIds(Services::CURRENCY_SERVICE . '.currency') as $id => $_) {
+            $currencies[] = new Reference($id);
         }
 
         if (count($currencies) == 0) {
@@ -47,10 +45,8 @@ class Currency implements CompilerPassInterface
 
         $defaultCurrency = reset($currencies);
 
-        foreach ($container->findTaggedServiceIds(Services::CURRENCY_SERVICE . '.currency_default') as $id => $tags) {
-            foreach ($tags as $tag) {
-                $defaultCurrency = new Reference($id);
-            }
+        foreach ($container->findTaggedServiceIds(Services::CURRENCY_SERVICE . '.currency_default') as $id => $_) {
+            $defaultCurrency = new Reference($id);
         }
 
         $container->getDefinition(Services::CURRENCY_SERVICE)->replaceArgument(0, $currencies);

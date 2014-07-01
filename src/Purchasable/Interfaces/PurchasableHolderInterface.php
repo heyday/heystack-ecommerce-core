@@ -52,7 +52,7 @@ interface PurchasableHolderInterface
     /**
      * Add a purchasable to the implementing class
      * @param PurchasableInterface $purchasable
-     * @param int                  $quantity
+     * @param int $quantity
      * @return
      */
     public function addPurchasable(PurchasableInterface $purchasable, $quantity = 1);
@@ -60,7 +60,7 @@ interface PurchasableHolderInterface
     /**
      * Sets the quantity of the purchasable in the implementing class
      * @param \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface $purchasable
-     * @param int                  $quantity
+     * @param int $quantity
      */
     public function setPurchasable(PurchasableInterface $purchasable, $quantity);
 

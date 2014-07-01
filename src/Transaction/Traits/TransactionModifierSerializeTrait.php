@@ -29,6 +29,7 @@ trait TransactionModifierSerializeTrait
     {
         return serialize($this->getData());
     }
+
     /**
      * Unserializes the data into the data array
      * @param string $data

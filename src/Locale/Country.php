@@ -25,6 +25,7 @@ class Country implements CountryInterface, ViewableDataInterface
      * @var bool
      */
     protected $default;
+
     /**
      * @param      $code
      * @param      $name
@@ -34,11 +35,13 @@ class Country implements CountryInterface, ViewableDataInterface
         $code,
         $name,
         $default = false
-    ) {
+    )
+    {
         $this->code = $code;
         $this->name = $name;
         $this->default = $default;
     }
+
     /**
      * Returns a unique identifier
      * @return \Heystack\Core\Identifier\Identifier
@@ -47,6 +50,7 @@ class Country implements CountryInterface, ViewableDataInterface
     {
         return new Identifier($this->code);
     }
+
     /**
      * Returns the name of the country object
      */
@@ -54,6 +58,7 @@ class Country implements CountryInterface, ViewableDataInterface
     {
         return $this->name;
     }
+
     /**
      * Returns the country code of the country object
      */
@@ -61,6 +66,7 @@ class Country implements CountryInterface, ViewableDataInterface
     {
         return $this->code;
     }
+
     /**
      * Returns a boolean indicating whether this is the default country
      */
@@ -68,6 +74,7 @@ class Country implements CountryInterface, ViewableDataInterface
     {
         return $this->default;
     }
+
     /**
      * Defines what methods the implementing class implements dynamically through __get and __set
      */
@@ -75,6 +82,7 @@ class Country implements CountryInterface, ViewableDataInterface
     {
         return [];
     }
+
     /**
      * Returns an array of SilverStripe DBField castings keyed by field name
      */

@@ -30,6 +30,7 @@ trait CurrencyTrait
     {
         return new Identifier($this->getCurrencyCode());
     }
+
     /**
      * @return mixed
      */
@@ -37,6 +38,7 @@ trait CurrencyTrait
     {
         return $this->getField('CurrencyCode');
     }
+
     /**
      * @return mixed
      */
@@ -44,6 +46,7 @@ trait CurrencyTrait
     {
         return $this->getField('Symbol');
     }
+
     /**
      * @return mixed
      */
@@ -51,6 +54,7 @@ trait CurrencyTrait
     {
         return $this->getField('IsDefaultCurrency');
     }
+
     /**
      * @return mixed
      */
@@ -58,4 +62,10 @@ trait CurrencyTrait
     {
         return $this->getField('Value');
     }
+
+    /**
+     * @param string $field
+     * @return mixed
+     */
+    public abstract function getField($field);
 }

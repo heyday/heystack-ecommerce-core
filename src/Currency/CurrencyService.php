@@ -2,7 +2,6 @@
 
 namespace Heystack\Ecommerce\Currency;
 
-use Heystack\Core\Identifier\Identifier;
 use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\State\State;
 use Heystack\Core\Traits\HasEventServiceTrait;
@@ -29,6 +28,7 @@ class CurrencyService implements CurrencyServiceInterface
 {
     use HasEventServiceTrait;
     use HasStateServiceTrait;
+
     /**
      * The key used on the data array to store the active currency
      */
@@ -58,12 +58,14 @@ class CurrencyService implements CurrencyServiceInterface
         CurrencyInterface $defaultCurrency,
         State $stateService,
         EventDispatcherInterface $eventService
-    ) {
+    )
+    {
         $this->setCurrencies($currencies);
         $this->defaultCurrency = $this->activeCurrency = $defaultCurrency;
         $this->stateService = $stateService;
         $this->eventService = $eventService;
     }
+
     /**
      * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface[] $currencies
      */
@@ -73,6 +75,7 @@ class CurrencyService implements CurrencyServiceInterface
             $this->addCurrency($currency);
         }
     }
+
     /**
      * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
      */
@@ -80,6 +83,7 @@ class CurrencyService implements CurrencyServiceInterface
     {
         $this->currencies[$currency->getIdentifier()->getFull()] = $currency;
     }
+
     /**
      * Uses the State service to retrieve the active currency's identifier and sets the active currency.
      *
@@ -92,6 +96,7 @@ class CurrencyService implements CurrencyServiceInterface
             $this->activeCurrency = $activeCurrency;
         }
     }
+
     /**
      * Saves the data array on the State service
      */
@@ -102,6 +107,7 @@ class CurrencyService implements CurrencyServiceInterface
             $this->activeCurrency
         );
     }
+
     /**
      * @param IdentifierInterface $identifier
      * @return bool true on success false on failure
@@ -111,7 +117,7 @@ class CurrencyService implements CurrencyServiceInterface
         $currency = $this->getCurrency($identifier);
         if ($currency && $currency != $this->activeCurrency) {
             $this->activeCurrency = $currency;
-            
+
             $this->saveState();
 
             $this->eventService->dispatch(
@@ -158,23 +164,23 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * Converts amount from one currency to another using the currency's identifier
-     * 
+     *
      * Warning this method can lose precision!
-     * 
+     *
      * @param  \SebastianBergmann\Money\Money $amount
      * @param  \Heystack\Core\Identifier\IdentifierInterface $to
      * @return \SebastianBergmann\Money\Money
      * @throws \InvalidArgumentException
      */
     public function convert(Money $amount, IdentifierInterface $to)
-    {   
+    {
         if (!$toCurrency = $this->getCurrency($to)) {
             throw new \InvalidArgumentException("Currency not supported");
         }
-        
+
         /** @var \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $fromCurrency */
         $fromCurrency = $amount->getCurrency();
-        
+
         return $amount->multiply($toCurrency->getValue() / $fromCurrency->getValue());
     }
 

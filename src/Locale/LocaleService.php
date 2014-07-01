@@ -40,10 +40,11 @@ class LocaleService implements LocaleServiceInterface
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $eventService;
+
     /**
-     * @param array                    $countries
-     * @param CountryInterface         $defaultCountry
-     * @param State                    $sessionState
+     * @param array $countries
+     * @param CountryInterface $defaultCountry
+     * @param State $sessionState
      * @param EventDispatcherInterface $eventService
      */
     public function __construct(
@@ -51,12 +52,14 @@ class LocaleService implements LocaleServiceInterface
         CountryInterface $defaultCountry,
         State $sessionState,
         EventDispatcherInterface $eventService
-    ) {
+    )
+    {
         $this->setCountries($countries);
         $this->defaultCountry = $this->activeCountry = $defaultCountry;
         $this->sessionState = $sessionState;
         $this->eventService = $eventService;
     }
+
     /**
      * @param array $countries
      */
@@ -66,6 +69,7 @@ class LocaleService implements LocaleServiceInterface
             $this->addCountry($country);
         }
     }
+
     /**
      * @param CountryInterface $country
      */
@@ -73,6 +77,7 @@ class LocaleService implements LocaleServiceInterface
     {
         $this->countries[$country->getIdentifier()->getFull()] = $country;
     }
+
     /**
      * Uses the State service to retrieve the active country's identifier and sets the active country.
      *
@@ -86,6 +91,7 @@ class LocaleService implements LocaleServiceInterface
             $this->activeCountry = $activeCountry;
         }
     }
+
     /**
      * Saves the data array on the State service
      */
@@ -96,6 +102,7 @@ class LocaleService implements LocaleServiceInterface
             $this->activeCountry
         );
     }
+
     /**
      * @param      $identifier
      * @return void
@@ -111,6 +118,7 @@ class LocaleService implements LocaleServiceInterface
             $this->eventService->dispatch(TransactionEvents::UPDATE);
         }
     }
+
     /**
      * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface
      */

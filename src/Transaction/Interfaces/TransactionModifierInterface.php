@@ -19,7 +19,7 @@ interface TransactionModifierInterface
 
     /**
      * Returns the total value of the TransactionModifier for use in the Transaction
-     * 
+     *
      * @return \SebastianBergmann\Money\Money
      */
     public function getTotal();

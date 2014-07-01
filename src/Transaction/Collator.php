@@ -80,7 +80,7 @@ class Collator implements ViewableDataInterface
             }
 
         }
-        
+
         return $this->sumModifiers($modifiers);
     }
 

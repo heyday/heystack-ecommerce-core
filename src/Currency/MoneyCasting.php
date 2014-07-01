@@ -14,7 +14,7 @@ use SebastianBergmann\Money\Money;
 class MoneyCasting extends \ViewableData
 {
     use HasLocaleServiceTrait;
-    
+
     private static $casting = [
         'Nice' => 'Text',
         'Currency' => 'Text'

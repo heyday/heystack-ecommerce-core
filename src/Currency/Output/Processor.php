@@ -30,6 +30,7 @@ class Processor implements ProcessorInterface
      * @var string
      */
     private $identifier;
+
     /**
      * Currency Input Processor Constructor
      * @param string $identifier
@@ -38,6 +39,7 @@ class Processor implements ProcessorInterface
     {
         $this->identifier = $identifier;
     }
+
     /**
      * Returns the identifier for this object
      * @return \Heystack\Core\Identifier\Identifier
@@ -48,10 +50,11 @@ class Processor implements ProcessorInterface
             strtolower($this->identifier)
         );
     }
+
     /**
      * Method used to determine how to handle the output based on the InputProcessor's result
-     * @param  \Controller          $controller
-     * @param  array|void           $result
+     * @param  \Controller $controller
+     * @param  array|void $result
      * @return \SS_HTTPResponse
      */
     public function process(\Controller $controller, $result = null)

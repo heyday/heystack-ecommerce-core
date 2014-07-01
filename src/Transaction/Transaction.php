@@ -9,8 +9,8 @@ use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Core\Traits\HasStateServiceTrait;
 use Heystack\Ecommerce\Currency\CurrencyService;
 use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
-use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\HasLinkedTransactionModifiersInterface;
+use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface;
 
@@ -29,6 +29,7 @@ class Transaction implements TransactionInterface, StateableInterface
 {
     use HasStateServiceTrait;
     use HasCurrencyServiceTrait;
+
     /**
      * Holds the key used for storing state
      */
@@ -74,7 +75,8 @@ class Transaction implements TransactionInterface, StateableInterface
         CurrencyService $currencyService,
         array $validStatuses,
         $defaultStatus
-    ) {
+    )
+    {
         $this->stateService = $stateService;
         $this->currencyService = $currencyService;
         $this->validStatuses = $validStatuses;
@@ -161,7 +163,7 @@ class Transaction implements TransactionInterface, StateableInterface
                 $modifiers[$modifier->getIdentifier()->getFull()] = $modifier;
             }
         }
-        
+
         return $modifiers;
     }
 
@@ -293,9 +295,9 @@ class Transaction implements TransactionInterface, StateableInterface
     {
         $linkedModifiers = [];
 
-        $fromModifiers = ($fromModifiers ?: $this->getModifiers());
+        $fromModifiers = ($fromModifiers ? : $this->getModifiers());
 
-        foreach ((array) $fromModifiers as $fromModifier) {
+        foreach ((array)$fromModifiers as $fromModifier) {
             if (
                 $fromModifier instanceof HasLinkedTransactionModifiersInterface &&
                 in_array($modifier, $fromModifier->getLinkedModifiers(), true)

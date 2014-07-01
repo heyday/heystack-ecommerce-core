@@ -20,13 +20,13 @@ use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 class Processor implements ProcessorInterface
 {
     use HasCurrencyServiceTrait;
-    
+
     /**
      * Stores the identifier for this object
      * @var string
      */
     private $identifier;
-    
+
     /**
      * Currency Input Processor Constructor
      * @param                          $identifier
@@ -37,6 +37,7 @@ class Processor implements ProcessorInterface
         $this->identifier = $identifier;
         $this->currencyService = $currencyService;
     }
+
     /**
      * Returns the identifier for this object
      * @return \Heystack\Core\Identifier\Identifier
@@ -47,6 +48,7 @@ class Processor implements ProcessorInterface
             strtolower($this->identifier)
         );
     }
+
     /**
      * Method to determine how to handle the request.
      * Uses the currency service to set the active currency
