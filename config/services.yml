@@ -79,6 +79,8 @@ services:
   zone_service:
     class: Heystack\Ecommerce\Locale\ZoneService
     arguments: [ @locale_service ]
+    tags:
+      - { name: autoinject.provides }
 
   zone_service.zone:
     abstract: true
