@@ -81,9 +81,11 @@ class ContainerExtension extends Extension
                 }
             };
 
-            $resource = call_user_func([$config['currency_db']['from'], 'get'])->where($config['currency_db']['where']);
-
-            (new DBClosureLoader($handler))->load($resource);
+            (new DBClosureLoader($handler))->load([
+                $config['currency_db']['select'],
+                $config['currency_db']['from'],
+                $config['currency_db']['where']
+            ]);
 
         } elseif (isset($config['currency'])) {
             foreach ($config['currency'] as $currency) {
@@ -107,8 +109,6 @@ class ContainerExtension extends Extension
 
         // Configure locale from DB
         if (isset($config['locale_db'])) {
-            $resource = call_user_func([$config['locale_db']['from'], 'get'])->where($config['locale_db']['where']);
-
             $handler = function (CountryDataProviderInterface $record) use ($container) {
                 $localeDefinition = new DefinitionDecorator(Services::LOCALE_SERVICE . '.country');
                 $localeDefinition->addArgument($identifier = $record->getCountryCode());
@@ -126,7 +126,11 @@ class ContainerExtension extends Extension
                 }
             };
 
-            (new DBClosureLoader($handler))->load($resource);
+            (new DBClosureLoader($handler))->load([
+                $config['locale_db']['select'],
+                $config['locale_db']['from'],
+                $config['locale_db']['where']
+            ]);
 
         } elseif (isset($config['locale'])) {
             foreach ($config['locale'] as $locale) {
@@ -148,8 +152,6 @@ class ContainerExtension extends Extension
         }
 
         if (isset($config['zone_db'])) {
-            $resource = call_user_func([$config['zone_db']['from'], 'get'])->where($config['zone_db']['where']);
-
             $handler = function (ZoneDataProviderInterface $record, $index) use ($container, $config) {
                 $zoneDefinition = new DefinitionDecorator(Services::ZONE_SERVICE . '.zone');
 
@@ -164,7 +166,11 @@ class ContainerExtension extends Extension
                 );
             };
 
-            (new DBClosureLoader($handler))->load($resource);
+            (new DBClosureLoader($handler))->load([
+                $config['zone_db']['select'],
+                $config['zone_db']['from'],
+                $config['zone_db']['where']
+            ]);
 
         } elseif (isset($config['zone'])) {
             foreach ($config['zone'] as $index => $locale) {
