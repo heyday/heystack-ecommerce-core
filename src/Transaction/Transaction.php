@@ -336,7 +336,7 @@ class Transaction implements TransactionInterface, StateableInterface
         return [
             'id' => 'Transaction',
             'flat' => [
-                'Total' => $this->total->getAmount() / $this->total->getCurrency()->getSubUnit(),
+                'Total' => \Heystack\Ecommerce\convertMoneyToString($this->total),
                 'Status' => $this->status,
                 'Currency' => $this->currencyService->getActiveCurrencyCode()
             ],
