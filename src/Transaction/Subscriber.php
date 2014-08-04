@@ -76,6 +76,7 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Method that facilitiates updating the Transaction
+     * @return void
      */
     public function onUpdate()
     {
@@ -85,6 +86,7 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Method that facilitates storing the Transaction
+     * @return void
      */
     public function onStore()
     {
@@ -93,6 +95,7 @@ class Subscriber implements EventSubscriberInterface
 
     /**
      * Called after the Transaction is stored, clears state of transaction
+     * @return void
      */
     public function onTransactionStored()
     {

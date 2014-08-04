@@ -16,6 +16,7 @@ trait HasLocaleDetectorServiceTrait
 
     /**
      * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleDetectionInterface $localeDetector
+     * @return void
      */
     public function setLocaleDetector(LocaleDetectionInterface $localeDetector)
     {

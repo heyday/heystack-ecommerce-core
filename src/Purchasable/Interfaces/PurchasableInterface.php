@@ -44,18 +44,21 @@ interface PurchasableInterface extends ParentReferenceInterface
     /**
      * Adds the State service to the Purchasable object
      * @param \Heystack\Core\State\State $stateService
+     * @return void
      */
     public function addStateService(State $stateService);
 
     /**
      * Adds the Event service to the Purchasable object
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
+     * @return void
      */
     public function addEventService(EventDispatcherInterface $eventService);
 
     /**
      * Sets the quantity of the Purchasable object in the PurchasableHolder
      * @param int $quantity
+     * @return void
      */
     public function setQuantity($quantity = 1);
 
@@ -69,6 +72,7 @@ interface PurchasableInterface extends ParentReferenceInterface
      * Sets the price of the Purchasable object in the PurchasableHolder
      *
      * @param \SebastianBergmann\Money\Money $unitPrice
+     * @return void
      */
     public function setUnitPrice(Money $unitPrice);
 

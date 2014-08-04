@@ -10,6 +10,7 @@ interface HasLocaleServiceInterface
 {
     /**
      * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localService
+     * @return void
      */
     public function setLocaleService(LocaleServiceInterface $localService);
 

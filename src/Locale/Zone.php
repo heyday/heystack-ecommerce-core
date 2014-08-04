@@ -32,9 +32,9 @@ class Zone implements ZoneInterface
     protected $currency;
 
     /**
-     * @param LocaleServiceInterface $localeService
-     * @param CurrencyServiceInterface $currencyService
-     * @param $name
+     * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localeService
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
+     * @param string $name
      * @param array $countries
      * @param string|void $currency
      */
@@ -74,7 +74,7 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return void
      * @throws \InvalidArgumentException
      */
@@ -112,7 +112,7 @@ class Zone implements ZoneInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return bool
      */
     public function hasCountry(IdentifierInterface $identifier)

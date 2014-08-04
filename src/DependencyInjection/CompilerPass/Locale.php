@@ -13,7 +13,6 @@ namespace Heystack\Ecommerce\DependencyInjection\CompilerPass;
 
 use Heystack\Ecommerce\Services;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -25,7 +24,9 @@ use Symfony\Component\DependencyInjection\Reference;
 class Locale implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @throws \RuntimeException
+     * @return void
      */
     public function process(ContainerBuilder $container)
     {

@@ -21,8 +21,8 @@ class InputController extends \Controller
     protected $outputHandler;
 
     /**
-     * @param InputHandler $inputHandler
-     * @param OutputHandler $outputHandler
+     * @param \Heystack\Core\Input\Handler $inputHandler
+     * @param \Heystack\Core\Output\Handler $outputHandler
      */
     public function __construct(InputHandler $inputHandler, OutputHandler $outputHandler)
     {
@@ -36,7 +36,7 @@ class InputController extends \Controller
      * and output controllers via the input and output processor services.
      *
      * @param \SS_HTTPRequest $request
-     * @return mixed
+     * @return mixed|null
      */
     public function process(\SS_HTTPRequest $request)
     {

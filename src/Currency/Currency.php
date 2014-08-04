@@ -18,9 +18,10 @@ class Currency extends BaseCurrency
 {
     /**
      * The currency value
-     * @var
+     * @var float
      */
     protected $value;
+
     /**
      * Whether the currency is the default
      * @var bool
@@ -29,7 +30,7 @@ class Currency extends BaseCurrency
 
     /**
      * @param string $currencyCode
-     * @param        $value
+     * @param float|string $value
      * @param bool $default
      */
     public function __construct(
@@ -38,7 +39,7 @@ class Currency extends BaseCurrency
         $default = false
     )
     {
-        $this->value = $value;
+        $this->value = (float) $value;
         $this->default = $default;
         parent::__construct($currencyCode);
     }
@@ -54,6 +55,7 @@ class Currency extends BaseCurrency
 
     /**
      * Returns whether the currency is the System's default
+     * @return bool
      */
     public function isDefaultCurrency()
     {
@@ -62,6 +64,7 @@ class Currency extends BaseCurrency
 
     /**
      * Returns the value of the currency vis-a-vis the default currency
+     * @return float
      */
     public function getValue()
     {
@@ -70,6 +73,7 @@ class Currency extends BaseCurrency
 
     /**
      * Defines what methods the implementing class implements dynamically through __get and __set
+     * @return array
      */
     public function getDynamicMethods()
     {
@@ -78,6 +82,7 @@ class Currency extends BaseCurrency
 
     /**
      * Returns an array of SilverStripe DBField castings keyed by field name
+     * @return array
      */
     public function getCastings()
     {

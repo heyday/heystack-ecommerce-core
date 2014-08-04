@@ -52,6 +52,7 @@ interface CurrencyServiceInterface extends StateableInterface
 
     /**
      * Retrieves the default currency object
+     * @return void
      */
     public function getDefaultCurrency();
 

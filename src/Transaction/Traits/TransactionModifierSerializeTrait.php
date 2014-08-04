@@ -33,6 +33,7 @@ trait TransactionModifierSerializeTrait
     /**
      * Unserializes the data into the data array
      * @param string $data
+     * @return void
      */
     public function unserialize($data)
     {

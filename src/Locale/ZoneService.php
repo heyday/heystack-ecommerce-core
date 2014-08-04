@@ -3,6 +3,7 @@
 namespace Heystack\Ecommerce\Locale;
 
 use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
+use Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface;
 use Heystack\Ecommerce\Locale\Interfaces\ZoneInterface;
 use Heystack\Ecommerce\Locale\Interfaces\ZoneServiceInterface;
 use Heystack\Ecommerce\Locale\Traits\HasLocaleServiceTrait;
@@ -20,15 +21,15 @@ class ZoneService implements ZoneServiceInterface
     protected $zones;
 
     /**
-     * @param LocaleService $localeService
+     * @param \Heystack\Ecommerce\Locale\Interfaces\LocaleServiceInterface $localeService
      */
-    public function __construct(LocaleService $localeService)
+    public function __construct(LocaleServiceInterface $localeService)
     {
         $this->localeService = $localeService;
     }
 
     /**
-     * @param ZoneInterface $zone
+     * @param \Heystack\Ecommerce\Locale\Interfaces\ZoneInterface $zone
      * @return void
      */
     public function addZone(ZoneInterface $zone)
@@ -56,7 +57,7 @@ class ZoneService implements ZoneServiceInterface
     }
 
     /**
-     * @return ZoneInterface
+     * @return \Heystack\Ecommerce\Locale\Interfaces\ZoneInterface
      */
     public function getActiveZone()
     {
@@ -64,8 +65,8 @@ class ZoneService implements ZoneServiceInterface
     }
 
     /**
-     * @param CountryInterface $country
-     * @return ZoneInterface
+     * @param \Heystack\Ecommerce\Locale\Interfaces\CountryInterface $country
+     * @return \Heystack\Ecommerce\Locale\Interfaces\ZoneInterface
      * @throws \InvalidArgumentException
      */
     public function getZoneForCountry(CountryInterface $country)

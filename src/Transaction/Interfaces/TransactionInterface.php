@@ -24,6 +24,7 @@ interface TransactionInterface extends StorableInterface
     /**
      * Add a TransactionModifier to the Transaction
      * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
+     * @return void
      */
     public function addModifier(TransactionModifierInterface $modifier);
 

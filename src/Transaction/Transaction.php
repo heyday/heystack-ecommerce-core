@@ -7,7 +7,7 @@ use Heystack\Core\State\State;
 use Heystack\Core\State\StateableInterface;
 use Heystack\Core\Storage\Backends\SilverStripeOrm\Backend;
 use Heystack\Core\Traits\HasStateServiceTrait;
-use Heystack\Ecommerce\Currency\CurrencyService;
+use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 use Heystack\Ecommerce\Currency\Traits\HasCurrencyServiceTrait;
 use Heystack\Ecommerce\Transaction\Interfaces\HasLinkedTransactionModifiersInterface;
 use Heystack\Ecommerce\Transaction\Interfaces\HasTransactionInterface;
@@ -64,15 +64,15 @@ class Transaction implements TransactionInterface, StateableInterface
 
     /**
      * Creates the Transaction object
-     * @param State $stateService
-     * @param CurrencyService $currencyService
+     * @param \Heystack\Core\State\State $stateService
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
      * @param array $validStatuses
-     * @param $defaultStatus
+     * @param string $defaultStatus
      * @throws ConfigurationException
      */
     public function __construct(
         State $stateService,
-        CurrencyService $currencyService,
+        CurrencyServiceInterface $currencyService,
         array $validStatuses,
         $defaultStatus
     )
@@ -91,6 +91,7 @@ class Transaction implements TransactionInterface, StateableInterface
 
     /**
      * Saves the state of the Transaction object
+     * @return void
      */
     public function saveState()
     {
@@ -106,6 +107,7 @@ class Transaction implements TransactionInterface, StateableInterface
 
     /**
      * Restores the state of the Transaction object
+     * @return void
      */
     public function restoreState()
     {
@@ -118,6 +120,7 @@ class Transaction implements TransactionInterface, StateableInterface
      * Add a TransactionModifier to the Transaction
      * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionModifierInterface $modifier
      * @throws \InvalidArgumentException
+     * @return void
      */
     public function addModifier(TransactionModifierInterface $modifier)
     {
@@ -347,7 +350,7 @@ class Transaction implements TransactionInterface, StateableInterface
 
     /**
      * Get the type of storage that is being used
-     * @return string The type of storage in use
+     * @return array The type of storage in use
      */
     public function getStorableBackendIdentifiers()
     {
@@ -360,6 +363,7 @@ class Transaction implements TransactionInterface, StateableInterface
      * Sets the status of the transaction
      * @param string $status the status of the transaction
      * @throws \InvalidArgumentException
+     * @return void
      */
     public function setStatus($status)
     {
@@ -384,7 +388,7 @@ class Transaction implements TransactionInterface, StateableInterface
 
     /**
      * Checks if a status is valid
-     * @param $status
+     * @param string $status
      * @return bool
      */
     protected function isValidStatus($status)

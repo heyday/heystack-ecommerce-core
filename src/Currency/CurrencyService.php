@@ -2,6 +2,7 @@
 
 namespace Heystack\Ecommerce\Currency;
 
+use Heystack\Core\EventDispatcher;
 use Heystack\Core\Identifier\IdentifierInterface;
 use Heystack\Core\State\State;
 use Heystack\Core\Traits\HasEventServiceTrait;
@@ -11,7 +12,6 @@ use Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface;
 use Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface;
 use Heystack\Ecommerce\Transaction\Events as TransactionEvents;
 use SebastianBergmann\Money\Money;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * CurrencyService default implementation
@@ -49,15 +49,15 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * @param array $currencies
-     * @param CurrencyInterface $defaultCurrency
-     * @param State $stateService
-     * @param EventDispatcherInterface $eventService
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $defaultCurrency
+     * @param \Heystack\Core\State\State $stateService
+     * @param \Heystack\Core\EventDispatcher $eventService
      */
     public function __construct(
         array $currencies,
         CurrencyInterface $defaultCurrency,
         State $stateService,
-        EventDispatcherInterface $eventService
+        EventDispatcher $eventService
     )
     {
         $this->setCurrencies($currencies);
@@ -68,6 +68,7 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface[] $currencies
+     * @return void
      */
     protected function setCurrencies(array $currencies)
     {
@@ -78,6 +79,7 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface $currency
+     * @return void
      */
     protected function addCurrency(CurrencyInterface $currency)
     {
@@ -89,6 +91,7 @@ class CurrencyService implements CurrencyServiceInterface
      *
      * If the retrieved identifier is not an instance of the Identifier Interface, then it checks if it is a string,
      * which it uses to create a new Identifier object to set the active currency.
+     * @return void
      */
     public function restoreState()
     {
@@ -99,6 +102,7 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * Saves the data array on the State service
+     * @return void
      */
     public function saveState()
     {
@@ -109,7 +113,7 @@ class CurrencyService implements CurrencyServiceInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return bool true on success false on failure
      */
     public function setActiveCurrency(IdentifierInterface $identifier)
@@ -185,7 +189,7 @@ class CurrencyService implements CurrencyServiceInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return \Heystack\Ecommerce\Currency\Interfaces\CurrencyInterface|null
      */
     public function getCurrency(IdentifierInterface $identifier)
@@ -194,7 +198,7 @@ class CurrencyService implements CurrencyServiceInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return bool
      */
     public function hasCurrency(IdentifierInterface $identifier)
@@ -213,7 +217,7 @@ class CurrencyService implements CurrencyServiceInterface
 
     /**
      * Sets the default currency
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return void
      * @throws \InvalidArgumentException
      */

@@ -43,9 +43,9 @@ class LocaleService implements LocaleServiceInterface
 
     /**
      * @param array $countries
-     * @param CountryInterface $defaultCountry
-     * @param State $sessionState
-     * @param EventDispatcherInterface $eventService
+     * @param \Heystack\Ecommerce\Locale\Interfaces\CountryInterface $defaultCountry
+     * @param \Heystack\Core\State\State $sessionState
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventService
      */
     public function __construct(
         array $countries,
@@ -62,6 +62,7 @@ class LocaleService implements LocaleServiceInterface
 
     /**
      * @param array $countries
+     * @return void
      */
     protected function setCountries(array $countries)
     {
@@ -71,7 +72,8 @@ class LocaleService implements LocaleServiceInterface
     }
 
     /**
-     * @param CountryInterface $country
+     * @param \Heystack\Ecommerce\Locale\Interfaces\CountryInterface $country
+     * @return void
      */
     protected function addCountry(CountryInterface $country)
     {
@@ -83,7 +85,7 @@ class LocaleService implements LocaleServiceInterface
      *
      * If the retrieved identifier is not an instance of the Identifier Interface, then it checks if it is a string,
      * which it uses to create a new Identifier object to set the active country.
-     *
+     * @return void
      */
     public function restoreState()
     {
@@ -94,6 +96,7 @@ class LocaleService implements LocaleServiceInterface
 
     /**
      * Saves the data array on the State service
+     * @return void
      */
     public function saveState()
     {
@@ -104,7 +107,7 @@ class LocaleService implements LocaleServiceInterface
     }
 
     /**
-     * @param      $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return void
      */
     public function setActiveCountry(IdentifierInterface $identifier)
@@ -129,7 +132,7 @@ class LocaleService implements LocaleServiceInterface
 
     /**
      * Uses the identifier to retrieve the country object from the cache
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return \Heystack\Ecommerce\Locale\Interfaces\CountryInterface|null
      */
     public function getCountry(IdentifierInterface $identifier)
@@ -148,7 +151,7 @@ class LocaleService implements LocaleServiceInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface|void $identifier
      * @return bool
      */
     public function setDefaultCountry(IdentifierInterface $identifier = null)
@@ -177,7 +180,7 @@ class LocaleService implements LocaleServiceInterface
     }
 
     /**
-     * @param IdentifierInterface $identifier
+     * @param \Heystack\Core\Identifier\IdentifierInterface $identifier
      * @return bool
      */
     public function hasCountry(IdentifierInterface $identifier)

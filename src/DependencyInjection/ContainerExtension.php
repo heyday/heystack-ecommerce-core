@@ -36,11 +36,10 @@ class ContainerExtension extends Extension
      * the subsytem level configuration with more relevant mysite/config level configuration
      *
      * @param array $configs An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
+     * @return void
      */
     public function load(array $configs, ContainerBuilder $container)
     {

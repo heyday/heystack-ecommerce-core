@@ -16,6 +16,7 @@ trait HasCurrencyServiceTrait
 
     /**
      * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
+     * @return void
      */
     public function setCurrencyService(CurrencyServiceInterface $currencyService)
     {

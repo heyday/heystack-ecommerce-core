@@ -17,6 +17,7 @@ trait HasTransactionTrait
 
     /**
      * @param \Heystack\Ecommerce\Transaction\Interfaces\TransactionInterface $transaction
+     * @return void
      */
     public function setTransaction(TransactionInterface $transaction)
     {

@@ -27,8 +27,10 @@ class MoneyCasting extends \ViewableData
 
     /**
      * @param \SebastianBergmann\Money\Money $value
+     * @param mixed|null|void $record
+     * @return void
      */
-    public function setValue(Money $value)
+    public function setValue(Money $value, $record = null)
     {
         $this->value = $value;
     }

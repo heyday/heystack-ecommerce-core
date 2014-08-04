@@ -17,6 +17,7 @@ trait HasTransactionCollatorTrait
 
     /**
      * @param \Heystack\Ecommerce\Transaction\Collator $transactionCollator
+     * @return void
      */
     public function setTransactionCollator(Collator $transactionCollator)
     {

@@ -29,8 +29,8 @@ class Processor implements ProcessorInterface
 
     /**
      * Currency Input Processor Constructor
-     * @param                          $identifier
-     * @param CurrencyServiceInterface $currencyService
+     * @param string $identifier
+     * @param \Heystack\Ecommerce\Currency\Interfaces\CurrencyServiceInterface $currencyService
      */
     public function __construct($identifier, CurrencyServiceInterface $currencyService)
     {

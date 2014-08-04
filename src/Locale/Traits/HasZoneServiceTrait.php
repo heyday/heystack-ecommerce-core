@@ -17,6 +17,7 @@ trait HasZoneServiceTrait
 
     /**
      * @param \Heystack\Ecommerce\Locale\Interfaces\ZoneServiceInterface $localService
+     * @return void
      */
     public function setZoneService(ZoneServiceInterface $localService)
     {

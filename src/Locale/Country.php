@@ -14,21 +14,23 @@ use Heystack\Ecommerce\Locale\Interfaces\CountryInterface;
 class Country implements CountryInterface, ViewableDataInterface
 {
     /**
-     * @var
+     * @var string
      */
     protected $code;
+
     /**
-     * @var
+     * @var string
      */
     protected $name;
+
     /**
      * @var bool
      */
     protected $default;
 
     /**
-     * @param      $code
-     * @param      $name
+     * @param string $code
+     * @param string $name
      * @param bool $default
      */
     public function __construct(
@@ -53,6 +55,7 @@ class Country implements CountryInterface, ViewableDataInterface
 
     /**
      * Returns the name of the country object
+     * @return string
      */
     public function getName()
     {
@@ -61,6 +64,7 @@ class Country implements CountryInterface, ViewableDataInterface
 
     /**
      * Returns the country code of the country object
+     * @return string
      */
     public function getCountryCode()
     {
@@ -69,6 +73,7 @@ class Country implements CountryInterface, ViewableDataInterface
 
     /**
      * Returns a boolean indicating whether this is the default country
+     * @return bool
      */
     public function isDefault()
     {
@@ -77,6 +82,7 @@ class Country implements CountryInterface, ViewableDataInterface
 
     /**
      * Defines what methods the implementing class implements dynamically through __get and __set
+     * @return array
      */
     public function getDynamicMethods()
     {
@@ -85,6 +91,7 @@ class Country implements CountryInterface, ViewableDataInterface
 
     /**
      * Returns an array of SilverStripe DBField castings keyed by field name
+     * @return array
      */
     public function getCastings()
     {
