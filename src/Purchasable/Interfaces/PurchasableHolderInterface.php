@@ -78,7 +78,7 @@ interface PurchasableHolderInterface
      * Retrieves purchasables from the implementing class' internal cache of
      * purchasables using the Primary string on the Identifier object
      * @param  \Heystack\Core\Identifier\IdentifierInterface $identifier
-     * @return \Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface[]
+     * @return bool|\Heystack\Ecommerce\Purchasable\Interfaces\PurchasableInterface[]
      */
     public function getPurchasablesByPrimaryIdentifier(IdentifierInterface $identifier);
 
