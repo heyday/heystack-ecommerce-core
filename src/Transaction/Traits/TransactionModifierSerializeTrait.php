@@ -27,7 +27,7 @@ trait TransactionModifierSerializeTrait
      */
     public function serialize()
     {
-        return serialize($this->getData());
+        return \Heystack\Core\serialize($this->getData());
     }
 
     /**
@@ -37,6 +37,6 @@ trait TransactionModifierSerializeTrait
      */
     public function unserialize($data)
     {
-        $this->setData(unserialize($data));
+        $this->setData(\Heystack\Core\unserialize($data));
     }
 }
