@@ -28,11 +28,12 @@ class MoneyCasting extends \ViewableData
     /**
      * @param \SebastianBergmann\Money\Money $value
      * @param mixed|null|void $record
-     * @return void
+     * @return \Heystack\Ecommerce\Currency\MoneyCasting
      */
     public function setValue(Money $value, $record = null)
     {
         $this->value = $value;
+        return $this;
     }
 
     /**
@@ -88,5 +89,13 @@ class MoneyCasting extends \ViewableData
     public function exists()
     {
         return $this->value->getAmount() !== 0;
+    }
+
+    /**
+     * @param \SebastianBergmann\Money\Money $value
+     */
+    public static function castMoneyToString(Money $value)
+    {
+        return \Injector::inst()->get(__CLASS__)->setValue($value)->Nice();
     }
 }
