@@ -16,8 +16,9 @@ class MoneyCasting extends \ViewableData
     use HasLocaleServiceTrait;
 
     private static $casting = [
-        'Nice' => 'Text',
-        'Currency' => 'Text'
+        'Nice'     => 'Text',
+        'Currency' => 'Text',
+        'Amount'   => 'Decimal'
     ];
 
     /**
@@ -59,6 +60,16 @@ class MoneyCasting extends \ViewableData
     public function Currency()
     {
         return $this->value->getCurrency()->getCurrencyCode();
+    }
+
+    /**
+     * @return string
+     */
+    public function Amount()
+    {
+        return \Heystack\Ecommerce\convertMoneyToString(
+            $this->value
+        );
     }
 
     /**
